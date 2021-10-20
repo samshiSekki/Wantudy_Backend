@@ -86,7 +86,7 @@ app.get('/',(req,res)=>{
  
 app.get(kakao.redirectUri)
  
-app.listen(3000, ()=>{
+app.listen(8080, ()=>{
     console.log(`server start 3000`);
 })
 
