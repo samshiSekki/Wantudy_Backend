@@ -1,0 +1,26 @@
+{
+  "name": "samshisekki",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samshiSekki/Back.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samshiSekki/Back/issues"
+  },
+  "homepage": "https://github.com/samshiSekki/Back#readme",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "express": "^4.17.1",
+    "nunjucks": "^3.2.3",
+    "qs": "^6.10.1",
+    "session": "^0.1.0"
+  }
+}
