@@ -4,9 +4,10 @@ const nunjucks = require('nunjucks');
 const axios = require('axios');
 const qs = require('qs');
 const session = require('express-session');
- 
+require('dotenv').config(); 
+
 app.set('view engine','html');
-nunjucks.configure('views',{
+nunjucks.configure('views',{ // html 파일이 열리는 폴더를 view 폴더로 지정
     express:app,
 })
  
@@ -18,13 +19,13 @@ app.use(session({
 }))//세션을 설정할 때 쿠키가 생성된다.&&req session의 값도 생성해준다. 어느 라우터든 req session값이 존재하게 된다.
  
 const kakao = {
-    clientID: '86d130c8c94c8dbcbb6c5756050fbaae',
-    clientSecret: 'KO6AUr0e9jKa33rkaeB7PJRqA2VOsayh',
-    redirectUri: 'http://13.209.66.117:8080/auth/kakao/callback'
+    clientID: process.env.clientID,
+    clientSecret: process.env.clientSecret,
+    redirectUri: process.env.redirectUri
 }
 //profile account_email
 app.get('/auth/kakao',(req,res)=>{
-    const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile,account_email`;
+    const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile`;
     res.redirect(kakaoAuthURL);
 })
  
@@ -80,7 +81,6 @@ app.get('/auth/info',(req,res)=>{
  
  
 app.get('/',(req,res)=>{
-   
     res.render('index');
 });
  
