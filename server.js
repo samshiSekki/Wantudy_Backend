@@ -71,16 +71,18 @@ app.get('/auth/kakao/callback', async(req,res)=>{
     console.log(user);
  
     req.session.kakao = user.data;
-    //req.session = {['kakao'] : user.data};
     
     res.send('success');
+    res.render('info',{
+        profile_image,
+    })
 })
  
  
 app.get('/auth/info',(req,res)=>{
-    let {nickname,profile_image}=req.session.kakao.properties;
+    let {profile_image}=req.session.kakao.properties;
     res.render('info',{
-        nickname,profile_image,
+        profile_image,
     })
 })
  
@@ -92,6 +94,6 @@ app.get('/',(req,res)=>{
 app.get(kakao.redirectUri)
  
 app.listen(8080, ()=>{
-    console.log(`server start 3000`);
+    console.log(`server start 8080`);
 })
 
