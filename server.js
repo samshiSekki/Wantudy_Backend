@@ -19,9 +19,9 @@ app.use(session({
 }))//세션을 설정할 때 쿠키가 생성된다.&&req session의 값도 생성해준다. 어느 라우터든 req session값이 존재하게 된다.
  
 const kakao = {
-    clientID: process.env.clientID,
-    clientSecret: process.env.clientSecret,
-    redirectUri: process.env.redirectUri
+    clientID: '86d130c8c94c8dbcbb6c5756050fbaae',
+    clientSecret: 'KO6AUr0e9jKa33rkaeB7PJRqA2VOsayh',
+    redirectUri: 'http://13.209.66.117:8080/auth/kakao/callback'
 }
 
 console.log(kakao.clientID)
