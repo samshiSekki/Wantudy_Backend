@@ -23,6 +23,11 @@ const kakao = {
     clientSecret: process.env.clientSecret,
     redirectUri: process.env.redirectUri
 }
+
+console.log(kakao.clientID)
+console.log(kakao.clientSecret)
+console.log(kakao.redirectUri)
+
 //profile account_email
 app.get('/auth/kakao',(req,res)=>{
     const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile`;
