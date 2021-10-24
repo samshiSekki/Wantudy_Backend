@@ -3,7 +3,7 @@ const StudyList = require('../models/StudyModel');
 
 //스터디 개설 페이지 보여주기
 exports.createStudy=function(req,res){
-    res.sendFile(path.join(__dirname,'../build/index.html'))
+    res.sendFile(path.join(__dirname,'../../build/index.html'))
 }
 
 //StudyList에 document 저장
