@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const userSchema = mongoose.Schema({
-    // 세션값 받아와야하나?
-    nickname:{
+const userSchema = new Schema({
+    email:{
         type:String,
-        minlength:8,
+        require:true
+    },
+    profileImage:{
+        type:String,
         require:true
     }
 })
 
-const User = mongoose.model('User', userSchema) 
-module.exports = { User } 
+module.exports = mongoose.model('User', userSchema);
+
+
