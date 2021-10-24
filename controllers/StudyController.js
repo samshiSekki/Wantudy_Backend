@@ -1,24 +1,14 @@
-//var mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
 
-//Study Schema
-// function StudyData(data){
-//     this.id = data._id;
-//     this.studyName = data.studyName;
-//     this.category= data.category;
-//     this.description=data.description;
-//     this.onoff=data.onoff;
-//     this.studyTime=data.studyTime;
-//     this.peopleNum=data.peopleNum;
-//     this.requiredInfo=data.requiredInfo;
-// }
-
+//스터디 개설 페이지 보여주기
 exports.createStudy=function(req,res){
-    res.send('스터디 추가 페이지')
+    res.sendFile(path.join(__dirname,'../build/index.html'))
 }
 
-exports.saveStudy=async function(req,res){
-    const{studyName, category, description, onoff, studyTime, peopleNum, requiredInfo} = req.body;
+//StudyList에 document 저장
+exports.saveStudy = async function (req, res) {
+    const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo } = req.body;
     console.log(req.body)
     var study = new StudyList({
         studyName,
@@ -29,12 +19,12 @@ exports.saveStudy=async function(req,res){
         peopleNum,
         requiredInfo
     })
-    try{
+    try {
         await study.save();
         return res
             .status(200)
             .json(study);
-    }catch(err){
-        return res.status(500).json({error:err})
+    } catch (err) {
+        return res.status(500).json({ error: err })
     }
 };
