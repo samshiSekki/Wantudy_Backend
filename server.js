@@ -36,3 +36,8 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
 //router 사용
 const studyRouter = require("./routes/study");
 app.use('/study', studyRouter);
+
+//react bulid
+app.get('/',function(req,res){
+    res.sendFile(path.join(__dirname,'../build/index.html'))
+})
