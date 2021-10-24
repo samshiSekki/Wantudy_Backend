@@ -138,7 +138,7 @@ app.use(session({
 const kakao = {
     clientID: '86d130c8c94c8dbcbb6c5756050fbaae',
     clientSecret: 'KO6AUr0e9jKa33rkaeB7PJRqA2VOsayh',
-    redirectUri: 'http://13.209.66.117:8080/auth/kakao'
+    redirectUri: 'http://13.209.66.117:8080/auth/kakao/callback'
 }
 
 console.log(kakao.clientID)
@@ -214,6 +214,13 @@ app.get('/',(req,res)=>{
 
 app.get(kakao.redirectUri)
  
+
+//
+const authRouter = require("./routes/auth");
+app.use('/auth', authRouter);
+
+
+
 app.listen(8080, ()=>{
     console.log(`server start 8080`);
 })
