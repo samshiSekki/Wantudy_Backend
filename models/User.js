@@ -9,6 +9,10 @@ const userSchema = new Schema({
     profileImage:{
         type:String,
         require:true
+    },
+    accessToken:{
+        type:String,
+        require:true
     }
 })
 
