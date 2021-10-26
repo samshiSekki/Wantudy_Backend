@@ -41,12 +41,12 @@ exports.saveNickname = async function (req, res) {
     else email 디비에 없는 경우 
      에러메세지 리턴
     */
-    try {
-        await user.save();
-        return res
-            .status(200)
-            .json(user); // 위에서 담은 user 정보를 json형태로 보내면 const response에 들어감
-    } catch (err) {
-        return res.status(500).json({ error: err })
-    }
+    // try {
+    //     await user.save();
+    //     return res
+    //         .status(200)
+    //         .json(user); // 위에서 담은 user 정보를 json형태로 보내면 const response에 들어감
+    // } catch (err) {
+    //     return res.status(500).json({ error: err })
+    // }
 };
