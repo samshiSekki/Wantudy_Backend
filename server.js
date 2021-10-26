@@ -17,15 +17,15 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
     }
     console.log("mongoDB Connected!");
 
-    // Server Open
     app.listen(port, function () {
         console.log(`Server listening on port ${port}!`);
     });
 });
 app.get('/', function(req, res){ 
     res.sendFile(__dirname+'/bin/index.html')
-}); // change the path to your index.html });
+}); 
 
 // router 사용
 const authRouter = require('./routes/auth')
 app.use('/auth', authRouter)
+
