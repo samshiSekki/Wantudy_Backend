@@ -16,10 +16,8 @@ const userSchema = new Schema({
     },
     nickname:{
         type:String,
-        maxlength=8
+        maxlength:8
     }
 })
 
 module.exports = mongoose.model('User', userSchema);
-
-

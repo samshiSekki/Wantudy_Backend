@@ -25,7 +25,7 @@ exports.saveUser = async function (req, res) {
 exports.saveNickname = async function (req, res) {
     const { email, nickname } = req.body;
   
-    User.find({ email = email}, (err, users) => {
+    User.find({ email:email }, (err, users) => {
         if(err)
             return res
                 .status(500)
