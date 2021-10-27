@@ -9,6 +9,7 @@ exports.saveUser = async function (req, res) {
     try{
         let user = await User.findOne({ email: email });
         // 이미 등록되어 있으면 토큰 교체 후 해당 유저 정보를 갖고 메인으로 이동
+        
         if(user){
             console.log("update before");
             const updateUser = await User.updateOne({email: email}, {accessToken: accessToken});  // 토큰 교체해주는 코드
