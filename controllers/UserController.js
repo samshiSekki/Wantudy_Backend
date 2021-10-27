@@ -9,11 +9,11 @@ exports.saveUser = async function (req, res) {
         if(err)
             return res
                 .status(500)
-                .json({ error: err })
+                .json({ error: err });
         else if(users){ // 이미 등록되어 있으면 해당 유저 정보를 갖고 메인으로 이동
             return res
                 .status(200)
-                .json({users})
+                .json(users);
         }    
     });
 
@@ -21,18 +21,17 @@ exports.saveUser = async function (req, res) {
         email,
         profileImage,
         accessToken
-    })    
+    });
 
     try {
         await user.save(); // 등록되어있지 않은 유저인 경우 저장하고 닉네임 페이지로 이동
-
         return res
             .status(200)
-            .json(user); // 위에서 담은 user 정보를 json형태로 보내면 const response에 들어감
+            .json(user) // 위에서 담은 user 정보를 json형태로 보내면 const response에 들어감
     } catch (err) {
         return res
             .status(500)
-            .json({ error: err })
+            .json({ error: err });
     }
-};
+}
 
