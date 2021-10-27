@@ -21,11 +21,11 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
         console.log(`Server listening on port ${port}!`);
     });
 });
+
 app.get('/', function(req, res){ 
     res.sendFile(__dirname+'/bin/index.html')
 }); 
 
 // router 사용
-const authRouter = require('./routes/auth')
-app.use('/auth', authRouter)
-
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
