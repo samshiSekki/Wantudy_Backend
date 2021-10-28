@@ -6,6 +6,7 @@ exports.saveUser = async function (req, res) {
     const nickname="";
     
     // 1. 등록된 유저인지 확인 / 토큰 교체 
+    
     try{
         let user = await User.findOne({ email: email });
         // 이미 등록되어 있으면 토큰 교체 후 해당 유저 정보를 갖고 메인으로 이동
