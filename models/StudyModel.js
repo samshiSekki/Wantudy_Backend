@@ -10,7 +10,7 @@ const StduySchema = new Schema({
     studyTime: { type: [String], require: true },
     peopleNum: Number,
     requiredInfo: { type: [String], require: true },
-    deadline: { type: Date, require: true },
+    //deadline: { type: Date, require: true },
 });
 
 module.exports = mongoose.model('StudyList', StduySchema);

@@ -18,7 +18,7 @@ exports.saveStudy = async function (req, res) {
         onoff,
         studyTime,
         peopleNum,
-        requiredInfo
+        requiredInfo,
     })
     try {
         await study.save();
@@ -35,12 +35,12 @@ exports.saveStudy = async function (req, res) {
 exports.showStudy = async function (req, res) {
 
     const { page } = req.body;
+    console.log(req.body);
 
     try {
         const studypost = await StudyList.find()
-            .sort({_id:-1})
             .limit(3)
-            .skip((page -1)*10)
+            .skip((page - 1) * 3)
             .exec();
         return res
             .status(200)
