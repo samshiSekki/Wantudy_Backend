@@ -63,11 +63,6 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
     });
 });
 
-<<<<<<< HEAD
-app.get('/', function(req, res){ 
-    res.sendFile(__dirname+'/bin/index.html')
-}); 
-=======
 //router 사용
 // const Router=require("./routes/*.js");
 const studyRouter = require("./routes/study");
@@ -80,8 +75,9 @@ app.use(express.static(path.join(__dirname,'../build')))
 app.get('/',function(req,res){
     res.sendFile(path.join(__dirname,'../build/index.html'))
 })
->>>>>>> 11c71fd066ee4d52258580b4343b04ba924dae15
 
 // router 사용
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
+
+//주석테스트
