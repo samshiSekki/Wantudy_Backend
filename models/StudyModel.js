@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const StduySchema = new Schema({
-    //userId : {type: Schema.ObjectId, ref:"User", required: true},
-    studyName: { type: String, require: true },
-    category: { type: [String], require: true },
-    description: { type: String, require: true },
-    onoff: { type: String, require: true },
-    studyTime: { type: [String], require: true },
-    peopleNum: Number,
-    requiredInfo: { type: [String], require: true },
-    //deadline: { type: Date, require: true },
+    // userId : {type: Schema.ObjectId, ref:"User", required: true},
+    studyName: { type: String, required: true },
+    category: { type: [String], required: true },
+    description: { type: String, required: true },
+    onoff: { type: String, required: true },
+    studyTime: { type: [String], required: true },
+    peopleNum: { type : Number, required: true },
+    requiredInfo: { type: [String], required: true },
+    deadline: { type: Date, required: true },
 });
 
 module.exports = mongoose.model('StudyList', StduySchema);
