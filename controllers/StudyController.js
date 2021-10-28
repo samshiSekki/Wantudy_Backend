@@ -34,11 +34,11 @@ exports.saveStudy = async function (req, res) {
     }
 };
 
-
 //스터디 리스트 페이지 조회 ( 한 페이지 당 3개씩 )
+//마감기한 임박순 디폴트
 exports.showStudy = async function (req, res) {
 
-    const { page } = req.query
+    const { page } = req.query;
     console.log(page);
 
     if (page < 1) {
@@ -47,7 +47,7 @@ exports.showStudy = async function (req, res) {
 
     try {
         const studypost = await StudyList.find()
-            .sort({ _id: -1 })
+            .sort({ deadline: 1 })
             .limit(3)
             .skip((page - 1) * 3)
             .exec();
@@ -60,7 +60,6 @@ exports.showStudy = async function (req, res) {
         return res.status(500).json({ error: err })
     }
 }
-
 
 //스터디 상세 페이지 조회
 exports.detailStudy = async function (req, res) {
@@ -81,3 +80,40 @@ exports.detailStudy = async function (req, res) {
         return res.status(500).json({ error: err });
     }
 }
+
+
+//스터디 검색하기
+exports.searchStudy = async function (req, res) {
+
+    const { page } = req.query
+    console.log(page);
+    let options = [];
+
+    if(page < 1){
+        return res.status(400)
+    }
+
+    try {
+        if (req.query.option == 'studyName') {
+            options = [{ studyName: new RegExp(req.query.content) }];
+        }
+        else {
+            const err = new Error('검색 옵션이 없습니다.');
+            err.status = 400;
+            throw err;
+        }
+        const studypost = await StudyList.find({ $or: options })
+            .sort({ deadline: 1 })
+            .limit(3)
+            .skip((page - 1) * 10)
+            .exec();
+        const postCount = await StudyList.countDocuments().exec();
+        res.set('Last-Page', Math.ceil(postCount / 3));
+        return res
+            .status(200)
+            .json(studypost);
+    } catch (err) {
+        return res.status(500).json({ error: err })
+    }
+}
+
