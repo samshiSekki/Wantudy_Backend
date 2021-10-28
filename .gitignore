@@ -1,3 +1,7 @@
+# Created by https://www.toptal.com/developers/gitignore/api/node
+# Edit at https://www.toptal.com/developers/gitignore?templates=node
+
+### Node ###
 # https://github.com/github/gitignore/blob/master/Node.gitignore 
 
 # Logs
@@ -119,5 +123,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+### Node Patch ###
+# Serverless Webpack directories
+.webpack/
+
+# End of https://www.toptal.com/developers/gitignore/api/node
 #pem
 pem/
