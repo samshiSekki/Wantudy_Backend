@@ -30,10 +30,18 @@ exports.saveStudy = async function (req, res) {
     }
 };
 
+
 //스터디 리스트 페이지 조회
 exports.showStudy = async function (req, res) {
+
+    const { page } = req.body;
+
     try {
-        const studypost = await StudyList.find().exec();
+        const studypost = await StudyList.find()
+            .sort({_id:-1})
+            .limit(3)
+            .skip((page -1)*10)
+            .exec();
         return res
             .status(200)
             .json(studypost);
@@ -42,11 +50,12 @@ exports.showStudy = async function (req, res) {
     }
 }
 
+
 //스터디 상세 페이지 조회
 exports.detailStudy = async function (req, res) {
-    const { id } = req.params;
+    const { studyId } = req.params;
     try {
-        const study = await StudyList.findById(id).exec();
+        const study = await StudyList.findById(studyId).exec();
         if (!study) {
             return res.status(404).end()
         } else {
