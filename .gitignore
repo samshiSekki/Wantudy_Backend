@@ -2,6 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
 ### Node ###
+# https://github.com/github/gitignore/blob/master/Node.gitignore 
+
 # Logs
 logs
 *.log
@@ -126,3 +128,5 @@ dist
 .webpack/
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+#pem
+pem/
