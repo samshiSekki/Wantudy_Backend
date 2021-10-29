@@ -5,7 +5,9 @@ const StudyController = require('../controllers/StudyController')
 router.get('/',StudyController.showStudy)
 //스터디 상세 조회
 router.get('/:studyId',StudyController.detailStudy)
+//스터디 삭제
 router.delete('/:studyId',StudyController.deleteStudy)
+//스터디 수정
 router.put('/:studyId',StudyController.updateStudy)
 
 module.exports = router;
