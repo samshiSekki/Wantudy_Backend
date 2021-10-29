@@ -148,11 +148,14 @@
   },
   "/study/applicaion": {
     "get": {
-
+      "tags": ["/study/application"],
+      "description": "스터디 신청서 등록 페이지 조회",
+      "parameters": [],
+      "responses": {}
     },
     "post": {
-      "tags": ["/auth/nickname"],
-      "description": "닉네임 등록",
+      "tags": ["/study/application"],
+      "description": "스터디 신청서 등록",
       "parameters": [
         {
           "name": "obj",
@@ -160,22 +163,51 @@
           "schema": {
             "type": "object",
             "properties": {
-              "email": {
-                "type": "string",
-                "example": "abc@gmail.com"
+              "name":{
+                "type":"string",
+                "example":"김철수"
               },
-              "nickName": {
+              "gender":{
+                "type":"string",
+                "example":"남"
+              },
+              "age": {
+                "type": "number",
+                "example": 23
+              },
+              "school": {
                 "type": "string",
-                "example": "abc"
+                "example": "서울대학교"
+              },
+              "major": {
+                "type": "string",
+                "example": "철학과"
+              },
+              "attending": {
+                "type": "string",
+                "example": "재학"
+              },
+              "semester": {
+                "type": "array",
+                "example": [3,2]
+              },
+              "address": {
+                "type": "string",
+                "example": "서울특별시 관악구"
+              },
+              "interests": {
+                "type": "array",
+                "example": ["개발", "디자인", "기획"]
+              },
+              "keyword": {
+                "type": "array",
+                "example": ["철두철미","적극적인","활발한"]
               }
             }
           }
         }
       ],
       "responses": {
-        "409":{
-          "description": "Conflict"
-        },
         "500":{
           "description": "Internal Server Error"
         }
