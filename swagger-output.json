@@ -77,6 +77,73 @@
           }
         }
       }
+    },
+    "/auth/kakao": {
+      "post": {
+        "tags": ["/auth/kakao"],
+        "description": "카카오 소셜 로그인",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "abc@gmail.com"
+                },
+                "profileImage": {
+                  "type":"string",
+                  "example": "https://img.abc"
+                },
+                "accessToken": {
+                  "type":"string",
+                  "example": "abc"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "500":{
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/nickname": {
+      "post": {
+        "tags": ["/auth/nickname"],
+        "description": "닉네임 등록",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "abc@gmail.com"
+                },
+                "nickName": {
+                  "type": "string",
+                  "example": "abc"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "409":{
+            "description": "Conflict"
+          },
+          "500":{
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "definitions": {}
