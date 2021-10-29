@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const StduySchema = new Schema({
-    // userId : {type: Schema.ObjectId, ref:"User", required: true},
+    // user:{
+    //     _id : mongoose.Types.ObjectId,
+    //     nickname: String,
+    // },
     studyName: { type: String, required: true },
     category: {
         type: [String],

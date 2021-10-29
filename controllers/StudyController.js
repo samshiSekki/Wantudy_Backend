@@ -30,7 +30,7 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
-        return res.status(500).json({ error: err })
+        throw res.status(500).json({ error: err })
     }
 };
 
@@ -57,7 +57,7 @@ exports.showStudy = async function (req, res) {
             .status(200)
             .json(studypost);
     } catch (err) {
-        return res.status(500).json({ error: err })
+        throw res.status(500).json({ error: err })
     }
 }
 
@@ -70,14 +70,14 @@ exports.detailStudy = async function (req, res) {
     try {
         const study = await StudyList.findById(studyId).exec();
         if (!study) {
-            return res.status(404).end()
+            return res.status(404).end();
         } else {
             return res
                 .status(200)
                 .json(study)
         }
     } catch (err) {
-        return res.status(500).json({ error: err });
+        throw res.status(500).json({ error: err });
     }
 }
 
@@ -89,7 +89,7 @@ exports.searchStudy = async function (req, res) {
     console.log(page);
     let options = [];
 
-    if(page < 1){
+    if (page < 1) {
         return res.status(400)
     }
 
@@ -113,7 +113,48 @@ exports.searchStudy = async function (req, res) {
             .status(200)
             .json(studypost);
     } catch (err) {
-        return res.status(500).json({ error: err })
+        throw res.status(500).json({ error: err })
     }
 }
 
+//게시글 삭제
+exports.deleteStudy = async function (req, res) {
+    const { studyId } = req.params;
+    console.log(req.params);
+    try {
+        await StudyList.findByIdAndDelete(studyId).exec();
+        return res.status(204).json();
+    } catch (err) {
+        throw res.status(500).json({ error: err })
+    }
+}
+
+//게시글 수정
+exports.updateStudy = async function (req, res) {
+    const { studyId } = req.params;
+
+    try {
+        const study = await StudyList.findByIdAndUpdate(studyId,
+            {
+                $set: {
+                    studyName: req.body.studyName,
+                    category: req.body.category,
+                    description: req.body.description,
+                    onoff: req.body.onoff,
+                    studyTime: req.body.studyTime,
+                    peopleNum: req.body.peopleNum,
+                    requiredInfo: req.body.requiredInfo,
+                    deadline: req.body.deadline
+                }
+            },{new: true}).exec();
+        if (!study) {
+            return res.status(404)
+        }
+        req.body=study;
+        return res
+            .status(200)
+            .json(study);
+    } catch (err) {
+        throw res.status(500).json({ error: err })
+    }
+};
