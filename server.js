@@ -7,9 +7,15 @@ require('dotenv').config(); // 환경설정 파일
 app.use(cors());
 app.use(express.json());
 
-var id = 'sam'
+// swagger
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output");
 
-var pwd = 'sam1234'
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+// DB 접속
+const id = process.env.DBid
+const pwd = process.env.DBpwd
 
 var mongoose = require("mongoose");
 mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrlParser: true, useUnifiedTopology: true }, function (err) {
