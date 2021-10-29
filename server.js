@@ -36,3 +36,8 @@ app.get('/', function(req, res){
 // router 사용
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
+
+
+const studyRouter = require('./routes/study');
+app.use('/study', studyRouter);
+
