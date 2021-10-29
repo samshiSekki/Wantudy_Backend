@@ -22,6 +22,62 @@
         "responses": {}
       }
     },
+    "/study/": {
+      "get": {
+        "tags": ["/study"],
+        "description": "스터디 개설 페이지",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": ["/study"],
+        "description": "스터디 개설 등록",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "studyName": {
+                  "type": "string",
+                  "example": "IT 경영스터디"
+                },
+                "category": {
+                  "type": "array",
+                  "example": ["IT","경영"]
+                },
+                "description": {
+                  "type": "string",
+                  "example": "IT 경영 스터디입니다."
+                },
+                "onoff": {
+                  "type": "string",
+                  "example": "online"
+                },
+                "studyTime": {
+                  "type": "array",
+                  "example": ["월 13-15, 금 17-19"]
+                },
+                "peopleNum": {
+                  "type": "number",
+                  "example": 5
+                },
+                "requiredInfo": {
+                  "type": "array",
+                  "example": ["성별, 관심분야, 지원동기"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/auth/kakao": {
       "post": {
         "tags": ["/auth/kakao"],
