@@ -6,6 +6,6 @@ router.get('/',StudyController.showStudy)
 //스터디 상세 조회
 router.get('/:studyId',StudyController.detailStudy)
 router.delete('/:studyId',StudyController.deleteStudy)
-router.patch('/:studyId',StudyController.updateStudy)
+router.put('/:studyId',StudyController.updateStudy)
 
 module.exports = router;
