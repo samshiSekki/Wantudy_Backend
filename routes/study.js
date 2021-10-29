@@ -1,3 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const ApplicationController = require('../controllers/ApplicationController')
+
+router.get('/application', Application.createApplication)
+router.post('/application', ApplicationController.saveApplication)
+
 const router = require('express').Router();
 const StudyController = require('../controllers/StudyController')
 
