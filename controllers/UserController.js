@@ -6,6 +6,7 @@ exports.saveUser = async function (req, res) {
     const nickname="";
     
     // 1. 등록된 유저인지 확인 / 토큰 교체 
+    
     try{
         let user = await User.findOne({ email: email });
         // 이미 등록되어 있으면 토큰 교체 후 해당 유저 정보를 갖고 메인으로 이동
@@ -60,7 +61,7 @@ exports.saveNickname = async function (req, res) {
         let alreadyUsed = await User.findOne({ nickname: nickName }); // 입력한 닉네임이 이미 있는지 확인
         if(alreadyUsed){ 
             return res
-                .status(204) //  204 error : Non Content, 클라이언트 요구를 처리했으나 전송할 데이터가 없음 
+                .status(409)  
                 .json({ error : '이미 사용 중인 닉네임입니다. '})
         }
 

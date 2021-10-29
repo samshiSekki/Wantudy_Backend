@@ -1,4 +1,4 @@
-const router = require('express').Router();
+var router = require('express').Router();
 const StudyController = require('../controllers/StudyController')
 
 //스터디 리스트 조회
