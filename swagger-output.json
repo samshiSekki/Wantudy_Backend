@@ -24,17 +24,13 @@
     },
     "/study/": {
       "get": {
-        "tags": [
-          "/study"
-        ],
+        "tags": ["/study"],
         "description": "스터디 개설 페이지",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [
-          "/study"
-        ],
+        "tags": ["/study"],
         "description": "스터디 개설 등록",
         "parameters": [
           {
@@ -49,10 +45,7 @@
                 },
                 "category": {
                   "type": "array",
-                  "example": [
-                    "IT",
-                    "경영"
-                  ]
+                  "example": ["IT","경영"]
                 },
                 "description": {
                   "type": "string",
@@ -64,10 +57,7 @@
                 },
                 "studyTime": {
                   "type": "array",
-                  "example": [
-                    "월 13-15",
-                    "금 17-19"
-                  ]
+                  "example": ["월 13-15, 금 17-19"]
                 },
                 "peopleNum": {
                   "type": "number",
@@ -75,192 +65,13 @@
                 },
                 "requiredInfo": {
                   "type": "array",
-                  "example": [
-                    "성별, 관심분야, 지원동기"
-                  ]
-                },
-                "deadline": {
-                  "type": "date",
-                  "example": "2021-11-01"
+                  "example": ["성별, 관심분야, 지원동기"]
                 }
               }
             }
           }
         ],
         "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/study/search": {
-      "get": {
-        "tags": [
-          "/study"
-        ],
-        "description": "스터디 검색하기 (스터디 이름 검색)",
-        "parameters": [
-          {
-            "name": "option",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "content",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/studylist/": {
-      "get": {
-        "tags": [
-          "/studylist"
-        ],
-        "description": "스터디 리스트 보기",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/studylist/{studyId}": {
-      "get": {
-        "tags": [
-          "/studylist"
-        ],
-        "description": "스터디 상세보기",
-        "parameters": [
-          {
-            "name": "studyId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "/studylist"
-        ],
-        "description": "스터디 삭제하기",
-        "parameters": [
-          {
-            "name": "studyId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "/studylist"
-        ],
-        "description": "스터디 수정하기",
-        "parameters": [
-          {
-            "name": "studyId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "studyName": {
-                  "type": "string",
-                  "example": "IT 경영스터디"
-                },
-                "category": {
-                  "type": "array",
-                  "example": [
-                    "IT",
-                    "경영"
-                  ]
-                },
-                "description": {
-                  "type": "string",
-                  "example": "IT 경영 스터디입니다."
-                },
-                "onoff": {
-                  "type": "string",
-                  "example": "online"
-                },
-                "studyTime": {
-                  "type": "array",
-                  "example": [
-                    "월 13-15",
-                    "금 17-19"
-                  ]
-                },
-                "peopleNum": {
-                  "type": "number",
-                  "example": 5
-                },
-                "requiredInfo": {
-                  "type": "array",
-                  "example": [
-                    "성별, 관심분야, 지원동기"
-                  ]
-                },
-                "deadline": {
-                  "type": "date",
-                  "example": "2021-11-01"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "404": {
-            "description": "Not Found"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -269,9 +80,7 @@
     },
     "/auth/kakao": {
       "post": {
-        "tags": [
-          "/auth/kakao"
-        ],
+        "tags": ["/auth/kakao"],
         "description": "카카오 소셜 로그인",
         "parameters": [
           {
@@ -285,11 +94,11 @@
                   "example": "abc@gmail.com"
                 },
                 "profileImage": {
-                  "type": "string",
+                  "type":"string",
                   "example": "https://img.abc"
                 },
                 "accessToken": {
-                  "type": "string",
+                  "type":"string",
                   "example": "abc"
                 }
               }
@@ -297,7 +106,7 @@
           }
         ],
         "responses": {
-          "500": {
+          "500":{
             "description": "Internal Server Error"
           }
         }
@@ -305,9 +114,7 @@
     },
     "/auth/nickname": {
       "post": {
-        "tags": [
-          "/auth/nickname"
-        ],
+        "tags": ["/auth/nickname"],
         "description": "닉네임 등록",
         "parameters": [
           {
@@ -317,29 +124,96 @@
               "type": "object",
               "properties": {
                 "email": {
-                  "email": {
-                    "type": "string",
-                    "example": "abc@gmail.com"
-                  },
-                  "nickName": {
-                    "type": "string",
-                    "example": "abc"
-                  }
+                  "type": "string",
+                  "example": "abc@gmail.com"
+                },
+                "nickName": {
+                  "type": "string",
+                  "example": "abc"
                 }
               }
             }
           }
         ],
         "responses": {
-          "409": {
+          "409":{
             "description": "Conflict"
           },
-          "500": {
+          "500":{
             "description": "Internal Server Error"
           }
-        },
-        "definitions": {}
+        }
       }
+    },
+    "/study/application": {
+      "get": {
+        "tags": ["/study/application"],
+        "description": "스터디 신청서 등록 페이지 조회",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": ["/study/application"],
+        "description": "스터디 신청서 등록",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name":{
+                  "type":"string",
+                  "example":"김철수"
+                },
+                "gender":{
+                  "type":"string",
+                  "example":"남"
+                },
+                "age": {
+                  "type": "number",
+                  "example": 23
+                },
+                "school": {
+                  "type": "string",
+                  "example": "서울대학교"
+                },
+                "major": {
+                  "type": "string",
+                  "example": "철학과"
+                },
+                "attending": {
+                  "type": "string",
+                  "example": "재학"
+                },
+                "semester": {
+                  "type": "array",
+                  "example": [3,2]
+                },
+                "address": {
+                  "type": "string",
+                  "example": "서울특별시 관악구"
+                },
+                "interests": {
+                  "type": "array",
+                  "example": ["개발", "디자인", "기획"]
+                },
+                "keyword": {
+                  "type": "array",
+                  "example": ["철두철미","적극적인","활발한"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "500":{
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "definitions": {
     }
   }
 }
