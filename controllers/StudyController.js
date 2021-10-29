@@ -70,7 +70,7 @@ exports.detailStudy = async function (req, res) {
     try {
         const study = await StudyList.findById(studyId).exec();
         if (!study) {
-            return res.status(404).end()
+            return res.status(404).end();
         } else {
             return res
                 .status(200)
@@ -89,7 +89,7 @@ exports.searchStudy = async function (req, res) {
     console.log(page);
     let options = [];
 
-    if(page < 1){
+    if (page < 1) {
         return res.status(400)
     }
 
@@ -117,3 +117,29 @@ exports.searchStudy = async function (req, res) {
     }
 }
 
+exports.deleteStudy = async function (req, res) {
+    const { studyId } = req.params;
+    console.log(req.params);
+    try {
+        await StudyList.findByIdAndDelete(studyId).exec();
+        return res.status(204);
+    } catch (e) {
+        throw res.status(500).json({ error: err })
+    }
+}
+
+
+exports.updateStudy = async function (req, res) {
+    const { studyId } = req.params;
+    console.log("수정" + studyId)
+    const { update } = req.body;
+    console.log("req.body: "+update);
+
+    try {
+        const study = await StudyList.findByIdAndUpdate(studyId, update, {
+            new: true
+        }).exec();
+    } catch (e) {
+        throw res.status(500, e);
+    }
+};
