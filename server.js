@@ -20,7 +20,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 const id = process.env.DBid
 const pwd = process.env.DBpwd
 
+// userId auto-increment
+var autoIncrement = require('mongoose-auto-increment');
 const mongoose = require("mongoose");
+var connection = mongoose.connection;
 mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrlParser: true, useUnifiedTopology: true }, function (err) {
     if (err) {
         console.error("mongoDB Connection Error!", err);
@@ -32,6 +35,8 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
         console.log("Server listening on port 8080!");
     });
 });
+autoIncrement.initialize(connection);
+
 
 //router 사용
 // const Router=require("./routes/*.js");
@@ -49,3 +54,6 @@ app.get('/',function(req,res){
 // router 사용
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
+
+const userRouter = require('./routes/users');
+app.use('/users', userRouter);

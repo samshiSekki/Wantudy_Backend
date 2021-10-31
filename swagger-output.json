@@ -243,7 +243,7 @@
     },
     "/auth/kakao": {
       "post": {
-        "tags": ["/auth/kakao"],
+        "tags": ["/auth"],
         "description": "카카오 소셜 로그인",
         "parameters": [
           {
@@ -277,8 +277,8 @@
     },
     "/auth/nickname": {
       "post": {
-        "tags": ["/auth/nickname"],
-        "description": "닉네임 등록",
+        "tags": ["/auth"],
+        "description": "첫 로그인 시 닉네임 등록",
         "parameters": [
           {
             "name": "obj",
@@ -293,6 +293,35 @@
                 "nickName": {
                   "type": "string",
                   "example": "abc"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "409":{
+            "description": "Conflict"
+          },
+          "500":{
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/profile":{
+      "post": {
+        "tags": ["/users/{userId}"],
+        "description": "마이페이지",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nickName": {
+                  "type": "string",
+                  "example": "닉네임2"
                 }
               }
             }
@@ -376,6 +405,7 @@
         }
       }
     },
+
     "definitions": {
     }
   }
