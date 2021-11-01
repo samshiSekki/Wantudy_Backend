@@ -18,10 +18,12 @@
   "homepage": "https://github.com/samshiSekki/Back#readme",
   "dependencies": {
     "axios": "^0.23.0",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "mongoose": "^6.0.12",
+    "mongoose-auto-increment": "^5.0.1",
     "nunjucks": "^3.2.3",
     "passport": "^0.5.0",
     "passport-kakao": "^1.0.1",

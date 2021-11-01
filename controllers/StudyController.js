@@ -12,6 +12,7 @@ exports.saveStudy = async function (req, res) {
     const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
     console.log(req.body)
     const study = new StudyList({
+        // user: req.body.user,
         studyName,
         category,
         description,
@@ -68,7 +69,7 @@ exports.detailStudy = async function (req, res) {
     console.log(req.params);
 
     try {
-        const study = await StudyList.findById(studyId).exec();
+        const study = await StudyList.findOne({StudyId: studyId}).exec();
         if (!study) {
             return res.status(404).end();
         } else {
@@ -122,7 +123,7 @@ exports.deleteStudy = async function (req, res) {
     const { studyId } = req.params;
     console.log(req.params);
     try {
-        await StudyList.findByIdAndDelete(studyId).exec();
+        await StudyList.findOneAndDelete({StudyId: studyId}).exec();
         return res.status(204).json();
     } catch (err) {
         throw res.status(500).json({ error: err })
@@ -134,7 +135,7 @@ exports.updateStudy = async function (req, res) {
     const { studyId } = req.params;
 
     try {
-        const study = await StudyList.findByIdAndUpdate(studyId,
+        const study = await StudyList.findOneAndUpdate({StudyId: studyId},
             {
                 $set: {
                     studyName: req.body.studyName,
