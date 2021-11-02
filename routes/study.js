@@ -2,8 +2,17 @@ const express = require('express');
 const router = express.Router();
 const ApplicationController = require('../controllers/ApplicationController')
 
-// router.get('/application', ApplicationController.createApplication)
-// router.post('/application', ApplicationController.saveApplication)
+// 스터디 지원서 조회
+router.get('/application', ApplicationController.showApplication)
+// 스터디 지원서 작성
+router.post('/application', ApplicationController.saveApplication)
+// 스터디 지원서 상세 보기
+router.get('/application/:applicationId', ApplicationController.detailApplication)
+// 스터디 지원서 수정
+router.put('/application/:applicationId', ApplicationController.updateApplication)
+// 스터디 지원서 삭제
+router.delete('/application/:applicationId', ApplicationController.deleteApplication)
+
 
 const StudyController = require('../controllers/StudyController')
 

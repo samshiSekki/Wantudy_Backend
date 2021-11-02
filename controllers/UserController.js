@@ -4,8 +4,9 @@ const User = require("../models/User");
 
 // 마이페이지에서 회원정보(닉네임) 수정
 exports.editNickname = async function (req, res) {
-    const { userId, nickName } = req.body;
-    console.log(userId);
+    const { nickName } = req.body;
+    const { userId } = req.params;
+    
     try{
         let user = await User.findOne({ userId : userId }); // 유저번호에 해당하는 유저 있는지 찾고
 
@@ -32,6 +33,7 @@ exports.editNickname = async function (req, res) {
             .json({ error: err });
     }
 }
+
 
 
 
