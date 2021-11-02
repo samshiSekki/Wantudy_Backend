@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
+const LikeStudy = require('../models/LikeStudy');
 const path = require('path');
+const logger=require('../.config/winston');
 
 //스터디 개설 페이지 보여주기
 exports.createStudy = function (req, res) {
@@ -9,6 +11,8 @@ exports.createStudy = function (req, res) {
 
 //StudyList에 document 저장
 exports.saveStudy = async function (req, res) {
+    logger.info('Post /')
+    logger.error('Error message');
     const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
     console.log(req.body)
     const study = new StudyList({
@@ -166,3 +170,25 @@ exports.updateStudy = async function (req, res) {
         throw res.status(500).json({ error: err })
     }
 };
+
+exports.likeStudy = async function (req, res) {
+    console.log(req.study)
+    const Like = new LikeStudy({
+        studyName: req.study.studyName,
+        category: req.study.category,
+        description: req.study.description,
+        onoff: req.study.onoff,
+        studyTime: req.study.studyTime,
+        peopleNum: req.study.peopleNum,
+        requiredInfo: req.study.requiredInfo,
+        deadline: req.study.deadline
+    })
+    try {
+        await Like.save();
+        return res
+            .status(200)
+            .json(Like);
+    } catch (err) {
+        throw res.status(500).json({ error: err })
+    }
+}
