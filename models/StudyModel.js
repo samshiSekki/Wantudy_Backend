@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-var autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-auto-increment');
 
 const StduySchema = new Schema({
-    // user:{
-    //     _id : mongoose.Types.ObjectId,
-    //     nickname: String,
-    // },
-    StudyId:{
+    user:{
+        type : mongoose.Types.ObjectId,
+        ref : 'User',
+    },
+    StudyId: {
         type: Number,
-        default:0 
+        default: 0,
     },
     studyName: { type: String, required: true },
     category: {
@@ -31,6 +31,14 @@ const StduySchema = new Schema({
         validate: v => Array.isArray(v) && v.length > 0,
     },
     deadline: { type: Date, required: true },
+    created: {
+        type: Date,
+        default: Date.now,
+    },
+    updated:{
+        type: Date,
+        default: Date.now,
+    }
 });
 
 StduySchema.index({ studyName: 'text' });

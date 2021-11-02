@@ -12,7 +12,7 @@ exports.saveStudy = async function (req, res) {
     const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
     console.log(req.body)
     const study = new StudyList({
-        // user: req.body.user,
+        // user: req.user.username,
         studyName,
         category,
         description,
@@ -58,7 +58,9 @@ exports.showStudy = async function (req, res) {
             .status(200)
             .json(studypost);
     } catch (err) {
-        throw res.status(500).json({ error: err })
+        throw res
+            .status(500)
+            .json({ error: err })
     }
 }
 
@@ -69,7 +71,7 @@ exports.detailStudy = async function (req, res) {
     console.log(req.params);
 
     try {
-        const study = await StudyList.findOne({StudyId: studyId}).exec();
+        const study = await StudyList.findOne({ StudyId: studyId }).exec();
         if (!study) {
             return res.status(404).end();
         } else {
@@ -78,7 +80,9 @@ exports.detailStudy = async function (req, res) {
                 .json(study)
         }
     } catch (err) {
-        throw res.status(500).json({ error: err });
+        throw res
+            .status(500)
+            .json({ error: err });
     }
 }
 
@@ -123,7 +127,7 @@ exports.deleteStudy = async function (req, res) {
     const { studyId } = req.params;
     console.log(req.params);
     try {
-        await StudyList.findOneAndDelete({StudyId: studyId}).exec();
+        await StudyList.findOneAndDelete({ StudyId: studyId }).exec();
         return res.status(204).json();
     } catch (err) {
         throw res.status(500).json({ error: err })
@@ -135,7 +139,7 @@ exports.updateStudy = async function (req, res) {
     const { studyId } = req.params;
 
     try {
-        const study = await StudyList.findOneAndUpdate({StudyId: studyId},
+        const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
             {
                 $set: {
                     studyName: req.body.studyName,
@@ -146,12 +150,15 @@ exports.updateStudy = async function (req, res) {
                     peopleNum: req.body.peopleNum,
                     requiredInfo: req.body.requiredInfo,
                     deadline: req.body.deadline
-                }
-            },{new: true}).exec();
+                },
+                updated: Date.now()
+            },
+            { new: true })
+            .exec();
         if (!study) {
             return res.status(404)
         }
-        req.body=study;
+        req.body = study;
         return res
             .status(200)
             .json(study);
