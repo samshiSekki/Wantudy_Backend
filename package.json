@@ -30,6 +30,8 @@
     "qs": "^6.10.1",
     "session": "^0.1.0",
     "swagger-autogen": "^2.12.3",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
   }
 }
