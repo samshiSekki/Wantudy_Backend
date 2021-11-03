@@ -18,7 +18,11 @@ const StduySchema = new Schema({
         validate: v => Array.isArray(v) && v.length > 0,
     },
     description: { type: String, required: true },
-    onoff: { type: String, required: true },
+    onoff: {
+        type: [String],
+        required: true,
+        validate: v => Array.isArray(v) && v.length > 0,
+    },
     studyTime: {
         type: [String],
         required: true,
