@@ -343,6 +343,12 @@
         "description": "스터디 지원서 조회",
         "parameters": [
           {
+            "name":"page",
+            "in":"query",
+            "type":"string",
+            "example":"3"
+          },
+          {
             "name": "obj",
             "in": "body",
             "schema": {
