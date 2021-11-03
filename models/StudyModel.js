@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
 
-const StduySchema = new Schema({
+const StudySchema = new Schema({
     userId:{
         type : Number,
         // required : true,
@@ -45,14 +45,14 @@ const StduySchema = new Schema({
     }
 });
 
-StduySchema.index({ studyName: 'text' });
+StudySchema.index({ studyName: 'text' });
 
-StduySchema.plugin(autoIncrement.plugin, {
+StudySchema.plugin(autoIncrement.plugin, {
     model: 'Studylist',
     field: 'StudyId',
     startAt: 1, //시작
     increment: 1 // 증가
 });
 
-module.exports = mongoose.model('StudyList', StduySchema);
+module.exports = mongoose.model('StudyList', StudySchema);
 //StudyList라는 이름으로 StudySchema에 접근
