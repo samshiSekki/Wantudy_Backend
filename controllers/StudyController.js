@@ -11,9 +11,8 @@ exports.createStudy = function (req, res) {
 
 //StudyList에 document 저장
 exports.saveStudy = async function (req, res) {
-    logger.info('Post /')
-    logger.error('Error message');
     const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
+    logger.info(req.body.deadline)
     console.log(req.body)
     const study = new StudyList({
         // user: req.user.username,
@@ -35,6 +34,7 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
+        logger.error(err)
         throw res.status(500).json({ error: err })
     }
 };
@@ -171,24 +171,33 @@ exports.updateStudy = async function (req, res) {
     }
 };
 
+//스크랩 
 exports.likeStudy = async function (req, res) {
-    console.log(req.study)
-    const Like = new LikeStudy({
-        studyName: req.study.studyName,
-        category: req.study.category,
-        description: req.study.description,
-        onoff: req.study.onoff,
-        studyTime: req.study.studyTime,
-        peopleNum: req.study.peopleNum,
-        requiredInfo: req.study.requiredInfo,
-        deadline: req.study.deadline
-    })
+    const { studyId } = req.params;
+    console.log(req.params);
+
     try {
-        await Like.save();
-        return res
-            .status(200)
-            .json(Like);
+        const study = await StudyList.findOne({ StudyId: studyId }).exec();
+        // console.log(study._id)
+        const check = await LikeStudy.findOne({ study : study._id}).exec();
+        // console.log(check)
+        if (!study) {
+            return res.status(404).end();
+        } 
+        else if(check){
+            return res.send('이미 찜한 스터디입니다.').end();
+        }
+        else {
+            const like = new LikeStudy({study : study});
+            await like.save();            
+            // console.log(like.study._id)
+            return res
+                .status(200)
+                .json(like)
+        }
     } catch (err) {
-        throw res.status(500).json({ error: err })
+        throw res
+            .status(500)
+            .json({ error: err });
     }
 }
