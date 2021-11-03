@@ -3,9 +3,9 @@ const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
 
 const StduySchema = new Schema({
-    user:{
-        type : mongoose.Types.ObjectId,
-        ref : 'User',
+    userId:{
+        type : Number,
+        // required : true,
     },
     StudyId: {
         type: Number,
