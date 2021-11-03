@@ -11,12 +11,12 @@ exports.createStudy = function (req, res) {
 
 //StudyList에 document 저장
 exports.saveStudy = async function (req, res) {
-    const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
-    logger.info(req.body.deadline)
-    console.log(req.body)
-    logger.info(req.body.deadline)
+    const { userId, studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
+    logger.info(req.body.userId)
+    // console.log(req.body)
+>>>>>>> 7df0d85ecc1a9c1939ca3c0eaa367de84f28623d
     const study = new StudyList({
-        // user: req.user.username,
+        userId,
         studyName,
         category,
         description,
@@ -35,11 +35,7 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
-<<<<<<< Updated upstream
         logger.error(err)
-=======
-	logger.error(err)
->>>>>>> Stashed changes
         throw res.status(500).json({ error: err })
     }
 };
@@ -80,7 +76,7 @@ exports.detailStudy = async function (req, res) {
     console.log(req.params);
 
     try {
-        const study = await StudyList.findOne({ StudyId: studyId }).exec();
+        const study = await StudyList.findOne({ StudyId: studyId })
         if (!study) {
             return res.status(404).end();
         } else {
@@ -122,7 +118,7 @@ exports.searchStudy = async function (req, res) {
             .skip((page - 1) * 10)
             .exec();
         const postCount = await StudyList.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(postCount / 3));
+        res.set('Last-Page', Math.ceil(postCount / 3)); //헤더에 라스트 페이지 뜨게 하는 코드
         return res
             .status(200)
             .json(studypost);
@@ -137,6 +133,7 @@ exports.deleteStudy = async function (req, res) {
     console.log(req.params);
     try {
         await StudyList.findOneAndDelete({ StudyId: studyId }).exec();
+        //exec 빼기
         return res.status(204).json();
     } catch (err) {
         throw res.status(500).json({ error: err })
@@ -167,7 +164,7 @@ exports.updateStudy = async function (req, res) {
         if (!study) {
             return res.status(404)
         }
-        req.body = study;
+        // req.body = study;
         return res
             .status(200)
             .json(study);
