@@ -14,6 +14,7 @@ exports.saveStudy = async function (req, res) {
     const { studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
     logger.info(req.body.deadline)
     console.log(req.body)
+    logger.info(req.body.deadline)
     const study = new StudyList({
         // user: req.user.username,
         studyName,
@@ -34,7 +35,11 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
+<<<<<<< Updated upstream
         logger.error(err)
+=======
+	logger.error(err)
+>>>>>>> Stashed changes
         throw res.status(500).json({ error: err })
     }
 };
