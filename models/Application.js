@@ -1,28 +1,25 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-// applicationId - autoIncrement 
 var autoIncrement = require('mongoose-auto-increment');
 
 const applicationSchema = new Schema({
     userId:{ // 누가 신청서를 작성했는지
         type:Number,
     },
-    applicationId:{ // 신청서 수정할 때 
+    applicationId:{ // 신청서 번호 auto increment
+        type:Number,
+        default:0
+    },
+    studyId:{ // 스터디에 등록하는 경우 이 값이 바뀜. 아니면 default=0 값 유지
         type:Number,
         default:0
     },
     applicationName:{ // 값이 없으면 띄워줄 때 신청서1,2..이런식으로 가게
         type:String,
     },
-    created: { 
-        type: Date, 
-    },
-    updated:{
-        type: Date, 
-    },
     name:{
         type:String,
-    },
+    }, 
     gender:{
         type:String,
     },
@@ -39,16 +36,19 @@ const applicationSchema = new Schema({
         type:String,
     },
     semester:{
-        type:[Number]
+        type:[Number],
+        validate: v => Array.isArray(v) && v.length > 0,
     },
     address:{
         type:String,
     },
     interests:{        
         type:[String],
+        validate: v => Array.isArray(v) && v.length > 0,
     },
     keyword:{
         type:[String],
+        validate: v => Array.isArray(v) && v.length > 0, 
     },
     applyMotive:{
         type:String,
@@ -66,4 +66,5 @@ applicationSchema.plugin(autoIncrement.plugin, {
 });
 
 module.exports = mongoose.model('Application', applicationSchema);
+
 

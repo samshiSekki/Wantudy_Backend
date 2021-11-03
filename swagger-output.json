@@ -339,14 +339,8 @@
     },
     "/study/application": {
       "get": {
-        "tags": ["/study/application"],
-        "description": "스터디 신청서 등록 페이지 조회",
-        "parameters": [],
-        "responses": {}
-      },
-      "post": {
-        "tags": ["/study/application"],
-        "description": "스터디 신청서 등록",
+        "tags": ["/study"],
+        "description": "스터디 지원서 조회",
         "parameters": [
           {
             "name": "obj",
@@ -354,6 +348,37 @@
             "schema": {
               "type": "object",
               "properties": {
+                "userId": {
+                  "type": "number",
+                  "example": 100
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["/study"],
+        "description": "스터디 지원서 작성",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "number",
+                  "example": 100
+                },
                 "name":{
                   "type":"string",
                   "example":"김철수"
@@ -405,7 +430,121 @@
         }
       }
     },
-
+    "/study/application/{applicationId}":{
+      "get": {
+        "tags": ["/study"],
+        "description": "스터디 지원서 상세보기",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["/study"],
+        "description": "스터디 지원서 수정하기",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name":{
+                  "type":"string",
+                  "example":"김영희"
+                },
+                "gender":{
+                  "type":"string",
+                  "example":"여"
+                },
+                "age": {
+                  "type": "number",
+                  "example": 32
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete":{
+        "tags": ["/study"],
+        "description": "스터디 지원서 삭제하기",
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/study/{studyId}/application":{
+      "put": {
+        "tags": ["/study"],
+        "description": "스터디 지원서 등록하기 (스터디 신청 시)",
+        "parameters": [
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "applicationId":{
+                  "type":"number",
+                  "example":9
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          } 
+        }
+      }
+    },
     "definitions": {
     }
   }

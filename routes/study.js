@@ -4,14 +4,22 @@ const ApplicationController = require('../controllers/ApplicationController')
 
 // 스터디 지원서 조회
 router.get('/application', ApplicationController.showApplication)
+
 // 스터디 지원서 작성
 router.post('/application', ApplicationController.saveApplication)
+
 // 스터디 지원서 상세 보기
 router.get('/application/:applicationId', ApplicationController.detailApplication)
-// 스터디 지원서 수정
+
+// 스터디 지원서 등록
+router.put('/:studyId/application', ApplicationController.registerApplication)
+
+//  스터디 지원서 수정
 router.put('/application/:applicationId', ApplicationController.updateApplication)
+
 // 스터디 지원서 삭제
 router.delete('/application/:applicationId', ApplicationController.deleteApplication)
+
 
 
 const StudyController = require('../controllers/StudyController')

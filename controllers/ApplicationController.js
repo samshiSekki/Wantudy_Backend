@@ -1,39 +1,28 @@
 const Application = require("../models/Application");
-// const path=require('path');
+const logger=require('../.config/winston');
 
-
-/* 
-    1) 상단바에서 지원서 등록하기 - 조회, 작성, (수정, 삭제)
-    2) 스터디 신청버튼 눌렀을 때 지원서 등록하기 - 수정, 조회, 작성, 신청(등록), 삭제 
-*/
-
-/* 
-    1,2 - 지원서 목록 조회
-    https://url:8080/posts?pages=1&limit=5
-*/
+// 스터디 지원서 조회
 exports.showApplication = async function (req, res) {
     const { userId } = req.body;
     const { page } = req.query;
 
-    if (page < 1) {
+    if (page < 1) 
         return res
             .status(400)
             .json({ error: err })
-    }
-
+    
     try {
-        const Applications = await Application.find(userId) 
+        const applications = await Application.find({userId:userId}) 
             .sort({ applicationId : -1}) // 내림차순 정렬
             .limit(5)
-            .skip((page - 1) * 3)
+            .skip((page - 1) * 5)
             .exec();
 
-        const count = await Applications.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(count / 3)); // 응답헤더를 설정 res.set(name, value)
+        const count = await Application.countDocuments().exec();
+        res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
         return res
             .status(200)
-            .json(Applications);
-
+            .json(applications);
     } catch (err) {
         throw res
             .status(500)
@@ -41,13 +30,14 @@ exports.showApplication = async function (req, res) {
     }
 }
 
-// 1,2 - 새로운 지원서 작성
+// 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
-    const { userId, name, gender, age, school, 
-        major, attending, semester, address, interests, keyword, message } = req.body;
+    const { userId, studyId, name, gender, age, school, 
+        major, attending, semester, address, interests, keyword, applyMotive, message } = req.body;
 
-    const application = new Application({
+    const application = new Application({ // 뭐가들어올지 모르니까 프론트에서 다 보내주세요
         userId,
+        studyId,
         name,
         gender,
         age,
@@ -58,23 +48,24 @@ exports.saveApplication = async function (req, res){
         address,
         interests,
         keyword,
+        applyMotive,
         message,
-        created:Date.now(), // db들어갈 때 넣어주는 값
     });
 
     try {
         await application.save();
         return res
             .status(200)
-            .json(user) // 지원서 등록
+            .json(application) // 지원서 등록
     } catch (err) {
+        logger.error(err)
         throw res
             .status(500)
             .json({ error: err })
     }    
 }
 
-// 1,2 - 지원서 상세보기 /study/application/1
+// 지원서 상세보기 /study/application/1
 exports.detailApplication = async function (req, res) {
     const { applicationId } = req.params;
     try {
@@ -87,7 +78,35 @@ exports.detailApplication = async function (req, res) {
         else 
             return res
                 .status(200)
-                .json(application)
+                .json(application)    
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
+// 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application/
+exports.registerApplication = async function (req, res) {
+    const { studyId } = req.params;
+    const { applicationId } = req.body;
+    try {
+        // const application = await Application.findOne({applicationId:applicationId});
+        
+        const application = await Application.findOneAndUpdate({applicationId:applicationId},{
+            $set: {
+                studyId:studyId,
+            }
+        },{new: true});
+        
+        if(!application)
+            return res
+                .status(404)
+                .end();
+
+        return res
+            .status(200)
+            .json(application)
         
     } catch (err) {
         throw res
@@ -96,40 +115,48 @@ exports.detailApplication = async function (req, res) {
     }
 }
 
-// 1 - 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application
-
-// 2 - 지원서 수정 (저장 / 다른 이름으로 저장)
+// 지원서 수정 (저장 / 다른 이름으로 저장)
 exports.updateApplication = async function (req, res){
     const { userId, applicationName, name, gender, age, school, 
-        major, attending, semester, address, interests, keyword, message } = req.body;
+        major, attending, semester, address, interests, keyword, applyMotive, message } = req.body;
     const { applicationId } = req.params;
 
-    try {
-        if(applicationName===''){ // 저장인 경우
-            const application = await Application.findOneAndUpdate(applicationId,{
+    if(applicationName===''){ // 저장인 경우
+        try{
+            const application = await Application.findOneAndUpdate({applicationId:applicationId},{
                 $set: {
                     name: name,
                     gender: gender,
                     age: age,
                     school: school,
-                    major: major,
+                    major: major, 
                     attending: attending,
                     semester: semester,
                     address: address,
                     interests: interests,
                     keyword: keyword,
+                    applyMotive: applyMotive,
                     message: message,
-                    updated: Date.now() // 수정된 시각
                 }
-            },{new: true}).exec();
-            if (!application) {
+            },{new: true});
+    
+            if (!application) 
                 return res
                     .status(404)
                     .json({ error: err});
-            }
-        } 
-        else { // 다른 이름으로 저장인 경우
-            const application = await Application.findOneAndUpdate(applicationId,{
+
+            return res
+                .status(200)
+                .json(application);
+        }catch (err) {
+            throw res
+                .status(500)
+                .json({ error: err })
+        }    
+    }
+    else { // 다른 이름으로 저장인 경우
+        try{
+            const application = await Application.findOneAndUpdate({applicationId:applicationId},{
                 $set: {
                     applicationName: applicationName,
                     name: name,
@@ -142,29 +169,27 @@ exports.updateApplication = async function (req, res){
                     address: address,
                     interests: interests,
                     keyword: keyword,
+                    applyMotive: applyMotive,
                     message: message,
-                    updated: Date.now() // 수정된 시각
                 }
-            },{new: true}).exec(); // 콜백 함수 없이 바로 쿼리를 실행시키려면, update() 호출 후 exec()를 호출
-            if (!application) {
+            },{new: true});
+           
+            if (!application) 
                 return res
                     .status(404)
-                    .json({ error: err});
-            }
+        
+            return res
+                .status(200)
+                .json(application);
+        } catch (err) {
+            throw res
+                .status(500)
+                .json({ error: err })
         }
-        return res
-            .status(200)
-            .json(application);
-
-    } catch (err) {
-        throw res
-            .status(500)
-            .json({ error: err })
-    }    
-
+    }
 }
 
-// 2 - 지원서 삭제하기
+// 지원서 삭제하기
 exports.deleteApplication = async function (req, res) {
     const { applicationId } = req.params;
     try {
