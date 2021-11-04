@@ -81,14 +81,17 @@ exports.detailStudy = async function (req, res) {
 
     try {
         const study = await StudyList.findOne({ StudyId: studyId })
+        const comment = await commentList.findOne({ StudyId: studyId })
         if (!study) {
             return res.status(404).end();
         } else {
-            return res
-                .status(200)
-                .json(study)
+            return res.status(200).json({
+                status: 'succes',
+                data : study,comment
+            })
         }
     } catch (err) {
+        logger.error("상세페이지 조회 error " + err)
         throw res
             .status(500)
             .json({ error: err });
@@ -219,22 +222,22 @@ exports.commentStudy = async (req, res) => {
     const { studyId } = req.params;
 
     try {
-        const check = await commentList.findOne({ studyId : studyId }).exec();
-        if(check){
+        const check = await commentList.findOne({ studyId: studyId }).exec();
+        if (check) {
             const commentupdate = await commentList.findOneAndUpdate({ StudyId: studyId },
                 {
                     $push: {
-                        content : req.body.content
+                        content: req.body.content
                     },//댓글 배열에 새로운 댓글 추가
                     updated: Date.now()
                 },
                 { new: true })
                 .exec();
-                return res
+            return res
                 .status(200)
                 .json(commentupdate)
         }
-        else{
+        else {
             const comment = new commentList({
                 studyId,
                 userId,
