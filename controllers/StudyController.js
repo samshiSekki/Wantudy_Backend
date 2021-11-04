@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
 const LikeStudy = require('../models/LikeStudy');
+const commentList = require('../models/comment');
 const path = require('path');
 const logger = require('../.config/winston');
 
@@ -13,7 +14,7 @@ exports.createStudy = function (req, res) {
 exports.saveStudy = async function (req, res) {
     const { userId, studyName, category, description, onoff,
         studyTime, peopleNum, requiredInfo, deadline, start, end } = req.body;
-    logger.info("userId : "+req.body.userId)
+    logger.info("userId : " + req.body.userId)
     // console.log(req.body)
 >>>>>>> 7df0d85ecc1a9c1939ca3c0eaa367de84f28623d
     const study = new StudyList({
@@ -38,7 +39,7 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
-        logger.error("스터디저장 error : "+err)
+        logger.error("스터디저장 error : " + err)
         throw res.status(500).json({ error: err })
     }
 };
@@ -126,7 +127,7 @@ exports.searchStudy = async function (req, res) {
             .status(200)
             .json(studypost);
     } catch (err) {
-        logger.error("스터디 검색 err : " + err )
+        logger.error("스터디 검색 err : " + err)
         throw res.status(500).json({ error: err })
     }
 }
@@ -209,3 +210,44 @@ exports.likeStudy = async function (req, res) {
             .json({ error: err });
     }
 }
+<<<<<<< HEAD
+=======
+
+//댓글 작성
+exports.commentStudy = async (req, res) => {
+    const { userId, content } = req.body;
+    const { studyId } = req.params;
+
+    try {
+        const check = await commentList.findOne({ studyId : studyId }).exec();
+        if(check){
+            const commentupdate = await commentList.findOneAndUpdate({ StudyId: studyId },
+                {
+                    $push: {
+                        content : req.body.content
+                    },//댓글 배열에 새로운 댓글 추가
+                    updated: Date.now()
+                },
+                { new: true })
+                .exec();
+                return res
+                .status(200)
+                .json(commentupdate)
+        }
+        else{
+            const comment = new commentList({
+                studyId,
+                userId,
+                content,
+            })
+            await comment.save();
+            return res
+                .status(200)
+                .json(comment);
+        }
+    } catch (err) {
+        logger.error("댓글 저장 error : " + err)
+        throw res.status(500).json({ error: err })
+    }
+};
+>>>>>>> ea0b20e492be29fc08fbc9f5a99bd913b064146f
