@@ -10,10 +10,10 @@ const applicationSchema = new Schema({
         type:Number,
         default:0
     },
-    studyId:{ // 스터디에 등록하는 경우 이 값이 바뀜. 아니면 default=0 값 유지
-        type:Number,
-        default:0
-    },
+    // studyId:{ // 스터디에 등록하는 경우 이 값이 바뀜. 아니면 default=0 값 유지
+    //     type:Number,
+    //     default:0
+    // },
     applicationName:{ // 값이 없으면 띄워줄 때 신청서1,2..이런식으로 가게
         type:String,
     },

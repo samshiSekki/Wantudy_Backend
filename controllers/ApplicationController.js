@@ -1,4 +1,6 @@
 const Application = require("../models/Application");
+const StudyList = require('../models/StudyModel');
+const RegisterApplication = require('../models/RegisterApplication');
 const logger=require('../.config/winston');
 
 // 스터디 지원서 조회
@@ -32,12 +34,11 @@ exports.showApplication = async function (req, res) {
 
 // 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
-    const { userId, studyId, name, gender, age, school, 
+    const { userId, name, gender, age, school, 
         major, attending, semester, address, interests, keyword, applyMotive, message } = req.body;
 
     const application = new Application({ // 뭐가들어올지 모르니까 프론트에서 다 보내주세요
         userId,
-        studyId,
         name,
         gender,
         age,
@@ -86,33 +87,47 @@ exports.detailApplication = async function (req, res) {
     }
 }
 
-// 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application/
+// 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application
 exports.registerApplication = async function (req, res) {
     const { studyId } = req.params;
-    const { applicationId } = req.body;
-    try {
-        // const application = await Application.findOne({applicationId:applicationId});
-        
-        const application = await Application.findOneAndUpdate({applicationId:applicationId},{
-            $set: {
-                studyId:studyId,
-            }
-        },{new: true});
-        
-        if(!application)
+    const { userId, applicationId } = req.body;
+
+    try{
+        const study = await StudyList.findOne({StudyId: studyId});
+        const application = await Application.findOne({applicationId: applicationId});
+
+        if(!study)
             return res
                 .status(404)
                 .end();
 
+        if(study.userId == userId)
+            return res
+                .status(400)
+                .json({
+                    msg:'자신이 개설한 스터디에는 등록할 수 없습니다'
+                });
+        
+        const registerApplication = new RegisterApplication({
+            userId,
+            study,
+            application,
+            registered:Date.now()        
+        })
+
+        await registerApplication.save();
         return res
             .status(200)
-            .json(application)
-        
+            .json({
+                msg:'스터디 지원서가 등록되었습니다.'
+            })
+
     } catch (err) {
+        logger.error("스터디 신청 시 지원서 등록 오류:" +err);
         throw res
             .status(500)
             .json({ error: err })
-    }
+    }   
 }
 
 // 지원서 수정 (저장 / 다른 이름으로 저장)
@@ -143,7 +158,7 @@ exports.updateApplication = async function (req, res){
             if (!application) 
                 return res
                     .status(404)
-                    .json({ error: err});
+                    .end();
 
             return res
                 .status(200)
@@ -177,6 +192,7 @@ exports.updateApplication = async function (req, res){
             if (!application) 
                 return res
                     .status(404)
+                    .end();
         
             return res
                 .status(200)
