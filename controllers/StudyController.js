@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
 const LikeStudy = require('../models/LikeStudy');
 const path = require('path');
-const logger=require('../.config/winston');
+const logger = require('../.config/winston');
 
 //스터디 개설 페이지 보여주기
 exports.createStudy = function (req, res) {
@@ -11,8 +11,9 @@ exports.createStudy = function (req, res) {
 
 //StudyList에 document 저장
 exports.saveStudy = async function (req, res) {
-    const { userId, studyName, category, description, onoff, studyTime, peopleNum, requiredInfo, deadline } = req.body;
-    logger.info(req.body.userId)
+    const { userId, studyName, category, description, onoff,
+        studyTime, peopleNum, requiredInfo, deadline, start, end } = req.body;
+    logger.info("userId : "+req.body.userId)
     // console.log(req.body)
     const study = new StudyList({
         userId,
@@ -24,6 +25,8 @@ exports.saveStudy = async function (req, res) {
         peopleNum,
         requiredInfo,
         deadline,
+        start,
+        end,
     })
     if (req.body.deadline !== null) {
         study.deadline = new Date(req.body.deadline);
@@ -34,12 +37,12 @@ exports.saveStudy = async function (req, res) {
             .status(200)
             .json(study);
     } catch (err) {
-        logger.error(err)
+        logger.error("스터디저장 error : "+err)
         throw res.status(500).json({ error: err })
     }
 };
 
-//스터디 리스트 페이지 조회 ( 한 페이지 당 3개씩 )
+//스터디 리스트 페이지 조회 ( 한 페이지 당 5개씩 )
 //마감기한 임박순 디폴트
 exports.showStudy = async function (req, res) {
 
@@ -53,11 +56,11 @@ exports.showStudy = async function (req, res) {
     try {
         const studypost = await StudyList.find()
             .sort({ deadline: 1 })
-            .limit(3)
-            .skip((page - 1) * 3)
+            .limit(5)
+            .skip((page - 1) * 5)
             .exec();
         const postCount = await StudyList.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(postCount / 3));
+        res.set('Last-Page', Math.ceil(postCount / 5));
         return res
             .status(200)
             .json(studypost);
@@ -113,15 +116,16 @@ exports.searchStudy = async function (req, res) {
         }
         const studypost = await StudyList.find({ $or: options })
             .sort({ deadline: 1 })
-            .limit(3)
-            .skip((page - 1) * 10)
+            .limit(5)
+            .skip((page - 1) * 5)
             .exec();
         const postCount = await StudyList.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(postCount / 3)); //헤더에 라스트 페이지 뜨게 하는 코드
+        res.set('Last-Page', Math.ceil(postCount / 5)); //헤더에 라스트 페이지 표시
         return res
             .status(200)
             .json(studypost);
     } catch (err) {
+        logger.error("스터디 검색 err : " + err )
         throw res.status(500).json({ error: err })
     }
 }
@@ -131,8 +135,7 @@ exports.deleteStudy = async function (req, res) {
     const { studyId } = req.params;
     console.log(req.params);
     try {
-        await StudyList.findOneAndDelete({ StudyId: studyId }).exec();
-        //exec 빼기
+        await StudyList.findOneAndDelete({ StudyId: studyId })
         return res.status(204).json();
     } catch (err) {
         throw res.status(500).json({ error: err })
@@ -154,7 +157,9 @@ exports.updateStudy = async function (req, res) {
                     studyTime: req.body.studyTime,
                     peopleNum: req.body.peopleNum,
                     requiredInfo: req.body.requiredInfo,
-                    deadline: req.body.deadline
+                    deadline: req.body.deadline,
+                    satrt: req.body.start,
+                    end: req.body.end
                 },
                 updated: Date.now()
             },
@@ -163,11 +168,11 @@ exports.updateStudy = async function (req, res) {
         if (!study) {
             return res.status(404)
         }
-        // req.body = study;
         return res
             .status(200)
             .json(study);
     } catch (err) {
+        logger.error("스터디 수정 err: " + err)
         throw res.status(500).json({ error: err })
     }
 };
@@ -180,23 +185,24 @@ exports.likeStudy = async function (req, res) {
     try {
         const study = await StudyList.findOne({ StudyId: studyId }).exec();
         // console.log(study._id)
-        const check = await LikeStudy.findOne({ study : study._id}).exec();
+        const check = await LikeStudy.findOne({ study: study._id }).exec();
         // console.log(check)
         if (!study) {
             return res.status(404).end();
-        } 
-        else if(check){
+        }
+        else if (check) {
             return res.send('이미 찜한 스터디입니다.').end();
         }
         else {
-            const like = new LikeStudy({study : study});
-            await like.save();            
+            const like = new LikeStudy({ study: study });
+            await like.save();
             // console.log(like.study._id)
             return res
                 .status(200)
                 .json(like)
         }
     } catch (err) {
+        logger.error("스터디 스크랩 err: " + err)
         throw res
             .status(500)
             .json({ error: err });

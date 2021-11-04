@@ -70,6 +70,14 @@
                 "deadline": {
                   "type":"date",
                   "example": "2021-11-01"
+                },
+                "satrt": {
+                  "type":"date",
+                  "example": "2021-11-01"
+                },
+                "end": {
+                  "type":"date",
+                  "example": "2021-11-30"
                 }
               }
             }
@@ -159,6 +167,26 @@
           }
         }
       },
+      "post":{
+        "tags": ["/studylist"],
+        "description": "스터디 찜하기",
+        "parameters": [
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
       "delete": {
         "tags": ["/studylist"],
         "description": "스터디 삭제하기",
@@ -226,6 +254,14 @@
                 "deadline": {
                   "type":"date",
                   "example": "2021-11-01"
+                },
+                "satrt": {
+                  "type":"date",
+                  "example": "2021-11-01"
+                },
+                "end": {
+                  "type":"date",
+                  "example": "2021-11-30"
                 }
               }
             }
