@@ -212,8 +212,6 @@ exports.likeStudy = async function (req, res) {
             .json({ error: err });
     }
 }
-<<<<<<< HEAD
-=======
 
 //댓글 작성
 exports.commentStudy = async (req, res) => {
@@ -252,4 +250,3 @@ exports.commentStudy = async (req, res) => {
         throw res.status(500).json({ error: err })
     }
 };
->>>>>>> ea0b20e492be29fc08fbc9f5a99bd913b064146f
