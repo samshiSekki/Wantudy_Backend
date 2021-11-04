@@ -12,7 +12,7 @@ router.post('/application', ApplicationController.saveApplication)
 router.get('/application/:applicationId', ApplicationController.detailApplication)
 
 // 스터디 지원서 등록
-router.put('/:studyId/application', ApplicationController.registerApplication)
+router.post('/:studyId/application', ApplicationController.registerApplication)
 
 //  스터디 지원서 수정
 router.put('/application/:applicationId', ApplicationController.updateApplication)
