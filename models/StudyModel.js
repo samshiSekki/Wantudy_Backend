@@ -42,6 +42,14 @@ const StudySchema = new Schema({
     updated:{
         type: Date,
         default: Date.now,
+    },
+    start:{
+        type:Date,
+        required: true
+    },
+    end:{
+        type:Date,
+        required:true
     }
 });
 
