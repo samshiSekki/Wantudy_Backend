@@ -85,7 +85,7 @@
                   "type": "date",
                   "example": "2021-11-01"
                 },
-                "satrt": {
+                "start": {
                   "type": "date",
                   "example": "2021-11-01"
                 },
@@ -289,7 +289,7 @@
                   "type": "date",
                   "example": "2021-11-01"
                 },
-                "satrt": {
+                "start": {
                   "type": "date",
                   "example": "2021-11-01"
                 },
@@ -337,7 +337,12 @@
               }
             }
           }
-        ]
+        ],
+        "responses":{
+          "500":{
+            "description":"Internal Server Error"
+          }
+        }
       }
     },
     "/auth/kakao": {
