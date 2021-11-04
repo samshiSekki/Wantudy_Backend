@@ -16,7 +16,6 @@ exports.saveStudy = async function (req, res) {
         studyTime, peopleNum, requiredInfo, deadline, start, end } = req.body;
     logger.info("userId : " + req.body.userId)
     // console.log(req.body)
->>>>>>> 7df0d85ecc1a9c1939ca3c0eaa367de84f28623d
     const study = new StudyList({
         userId,
         studyName,
