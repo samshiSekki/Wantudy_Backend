@@ -222,7 +222,7 @@ exports.commentStudy = async (req, res) => {
     try {
         const check = await commentList.findOne({ studyId: studyId }).exec();
         if (check) {
-            const commentupdate = await commentList.findOneAndUpdate({ StudyId: studyId },
+            const commentupdate = await commentList.findOneAndUpdate({ studyId: studyId },
                 {
                     $push: {
                         content: req.body.content
