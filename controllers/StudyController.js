@@ -80,7 +80,8 @@ exports.detailStudy = async function (req, res) {
 
     try {
         const study = await StudyList.findOne({ StudyId: studyId })
-        const comment = await commentList.findOne({ StudyId: studyId })
+        const comment = await commentList.findOne({ studyId: studyId })
+        console.log(comment)
         if (!study) {
             return res.status(404).end();
         } else {
