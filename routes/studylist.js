@@ -12,5 +12,7 @@ router.get('/:studyId', StudyController.detailStudy)
 router.delete('/:studyId', StudyController.deleteStudy)
 //스터디 수정
 router.put('/:studyId', StudyController.updateStudy)
+//댓글 작성
+router.post('/:studyId/comment',StudyController.commentStudy)
 
 module.exports = router;

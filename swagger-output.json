@@ -16,7 +16,9 @@
   "paths": {
     "/": {
       "get": {
-        "tags": ["main"],
+        "tags": [
+          "main"
+        ],
         "description": "메인 첫 페이지",
         "parameters": [],
         "responses": {}
@@ -24,13 +26,17 @@
     },
     "/study/": {
       "get": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 개설 페이지",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 개설 등록",
         "parameters": [
           {
@@ -45,7 +51,10 @@
                 },
                 "category": {
                   "type": "array",
-                  "example": ["IT","경영"]
+                  "example": [
+                    "IT",
+                    "경영"
+                  ]
                 },
                 "description": {
                   "type": "string",
@@ -57,26 +66,31 @@
                 },
                 "studyTime": {
                   "type": "array",
-                  "example": ["월 13-15", "금 17-19"]
+                  "example": [
+                    "월 13-15",
+                    "금 17-19"
+                  ]
                 },
                 "peopleNum": {
                   "type": "number",
                   "example": 5
                 },
                 "requiredInfo": {
-                  "type":"array",
-                  "example": ["성별, 관심분야, 지원동기"]
+                  "type": "array",
+                  "example": [
+                    "성별, 관심분야, 지원동기"
+                  ]
                 },
                 "deadline": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-01"
                 },
                 "satrt": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-01"
                 },
                 "end": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-30"
                 }
               }
@@ -92,26 +106,28 @@
     },
     "/study/search": {
       "get": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 검색하기 (스터디 이름 검색)",
         "parameters": [
           {
             "name": "option",
             "in": "query",
             "type": "string",
-            "example":"studyName"
+            "example": "studyName"
           },
           {
             "name": "content",
             "in": "query",
             "type": "string",
-            "example":"IT"
+            "example": "IT"
           },
           {
             "name": "page",
             "in": "query",
             "type": "string",
-            "example":"3"
+            "example": "3"
           }
         ],
         "responses": {
@@ -126,7 +142,9 @@
     },
     "/studylist/": {
       "get": {
-        "tags": ["/studylist"],
+        "tags": [
+          "/studylist"
+        ],
         "description": "스터디 리스트 보기",
         "parameters": [
           {
@@ -148,7 +166,9 @@
     },
     "/studylist/{studyId}": {
       "get": {
-        "tags": ["/studylist"],
+        "tags": [
+          "/studylist"
+        ],
         "description": "스터디 상세보기",
         "parameters": [
           {
@@ -167,8 +187,10 @@
           }
         }
       },
-      "post":{
-        "tags": ["/studylist"],
+      "post": {
+        "tags": [
+          "/studylist"
+        ],
         "description": "스터디 찜하기",
         "parameters": [
           {
@@ -188,7 +210,9 @@
         }
       },
       "delete": {
-        "tags": ["/studylist"],
+        "tags": [
+          "/studylist"
+        ],
         "description": "스터디 삭제하기",
         "parameters": [
           {
@@ -208,7 +232,9 @@
         }
       },
       "put": {
-        "tags": ["/studylist"],
+        "tags": [
+          "/studylist"
+        ],
         "description": "스터디 수정하기",
         "parameters": [
           {
@@ -229,7 +255,10 @@
                 },
                 "category": {
                   "type": "array",
-                  "example": ["IT","경영"]
+                  "example": [
+                    "IT",
+                    "경영"
+                  ]
                 },
                 "description": {
                   "type": "string",
@@ -241,26 +270,31 @@
                 },
                 "studyTime": {
                   "type": "array",
-                  "example": ["월 13-15", "금 17-19"]
+                  "example": [
+                    "월 13-15",
+                    "금 17-19"
+                  ]
                 },
                 "peopleNum": {
                   "type": "number",
                   "example": 5
                 },
                 "requiredInfo": {
-                  "type":"array",
-                  "example": ["성별, 관심분야, 지원동기"]
+                  "type": "array",
+                  "example": [
+                    "성별, 관심분야, 지원동기"
+                  ]
                 },
                 "deadline": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-01"
                 },
                 "satrt": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-01"
                 },
                 "end": {
-                  "type":"date",
+                  "type": "date",
                   "example": "2021-11-30"
                 }
               }
@@ -277,9 +311,40 @@
         }
       }
     },
+    "/studylist/{studyId}/comment": {
+      "post": {
+        "tags": [
+          "/studylist"
+        ],
+        "description": "댓글 작성",
+        "parameters": [
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "array",
+                  "example": "댓글내용"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "/auth/kakao": {
       "post": {
-        "tags": ["/auth"],
+        "tags": [
+          "/auth"
+        ],
         "description": "카카오 소셜 로그인",
         "parameters": [
           {
@@ -293,11 +358,11 @@
                   "example": "abc@gmail.com"
                 },
                 "profileImage": {
-                  "type":"string",
+                  "type": "string",
                   "example": "https://img.abc"
                 },
                 "accessToken": {
-                  "type":"string",
+                  "type": "string",
                   "example": "abc"
                 }
               }
@@ -305,7 +370,7 @@
           }
         ],
         "responses": {
-          "500":{
+          "500": {
             "description": "Internal Server Error"
           }
         }
@@ -313,7 +378,9 @@
     },
     "/auth/nickname": {
       "post": {
-        "tags": ["/auth"],
+        "tags": [
+          "/auth"
+        ],
         "description": "첫 로그인 시 닉네임 등록",
         "parameters": [
           {
@@ -335,18 +402,20 @@
           }
         ],
         "responses": {
-          "409":{
+          "409": {
             "description": "Conflict"
           },
-          "500":{
+          "500": {
             "description": "Internal Server Error"
           }
         }
       }
     },
-    "/users/{userId}/profile":{
+    "/users/{userId}/profile": {
       "post": {
-        "tags": ["/users/{userId}"],
+        "tags": [
+          "/users/{userId}"
+        ],
         "description": "마이페이지",
         "parameters": [
           {
@@ -364,10 +433,10 @@
           }
         ],
         "responses": {
-          "409":{
+          "409": {
             "description": "Conflict"
           },
-          "500":{
+          "500": {
             "description": "Internal Server Error"
           }
         }
@@ -375,14 +444,16 @@
     },
     "/study/application": {
       "get": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 조회",
         "parameters": [
           {
-            "name":"page",
-            "in":"query",
-            "type":"string",
-            "example":"3"
+            "name": "page",
+            "in": "query",
+            "type": "string",
+            "example": "3"
           },
           {
             "name": "obj",
@@ -408,7 +479,9 @@
         }
       },
       "post": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 작성",
         "parameters": [
           {
@@ -421,13 +494,13 @@
                   "type": "number",
                   "example": 100
                 },
-                "name":{
-                  "type":"string",
-                  "example":"김철수"
+                "name": {
+                  "type": "string",
+                  "example": "김철수"
                 },
-                "gender":{
-                  "type":"string",
-                  "example":"남"
+                "gender": {
+                  "type": "string",
+                  "example": "남"
                 },
                 "age": {
                   "type": "number",
@@ -447,7 +520,10 @@
                 },
                 "semester": {
                   "type": "array",
-                  "example": [3,2]
+                  "example": [
+                    3,
+                    2
+                  ]
                 },
                 "address": {
                   "type": "string",
@@ -455,26 +531,36 @@
                 },
                 "interests": {
                   "type": "array",
-                  "example": ["개발", "디자인", "기획"]
+                  "example": [
+                    "개발",
+                    "디자인",
+                    "기획"
+                  ]
                 },
                 "keyword": {
                   "type": "array",
-                  "example": ["철두철미","적극적인","활발한"]
+                  "example": [
+                    "철두철미",
+                    "적극적인",
+                    "활발한"
+                  ]
                 }
               }
             }
           }
         ],
         "responses": {
-          "500":{
+          "500": {
             "description": "Internal Server Error"
           }
         }
       }
     },
-    "/study/application/{applicationId}":{
+    "/study/application/{applicationId}": {
       "get": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 상세보기",
         "parameters": [
           {
@@ -494,7 +580,9 @@
         }
       },
       "put": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 수정하기",
         "parameters": [
           {
@@ -509,13 +597,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "name":{
-                  "type":"string",
-                  "example":"김영희"
+                "name": {
+                  "type": "string",
+                  "example": "김영희"
                 },
-                "gender":{
-                  "type":"string",
-                  "example":"여"
+                "gender": {
+                  "type": "string",
+                  "example": "여"
                 },
                 "age": {
                   "type": "number",
@@ -534,8 +622,10 @@
           }
         }
       },
-      "delete":{
-        "tags": ["/study"],
+      "delete": {
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 삭제하기",
         "parameters": [
           {
@@ -552,9 +642,11 @@
         }
       }
     },
-    "/study/{studyId}/application":{
+    "/study/{studyId}/application": {
       "put": {
-        "tags": ["/study"],
+        "tags": [
+          "/study"
+        ],
         "description": "스터디 지원서 등록하기 (스터디 신청 시)",
         "parameters": [
           {
@@ -569,9 +661,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "applicationId":{
-                  "type":"number",
-                  "example":9
+                "applicationId": {
+                  "type": "number",
+                  "example": 9
                 }
               }
             }
@@ -583,11 +675,10 @@
           },
           "500": {
             "description": "Internal Server Error"
-          } 
+          }
         }
       }
     },
-    "definitions": {
-    }
+    "definitions": {}
   }
 }
