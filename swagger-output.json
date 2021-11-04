@@ -45,6 +45,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "userId":{
+                  "type": "number",
+                  "example":1
+                },
                 "studyName": {
                   "type": "string",
                   "example": "IT 경영스터디"
@@ -457,8 +461,8 @@
           {
             "name": "page",
             "in": "query",
-            "type": "string",
-            "example": "3"
+            "type": "number",
+            "example": 5
           },
           {
             "name": "obj",
@@ -549,6 +553,14 @@
                     "적극적인",
                     "활발한"
                   ]
+                },
+                "applyMotive":{
+                  "type": "string",
+                  "example": "지원동기입니다"
+                },
+                "message":{
+                  "type": "string",
+                  "example": "열심히할게요"
                 }
               }
             }
@@ -612,7 +624,11 @@
                 },
                 "age": {
                   "type": "number",
-                  "example": 32
+                  "example": 22
+                },
+                "applicationName":{
+                  "type": "string",
+                  "example": "지원서1"
                 }
               }
             }
@@ -648,11 +664,11 @@
       }
     },
     "/study/{studyId}/application": {
-      "put": {
+      "post": {
         "tags": [
           "/study"
         ],
-        "description": "스터디 지원서 등록하기 (스터디 신청 시)",
+        "description": "스터디 신청 시에 지원서 등록하기",
         "parameters": [
           {
             "name": "studyId",
@@ -666,15 +682,22 @@
             "schema": {
               "type": "object",
               "properties": {
+                "userId": {
+                  "type": "number",
+                  "example": 3
+                },
                 "applicationId": {
                   "type": "number",
-                  "example": 9
+                  "example": 11
                 }
               }
             }
           }
         ],
         "responses": {
+          "400":{
+            "description": "Bad Request"
+          },
           "404": {
             "description": "Not Found"
           },
