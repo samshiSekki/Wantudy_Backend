@@ -132,7 +132,7 @@ exports.registerApplication = async function (req, res) {
 
 // 지원서 수정 (저장 / 다른 이름으로 저장)
 exports.updateApplication = async function (req, res){
-    const { userId, applicationName, name, gender, age, school, 
+    const { applicationName, name, gender, age, school, 
         major, attending, semester, address, interests, keyword, applyMotive, message } = req.body;
     const { applicationId } = req.params;
 
