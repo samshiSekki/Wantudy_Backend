@@ -82,7 +82,7 @@
                 "requiredInfo": {
                   "type": "array",
                   "example": [
-                    "성별, 관심분야, 지원동기"
+                    "성별", "관심분야", "지원동기"
                   ]
                 },
                 "deadline": {
