@@ -130,7 +130,7 @@
           {
             "name": "page",
             "in": "query",
-            "type": "string",
+            "type": "Number",
             "example": "3"
           }
         ],
@@ -154,7 +154,7 @@
           {
             "name": "page",
             "in": "query",
-            "type": "string",
+            "type": "Number",
             "example": "3"
           }
         ],
