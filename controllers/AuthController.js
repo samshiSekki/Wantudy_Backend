@@ -20,7 +20,6 @@ exports.saveUser = async function (req, res) {
             return res
                 .status(200)
                 .json(user); 
-    
         }    
     } catch (err) {
         return res
@@ -35,7 +34,6 @@ exports.saveUser = async function (req, res) {
         accessToken,
         nickname
     });
-    console.log("hi")
     console.log(user)
 
     try {
@@ -57,7 +55,6 @@ exports.saveNickname = async function (req, res) {
 
     // 등록된 유저인지 확인 / 토큰 교체 
     try{
-
         // 1. 닉네임 중복처리
         let alreadyUsed = await User.findOne({ nickname: nickName }); // 입력한 닉네임이 이미 있는지 확인
         if(alreadyUsed){ 

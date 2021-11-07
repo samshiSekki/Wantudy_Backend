@@ -23,6 +23,10 @@ const userSchema = new Schema({
     nickname:{
         type:String,
         maxlength:8
+    },
+    state:{ // 대표지원서 있는지 여부
+        type:Boolean,
+        default:false 
     }
 })
 
