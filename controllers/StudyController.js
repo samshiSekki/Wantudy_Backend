@@ -53,6 +53,7 @@ exports.showStudy = async function (req, res) {
 
     const { page } = req.query;
     console.log(page);
+    logger.info("스터디 조회: " + page)
 
     if (page < 1) {
         return res.status(400).json({ error: err })
@@ -70,6 +71,7 @@ exports.showStudy = async function (req, res) {
             .status(200)
             .json(studypost);
     } catch (err) {
+        logger.error("스터디 조회 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
