@@ -6,7 +6,8 @@ const logger=require('../.config/winston');
 
 // 스터디 지원서 조회
 exports.showApplication = async function (req, res) {
-    const { userId } = req.body;
+    // const { userId } = req.body;
+    const { userId } = req.params;
     const { page } = req.query;
 
     // if (page < 1) 
