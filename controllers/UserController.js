@@ -1,4 +1,5 @@
 const LikeStudy = require("../models/LikeStudy");
+const StudyList = require('../models/StudyModel');
 const User = require("../models/User");
 
 /* 마이페이지 화면 controller */ 
@@ -39,10 +40,30 @@ exports.editNickname = async function (req, res) {
 exports.likeStudyList = async function (req, res){
     const { userId } = req.params;
     try{
-        const likeStudyList = await LikeStudy.find({userId: userId})
-        console.log(likeStudyList);
-    } catch{
-        console.log("false");
+        var studyList=new Array();
+        const likeStudyList = await LikeStudy.find({userId: userId}) // a가 찜한 스터디 목록 모두 담기
+        console.log(likeStudyList.length)
+        
+        if(likeStudyList.length==0){ // 찜한 스터디가 없는 경우
+            return res
+                .status(200)
+                .json({msg : '찜한 스터디가 없습니다'})
+        }
+
+        // objectId 받아서 studyList에서 다시 조회해오기
+        for(var i=0;i<likeStudyList.length;i++){
+            var study = await StudyList.findOne({_id : likeStudyList[i].study})
+            studyList[i]=study;
+        }
+        
+        return res
+            .status(200)
+            .json(studyList);
+
+    } catch (err){
+        throw res
+            .status(500)
+            .json({ error: err })       
     }
 }
 
