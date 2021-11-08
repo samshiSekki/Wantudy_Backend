@@ -179,7 +179,7 @@
             "name": "studyId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -201,7 +201,7 @@
             "name": "studyId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -223,7 +223,7 @@
             "name": "studyId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -245,7 +245,7 @@
             "name": "studyId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "obj",
@@ -326,7 +326,7 @@
             "name": "studyId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           },
           {
             "name": "obj",
@@ -425,7 +425,7 @@
         "tags": [
           "/users/{userId}"
         ],
-        "description": "마이페이지",
+        "description": "마이페이지에서 닉네임 수정하기",
         "parameters": [
           {
             "name": "obj",
@@ -445,6 +445,27 @@
           "409": {
             "description": "Conflict"
           },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/like-studylist":{
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 찜한 스터디 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
           "500": {
             "description": "Internal Server Error"
           }

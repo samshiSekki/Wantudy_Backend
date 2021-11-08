@@ -124,12 +124,12 @@ exports.registerApplication = async function (req, res) {
         })
 
         await registerApplication.save();
+    
         return res
             .status(200)
             .json({
                 msg:'스터디 지원서가 등록되었습니다.'
             })
-
     } catch (err) {
         logger.error("스터디 신청 시 지원서 등록 오류:" +err);
         throw res
