@@ -1,5 +1,6 @@
 const Application = require("../models/Application");
 const StudyList = require('../models/StudyModel');
+const User = require('../models/User')
 const RegisterApplication = require('../models/RegisterApplication');
 const logger=require('../.config/winston');
 
@@ -53,13 +54,20 @@ exports.saveApplication = async function (req, res){
         message,
     });
 
+    const user = await User.findOneAndUpdate({userId: userId},{
+        $set: {
+            state:true
+        }
+    },{new: true});
+
+
     try {
         await application.save();
         return res
             .status(200)
-            .json(application) // 지원서 등록
+            .json(user) // 지원서 등록
     } catch (err) {
-        logger.error(err)
+        logger.error("지원서 등록:"+err)
         throw res
             .status(500)
             .json({ error: err })

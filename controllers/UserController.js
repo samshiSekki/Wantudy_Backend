@@ -34,16 +34,10 @@ exports.editNickname = async function (req, res) {
     }
 }
 
+// 찜한 스터디 
+exports.likeStudyList = async function (req, res){
 
-
-
-// // 회원정보 수정페이지 띄우기
-// exports.editUser = function (req, res) {
-//     res.sendFile(path.join(__dirname, '../../build/index.html'))
-// }
-
-// // 회원정보 수정
-// router.get('/:userId/profile', UserController.editUser)
+}
 
 // // 찜한 스터디 조회
 // router.get('/:userId/like-studylist', UserController.editUser)
