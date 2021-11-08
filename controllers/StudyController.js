@@ -51,22 +51,22 @@ exports.saveStudy = async function (req, res) {
 //마감기한 임박순 디폴트
 exports.showStudy = async function (req, res) {
 
-    const { page } = req.query;
-    console.log(page);
-    logger.info("스터디 조회: " + page)
+    // const { page } = req.query;
+    // console.log(page);
+    // logger.info("스터디 조회: " + page)
 
-    if (page < 1) {
-        return res.status(400).json({ error: err })
-    }
+    // if (page < 1) {
+    //     return res.status(400).json({ error: err })
+    // }
 
     try {
         const studypost = await StudyList.find()
-            .sort({ deadline: 1 })
-            .limit(5)
-            .skip((page - 1) * 5)
-            .exec();
-        const postCount = await StudyList.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(postCount / 5));
+            // .sort({ _id : 1 })
+            // .limit(5)
+            // .skip((page - 1) * 5)
+            // .exec();
+        // const postCount = await StudyList.countDocuments().exec();
+        // res.set('Last-Page', Math.ceil(postCount / 5));
         return res
             .status(200)
             .json(studypost);
@@ -108,13 +108,13 @@ exports.detailStudy = async function (req, res) {
 //스터디 검색하기
 exports.searchStudy = async function (req, res) {
 
-    const { page } = req.query
-    console.log(page);
+    // const { page } = req.query
+    // console.log(page);
     let options = [];
 
-    if (page < 1) {
-        return res.status(400)
-    }
+    // if (page < 1) {
+    //     return res.status(400)
+    // }
 
     try {
         if (req.query.option == 'studyName') {
@@ -126,12 +126,12 @@ exports.searchStudy = async function (req, res) {
             throw err;
         }
         const studypost = await StudyList.find({ $or: options })
-            .sort({ deadline: 1 })
-            .limit(5)
-            .skip((page - 1) * 5)
-            .exec();
-        const postCount = await StudyList.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(postCount / 5)); //헤더에 라스트 페이지 표시
+            // .sort({ _id: 1 })
+            // .limit(5)
+            // .skip((page - 1) * 5)
+            // .exec();
+        // const postCount = await StudyList.countDocuments().exec();
+        // res.set('Last-Page', Math.ceil(postCount / 5)); //헤더에 라스트 페이지 표시
         return res
             .status(200)
             .json(studypost);
