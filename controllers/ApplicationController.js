@@ -9,21 +9,21 @@ exports.showApplication = async function (req, res) {
     const { userId } = req.body;
     const { page } = req.query;
 
-    if (page < 1) 
-        return res
-            .status(400)
-            .json({ error: err })
+    // if (page < 1) 
+    //     return res
+    //         .status(400)
+    //         .json({ error: err })
     
     try {
         const applications = await Application.find({userId:userId}) 
-            .sort({ applicationId : -1}) // 내림차순 정렬
-            .limit(5)
-            .skip((page - 1) * 5)
-            .exec();
+            // .sort({ applicationId : -1}) // 내림차순 정렬
+            // .limit(5)
+            // .skip((page - 1) * 5)
+            // .exec();
 
 
-        const count = await Application.countDocuments().exec();
-        res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
+        // const count = await Application.countDocuments().exec();
+        // res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
         return res
             .status(200)
             .json(applications);
