@@ -114,6 +114,7 @@ exports.applyStudyList = async function (req, res){
 exports.openedStudyList = async function (req, res){
     const { userId } = req.params;
     try{
+        var openedAndApplication =new Array();
         const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
         
         if(openedStudyList.length==0){ // 개설한 스터디가 없는 경우
@@ -123,23 +124,17 @@ exports.openedStudyList = async function (req, res){
         }
 
         for(var i=0;i<openedStudyList.length;i++){
-            var application = await RegisterApplication.findOne({application : openedStudyList[i]._id}) // 해당스터디에 등록한 지원서
-
-            const result = {
-                studyId :study.StudyId,
-                studyName : study.studyName,
-                state,
-                application
+            var application = await RegisterApplication.find({study : openedStudyList[i]._id}) // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
+                        
+            openedAndApplication[i]={ 
+                study:openedStudyList[i], // 개설한 스터디 정보
+                application // 그 스터디에 등록되어있는 지원서 목록
             }
-            studyAndApplication[i]=result;
-            console.log(studyAndApplication[i]);
         }
-
-        console.log(openedStudyList)
         
         return res
             .status(200)
-            .json(studyList);
+            .json(openedAndApplication);
 
     } catch (err){
         throw res

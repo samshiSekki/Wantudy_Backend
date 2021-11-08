@@ -20,11 +20,6 @@ router.get('/:userId/opened-studylist', UserController.openedStudyList)
 // // 과제 관리
 // router.get('/:userId/assignment', UserController.getAssignment);
 
-// // 신청한 스터디 조회
-// router.get('/:userId/apply-studylist', UserController.editUser)
-
-// // 개설한 스터디 조회
-// router.get('/:userId/opened-studylist', UserController.editUser)
 
 
 module.exports = router;

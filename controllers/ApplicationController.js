@@ -21,6 +21,7 @@ exports.showApplication = async function (req, res) {
             .skip((page - 1) * 5)
             .exec();
 
+
         const count = await Application.countDocuments().exec();
         res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
         return res
@@ -65,7 +66,7 @@ exports.saveApplication = async function (req, res){
         await application.save();
         return res
             .status(200)
-            .json(user) // 지원서 등록
+            .json(application) // 지원서 등록
     } catch (err) {
         logger.error("지원서 등록:"+err)
         throw res

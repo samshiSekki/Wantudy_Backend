@@ -425,7 +425,7 @@
         "tags": [
           "/users/{userId}"
         ],
-        "description": "마이페이지에서 닉네임 수정하기",
+        "description": "마이페이지 닉네임 수정하기",
         "parameters": [
           {
             "name": "obj",
@@ -457,6 +457,48 @@
           "/users/{userId}"
         ],
         "description": "마이페이지 찜한 스터디 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/apply-studylist":{
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 신청한 스터디 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/opened-studylist":{
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 개설한 스터디 조회",
         "parameters": [
           {
             "name": "userId",
