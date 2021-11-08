@@ -126,12 +126,6 @@
             "in": "query",
             "type": "string",
             "example": "IT"
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "type": "Number",
-            "example": "3"
           }
         ],
         "responses": {
@@ -151,12 +145,6 @@
         ],
         "description": "스터디 리스트 보기",
         "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "type": "Number",
-            "example": "3"
-          }
         ],
         "responses": {
           "400": {
