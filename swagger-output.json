@@ -65,8 +65,10 @@
                   "example": "IT 경영 스터디입니다."
                 },
                 "onoff": {
-                  "type": "string",
-                  "example": "online"
+                  "type": "array",
+                  "example": [
+                    "온라인","오프라인"
+                  ]
                 },
                 "studyTime": {
                   "type": "array",
@@ -257,8 +259,10 @@
                   "example": "IT 경영 스터디입니다."
                 },
                 "onoff": {
-                  "type": "string",
-                  "example": "online"
+                  "type": "array",
+                  "example": [
+                    "온라인","오프라인"
+                  ]
                 },
                 "studyTime": {
                   "type": "array",
