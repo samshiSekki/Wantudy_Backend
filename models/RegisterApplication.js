@@ -18,7 +18,7 @@ const registerApplicationSchema = new Schema({
         type:Number,
         default:0
     },
-    registered:{
+    registered:{ // 언제 등록된 지원서인지
         type:Date,
         required:true
     }
