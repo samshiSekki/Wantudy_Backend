@@ -189,21 +189,27 @@ exports.updateStudy = async function (req, res) {
 //스크랩 
 exports.likeStudy = async function (req, res) {
     const { studyId } = req.params;
+    const { userId } = req.body;
+
     console.log(req.params);
 
     try {
-        const study = await StudyList.findOne({ StudyId: studyId }).exec();
+        const study = await StudyList.findOne({ StudyId: studyId }); // 스터디 찾아오기
         // console.log(study._id)
-        const check = await LikeStudy.findOne({ study: study._id }).exec();
-        // console.log(check)
+        // const check = await LikeStudy.findOne({ study: study._id }).exec(); // 이렇게 되면 여러 사람이 스터디 못찜함
+        const check = await LikeStudy.find({userId: userId, study: study._id});
         if (!study) {
             return res.status(404).end();
         }
-        else if (check) {
+        else if (check.length!=0) {
             return res.send('이미 찜한 스터디입니다.').end();
         }
         else {
-            const like = new LikeStudy({ study: study });
+            const like = new LikeStudy({ 
+                userId: userId,
+                study: study 
+            });
+
             await like.save();
             // console.log(like.study._id)
             return res

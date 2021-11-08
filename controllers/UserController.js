@@ -1,3 +1,4 @@
+const LikeStudy = require("../models/LikeStudy");
 const User = require("../models/User");
 
 /* 마이페이지 화면 controller */ 
@@ -34,9 +35,15 @@ exports.editNickname = async function (req, res) {
     }
 }
 
-// 찜한 스터디 
+// 찜한 스터디 조회
 exports.likeStudyList = async function (req, res){
-
+    const { userId } = req.params;
+    try{
+        const likeStudyList = await LikeStudy.find({userId: userId})
+        console.log(likeStudyList);
+    } catch{
+        console.log("false");
+    }
 }
 
 // // 찜한 스터디 조회
