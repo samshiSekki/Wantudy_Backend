@@ -5,35 +5,34 @@ const RegisterApplication = require('../models/RegisterApplication');
 const logger=require('../.config/winston');
 
 // 스터디 지원서 조회
-exports.showApplication = async function (req, res) {
-    // const { userId } = req.body;
-    const { userId } = req.params;
-    const { page } = req.query;
+// exports.showApplication = async function (req, res) {
+//     const { userId } = req.params;
+//     const { page } = req.query;
 
-    // if (page < 1) 
-    //     return res
-    //         .status(400)
-    //         .json({ error: err })
+//     // if (page < 1) 
+//     //     return res
+//     //         .status(400)
+//     //         .json({ error: err })
     
-    try {
-        const applications = await Application.find({userId:userId}) 
-            // .sort({ applicationId : -1}) // 내림차순 정렬
-            // .limit(5)
-            // .skip((page - 1) * 5)
-            // .exec();
+//     try {
+//         const applications = await Application.find({userId:userId}) 
+//             // .sort({ applicationId : -1}) // 내림차순 정렬
+//             // .limit(5)
+//             // .skip((page - 1) * 5)
+//             // .exec();
 
 
-        // const count = await Application.countDocuments().exec();
-        // res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
-        return res
-            .status(200)
-            .json(applications);
-    } catch (err) {
-        throw res
-            .status(500)
-            .json({ error: err })
-    }
-}
+//         // const count = await Application.countDocuments().exec();
+//         // res.set('Last-Page', Math.ceil(count / 5 )); // 응답헤더를 설정 res.set(name, value)
+//         return res
+//             .status(200)
+//             .json(applications);
+//     } catch (err) {
+//         throw res
+//             .status(500)
+//             .json({ error: err })
+//     }
+// }
 
 // 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
@@ -100,7 +99,9 @@ exports.detailApplication = async function (req, res) {
 // 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application
 exports.registerApplication = async function (req, res) {
     const { studyId } = req.params;
-    const { userId, applicationId } = req.body;
+    // const { userId, applicationId } = req.body; // 기존 코드
+    const { userId, applicationId, state } = req.body; // 스터디장이 수락한 경우 (state 변수 바꾸기 테스트용)
+
 
     try{
         const study = await StudyList.findOne({StudyId: studyId});
@@ -122,6 +123,7 @@ exports.registerApplication = async function (req, res) {
             userId,
             study,
             application,
+            state, // 테스트용 (원래는 없어야 함) 
             registered:Date.now()        
         })
 

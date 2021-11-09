@@ -420,6 +420,12 @@
         "description": "마이페이지 닉네임 수정하기",
         "parameters": [
           {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
             "name": "obj",
             "in": "body",
             "schema": {
@@ -437,6 +443,27 @@
           "409": {
             "description": "Conflict"
           },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/application": {
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "스터디 지원서 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
           "500": {
             "description": "Internal Server Error"
           }
@@ -506,42 +533,28 @@
         }
       }
     },
-    "/study/application": {
+    "/users/{userId}/ongoing-studylist":{
       "get": {
         "tags": [
-          "/study"
+          "/users/{userId}"
         ],
-        "description": "스터디 지원서 조회",
+        "description": "마이페이지 신청한 스터디 조회",
         "parameters": [
           {
-            "name": "page",
-            "in": "query",
-            "type": "number",
-            "example": 5
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "userId": {
-                  "type": "number",
-                  "example": 100
-                }
-              }
-            }
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad Request"
-          },
           "500": {
             "description": "Internal Server Error"
           }
         }
-      },
+      }
+    },
+    "/study/application": {
       "post": {
         "tags": [
           "/study"

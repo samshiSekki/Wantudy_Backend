@@ -2,10 +2,8 @@ const express = require('express');
 const router = express.Router();
 const ApplicationController = require('../controllers/ApplicationController')
 
-// 스터디 지원서 조회
-// router.get('/application', ApplicationController.showApplication)
-router.get('/application/:userId', ApplicationController.showApplication)
-
+// // 스터디 지원서 조회
+// router.get('/application/:userId', ApplicationController.showApplication)
 
 // 스터디 지원서 작성
 router.post('/application', ApplicationController.saveApplication)
