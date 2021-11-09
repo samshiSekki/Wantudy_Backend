@@ -5,6 +5,9 @@ const UserController = require('../controllers/UserController')
 // 닉네임 수정
 router.post('/:userId/profile', UserController.editNickname)
 
+// 스터디 지원서 조회
+router.get('/:userId/application', UserController.showApplication)
+
 // 찜한 스터디 조회
 router.get('/:userId/like-studylist', UserController.likeStudyList)
 
@@ -14,8 +17,8 @@ router.get('/:userId/apply-studylist', UserController.applyStudyList)
 // 개설한 스터디 조회
 router.get('/:userId/opened-studylist', UserController.openedStudyList)
 
-// // 참여 스터디 조회 
-// router.get('/:userId/total-studylist ', UserController.editUser)
+// 참여 스터디 조회 
+router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 
 // // 과제 관리
 // router.get('/:userId/assignment', UserController.getAssignment);
