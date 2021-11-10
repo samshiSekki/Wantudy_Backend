@@ -269,10 +269,9 @@ exports.commentStudy = async (req, res) => {
 
 exports.saveReport = async (req, res) => {
     const { studyId } = req.params;
-    const { userId, reason } = req.body;
+    const { reason } = req.body;
 
     const report = new reportList({
-        userId,
         studyId,
         reason
     })
