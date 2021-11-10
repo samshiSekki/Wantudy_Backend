@@ -6,7 +6,7 @@ const reportSchema = new Schema({
         type: Number,
     },
     reason: {
-        type: String,
+        type: [String],
         required: true
     }
 })

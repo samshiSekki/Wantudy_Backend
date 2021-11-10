@@ -271,15 +271,31 @@ exports.saveReport = async (req, res) => {
     const { studyId } = req.params;
     const { reason } = req.body;
 
-    const report = new reportList({
-        studyId,
-        reason
-    })
     try {
-        await report.save();
-        return res
-            .status(200)
-            .json(report);
+        const check = await reportList.findOne({ studyId: studyId }).exec();
+        if(check){
+            const reportupdate = await reportList.findOneAndUpdate({ studyId: studyId },
+                {
+                    $push: {
+                        reason: req.body.reason
+                    },//신고 사유 누적
+                },
+                { new: true })
+                .exec();
+            return res
+                .status(200)
+                .json(reportupdate)
+        }
+        else{
+            const report = new reportList({
+                studyId,
+                reason
+            })
+            await report.save();
+            return res
+                .status(200)
+                .json(report);
+        }
     } catch (err) {
         logger.error("신고 사유 저장 error : " + err)
         throw res.status(500).json({ error: err })
