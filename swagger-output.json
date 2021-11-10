@@ -374,7 +374,7 @@
               "type": "object",
               "properties": {
                 "reason": {
-                  "type": "string",
+                  "type": "Array",
                   "example": "신고 사유"
                 }
               }
