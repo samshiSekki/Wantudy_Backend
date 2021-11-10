@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const reportSchema = new Schema({
-    userId:{
-        type: Number,
-    },
     studyId: {
         type: Number,
     },

@@ -192,6 +192,19 @@
             "in": "path",
             "required": true,
             "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "Number",
+                  "example": 1
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -329,6 +342,40 @@
                 "content": {
                   "type": "array",
                   "example": "댓글내용"
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "500":{
+            "description":"Internal Server Error"
+          }
+        }
+      }
+    },
+    "/studylist/{studyId}/report": {
+      "post": {
+        "tags": [
+          "/studylist"
+        ],
+        "description": "스터디 신고",
+        "parameters": [
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "example": "신고 사유"
                 }
               }
             }
