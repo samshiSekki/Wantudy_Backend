@@ -12,6 +12,9 @@ router.get('/:studyId', StudyController.detailStudy)
 router.delete('/:studyId', StudyController.deleteStudy)
 //스터디 수정
 router.put('/:studyId', StudyController.updateStudy)
+//스터디 신고(사유 저장)
+router.post('/:studyId/report',StudyController.saveReport)
+// router.patch('/:studyId/report',StudyController.reportStudy)
 //댓글 작성
 router.post('/:studyId/comment',StudyController.commentStudy)
 

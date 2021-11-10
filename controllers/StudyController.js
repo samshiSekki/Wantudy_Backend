@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
 const LikeStudy = require('../models/LikeStudy');
 const commentList = require('../models/comment');
+const reportList = require('../models/reportModel');
 const path = require('path');
 const logger = require('../.config/winston');
 
@@ -61,10 +62,10 @@ exports.showStudy = async function (req, res) {
 
     try {
         const studypost = await StudyList.find()
-            // .sort({ _id : 1 })
-            // .limit(5)
-            // .skip((page - 1) * 5)
-            // .exec();
+        // .sort({ _id : 1 })
+        // .limit(5)
+        // .skip((page - 1) * 5)
+        // .exec();
         // const postCount = await StudyList.countDocuments().exec();
         // res.set('Last-Page', Math.ceil(postCount / 5));
         return res
@@ -126,10 +127,10 @@ exports.searchStudy = async function (req, res) {
             throw err;
         }
         const studypost = await StudyList.find({ $or: options })
-            // .sort({ _id: 1 })
-            // .limit(5)
-            // .skip((page - 1) * 5)
-            // .exec();
+        // .sort({ _id: 1 })
+        // .limit(5)
+        // .skip((page - 1) * 5)
+        // .exec();
         // const postCount = await StudyList.countDocuments().exec();
         // res.set('Last-Page', Math.ceil(postCount / 5)); //헤더에 라스트 페이지 표시
         return res
@@ -199,17 +200,17 @@ exports.likeStudy = async function (req, res) {
         const study = await StudyList.findOne({ StudyId: studyId }); // 스터디 찾아오기
         // console.log(study._id)
         // const check = await LikeStudy.findOne({ study: study._id }).exec(); // 이렇게 되면 여러 사람이 스터디 못찜함
-        const check = await LikeStudy.find({userId: userId, study: study._id});
+        const check = await LikeStudy.find({ userId: userId, study: study._id });
         if (!study) {
             return res.status(404).end();
         }
-        else if (check.length!=0) {
+        else if (check.length != 0) {
             return res.send('이미 찜한 스터디입니다.').end();
         }
         else {
-            const like = new LikeStudy({ 
+            const like = new LikeStudy({
                 userId: userId,
-                study: study 
+                study: study
             });
 
             await like.save();
@@ -263,3 +264,43 @@ exports.commentStudy = async (req, res) => {
         throw res.status(500).json({ error: err })
     }
 };
+
+//스터디 신고
+
+exports.saveReport = async (req, res) => {
+    const { studyId } = req.params;
+    const { userId, reason } = req.body;
+
+    const report = new reportList({
+        userId,
+        studyId,
+        reason
+    })
+    try {
+        await report.save();
+        return res
+            .status(200)
+            .json(report);
+    } catch (err) {
+        logger.error("신고 사유 저장 error : " + err)
+        throw res.status(500).json({ error: err })
+    }
+};
+
+// exports.reportStudy = async (req, res) => {
+//     const { studyId } = req.params;
+
+//     try {
+//         const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
+//             { $inc: { report: 1 } });
+//         if (!study) {
+//             return res.status(404)
+//         }
+//         return res
+//             .status(200)
+//             .json(study);
+//     } catch (err) {
+//         logger.error("스터디 신고 err: " + err)
+//         throw res.status(500).json({ error: err })
+//     }
+// };

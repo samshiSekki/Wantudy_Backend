@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
 
 const StudySchema = new Schema({
-    userId:{
-        type : Number,
+    userId: {
+        type: Number,
         // required : true,
     },
     StudyId: {
@@ -39,18 +39,22 @@ const StudySchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    updated:{
+    updated: {
         type: Date,
         default: Date.now,
     },
-    start:{
-        type:Date,
-        required: true
+    start: {
+        type: Date,
+        required: true,
     },
-    end:{
-        type:Date,
-        required:true
-    }
+    end: {
+        type: Date,
+        required: true,
+    },
+    // report: {
+    //     type: Number,
+    //     default: 0
+    // }
 });
 
 StudySchema.index({ studyName: 'text' });
