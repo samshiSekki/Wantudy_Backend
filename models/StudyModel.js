@@ -34,7 +34,10 @@ const StudySchema = new Schema({
         required: true,
         validate: v => Array.isArray(v) && v.length > 0,
     },
-    deadline: { type: Date, required: true },
+    deadline: {
+        type: Date,
+        required: true
+    },
     created: {
         type: Date,
         default: Date.now,
@@ -43,14 +46,18 @@ const StudySchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    start: {
-        type: Date,
+    // start: {
+    //     type: Date,
+    //     required: true,
+    // },
+    period: {
+        type: String,
         required: true,
-    },
-    end: {
-        type: Date,
-        required: true,
-    },
+    }, //기간
+    level: {
+        type: String,
+        required: true
+    } //난이도
     // report: {
     //     type: Number,
     //     default: 0

@@ -14,12 +14,12 @@ exports.createStudy = function (req, res) {
 //StudyList에 document 저장
 exports.saveStudy = async function (req, res) {
     const { userId, studyName, category, description, onoff,
-        studyTime, peopleNum, requiredInfo, deadline, start, end } = req.body;
+        studyTime, peopleNum, requiredInfo, deadline, period, level } = req.body;
     logger.info("userId : " + req.body.userId)
     logger.info("onoff : " + req.body.onoff)
     logger.info("requiredInfo : " + req.body.requiredInfo)
     logger.info("deadline : " + req.body.deadline)
-    logger.info("start : " + req.body.start)
+    logger.info("period : " + req.body.period)
     // console.log(req.body)
     const study = new StudyList({
         userId,
@@ -31,8 +31,8 @@ exports.saveStudy = async function (req, res) {
         peopleNum,
         requiredInfo,
         deadline,
-        start,
-        end,
+        period,
+        level
     })
     if (req.body.deadline !== null) {
         study.deadline = new Date(req.body.deadline);

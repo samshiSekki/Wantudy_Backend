@@ -91,13 +91,13 @@
                   "type": "date",
                   "example": "2021-11-01"
                 },
-                "start": {
-                  "type": "date",
-                  "example": "2021-11-01"
+                "period": {
+                  "type": "string",
+                  "example": "6개월"
                 },
-                "end": {
-                  "type": "date",
-                  "example": "2021-11-30"
+                "level": {
+                  "type": "string",
+                  "example": "입문"
                 }
               }
             }
@@ -298,13 +298,13 @@
                   "type": "date",
                   "example": "2021-11-01"
                 },
-                "start": {
-                  "type": "date",
-                  "example": "2021-11-01"
+                "period": {
+                  "type": "string",
+                  "example": "6개월"
                 },
-                "end": {
-                  "type": "date",
-                  "example": "2021-11-30"
+                "level": {
+                  "type": "string",
+                  "example": "입문"
                 }
               }
             }
