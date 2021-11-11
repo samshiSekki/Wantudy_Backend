@@ -93,7 +93,7 @@ exports.detailStudy = async function (req, res) {
             return res.status(404).end();
         } else {
             return res.status(200).json({
-                status: 'succes',
+                status: 'success',
                 data: study, comment
             })
         }

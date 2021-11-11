@@ -2,21 +2,6 @@ const User = require("../models/User");
 
 /* 처음 카카오 로그인 + 닉네임 수정 */ 
 
-exports.showUser = async function (req, res) {
-    try {
-        const users = await User.find();
-        console.log(users);
-        return res
-            .status(200)
-            .json(users);
-    } catch (err) {
-        throw res
-            .status(500)
-            .json({ error: err })
-    }
-}
-
-
 exports.saveUser = async function (req, res) {
     const { email, profileImage, accessToken } = req.body;
     const nickname="";
