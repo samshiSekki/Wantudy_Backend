@@ -6,6 +6,23 @@ const User = require("../models/User");
 
 /* 마이페이지 화면 controller */ 
 
+// 유저 정보 조회
+exports.showUser = async function (req, res) {
+    const { userId } = req.params;
+
+    try {
+        const user = await User.find({userId : userId});
+        console.log(user);
+        return res
+            .status(200)
+            .json(user);
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
 // 자신의 스터디 지원서 목록 조회
 exports.showApplication = async function (req, res) {
     const { userId } = req.params;
