@@ -27,6 +27,10 @@ const userSchema = new Schema({
     state:{ // 대표지원서 있는지 여부
         type:Boolean,
         default:false 
+    },
+    temperature:{
+        type:Number,
+        default:36.5
     }
 })
 

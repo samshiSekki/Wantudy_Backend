@@ -6,6 +6,23 @@ const User = require("../models/User");
 
 /* 마이페이지 화면 controller */ 
 
+// 유저 정보 조회
+exports.showUser = async function (req, res) {
+    const { userId } = req.params;
+
+    try {
+        const user = await User.find({userId : userId});
+        console.log(user);
+        return res
+            .status(200)
+            .json(user);
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
 // 자신의 스터디 지원서 목록 조회
 exports.showApplication = async function (req, res) {
     const { userId } = req.params;
@@ -146,20 +163,23 @@ exports.openedStudyList = async function (req, res){
     try{
         var openedAndApplication =new Array();
         const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
-        
+        const user = await User.findOne({userId: userId}); // 열정온도 불러오기 위해서
+        var temperature = user.temperature; // 열정온도
+
         if(openedStudyList.length==0){ // 개설한 스터디가 없는 경우
             return res
                 .status(200)
                 .json({msg : '개설한 스터디가 없습니다'})
         }
-
+        
         for(var i=0;i<openedStudyList.length;i++){
-            var application = await RegisterApplication.findOne({study : openedStudyList[i]._id}) // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
-                        
+            var application = await RegisterApplication.findOne({study : openedStudyList[i]._id})  // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
             openedAndApplication[i]={ 
                 study:openedStudyList[i], // 개설한 스터디 정보
-                application // 그 스터디에 등록되어있는 지원서 목록
+                application, // 그 스터디에 등록되어있는 지원서 목록
+                temperature
             }
+            console.log(openedAndApplication[i]);
         }
         
         return res

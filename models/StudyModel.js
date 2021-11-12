@@ -30,6 +30,7 @@ const StudySchema = new Schema({
         validate: v => Array.isArray(v) && v.length > 0,
     },
     peopleNum: { type: Number, required: true },
+    currentNum : {  type:Number, default: 0 },
     requiredInfo: {
         type: [String],
         required: true,
