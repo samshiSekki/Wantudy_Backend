@@ -29,8 +29,14 @@ const StudySchema = new Schema({
         required: true,
         validate: v => Array.isArray(v) && v.length > 0,
     },
-    peopleNum: { type: Number, required: true },
-    currentNum : {  type:Number, default: 0 },
+    peopleNum: {
+        type: Number,
+        required: true
+    },
+    currentNum: {
+        type: Number,
+        default: 0
+    },
     requiredInfo: {
         type: [String],
         required: true,
@@ -49,9 +55,9 @@ const StudySchema = new Schema({
         default: Date.now,
     },
     period: {
-        type: String,
+        type: Number,
         required: true,
-    }, 
+    },
     level: {
         type: String,
         required: true

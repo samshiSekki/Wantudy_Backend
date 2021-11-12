@@ -95,8 +95,8 @@
                   "example": "2021-11-01"
                 },
                 "period": {
-                  "type": "string",
-                  "example": "6개월"
+                  "type": "Number",
+                  "example": "6"
                 },
                 "level": {
                   "type": "string",
@@ -302,8 +302,8 @@
                   "example": "2021-11-01"
                 },
                 "period": {
-                  "type": "string",
-                  "example": "6개월"
+                  "type": "Number",
+                  "example": "6"
                 },
                 "level": {
                   "type": "string",
@@ -406,7 +406,7 @@
             "name": "commentId",
             "in": "path",
             "required": true,
-            "type": "ObjectId"
+            "type": "String"
           }
         ],
         "responses": {
@@ -425,7 +425,7 @@
             "name": "commentId",
             "in": "path",
             "required": true,
-            "type": "ObjectId"
+            "type": "String"
           },
           {
             "name": "obj",
