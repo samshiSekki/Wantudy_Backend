@@ -45,9 +45,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userId":{
+                "userId": {
                   "type": "number",
-                  "example":1
+                  "example": 1
                 },
                 "studyName": {
                   "type": "string",
@@ -67,7 +67,8 @@
                 "onoff": {
                   "type": "Array",
                   "example": [
-                    "온라인","오프라인"
+                    "온라인",
+                    "오프라인"
                   ]
                 },
                 "studyTime": {
@@ -84,7 +85,9 @@
                 "requiredInfo": {
                   "type": "Array",
                   "example": [
-                    "성별", "관심분야", "지원동기"
+                    "성별",
+                    "관심분야",
+                    "지원동기"
                   ]
                 },
                 "deadline": {
@@ -146,8 +149,7 @@
           "/studylist"
         ],
         "description": "스터디 리스트 보기",
-        "parameters": [
-        ],
+        "parameters": [],
         "responses": {
           "400": {
             "description": "Bad Request"
@@ -274,7 +276,8 @@
                 "onoff": {
                   "type": "Array",
                   "example": [
-                    "온라인","오프라인"
+                    "온라인",
+                    "오프라인"
                   ]
                 },
                 "studyTime": {
@@ -339,17 +342,21 @@
             "schema": {
               "type": "object",
               "properties": {
+                "userId": {
+                  "type": "Number",
+                  "example": 1
+                },
                 "content": {
-                  "type": "Array",
+                  "type": "String",
                   "example": "댓글내용"
                 }
               }
             }
           }
         ],
-        "responses":{
-          "500":{
-            "description":"Internal Server Error"
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -381,11 +388,100 @@
             }
           }
         ],
-        "responses":{
-          "500":{
-            "description":"Internal Server Error"
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
           }
         }
+      }
+    },
+    "/studylist/{commentId}/comment": {
+      "delete": {
+        "tags": [
+          "/studylist/{commentId}"
+        ],
+        "description": "댓글 삭제하기",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "type": "ObjectId"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "/studylist/{commentId}"
+        ],
+        "description": "스터디 수정하기",
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "type": "ObjectId"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "example": "댓글 내용"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/studylist/{commentId}/recomment":{
+      "post":{
+        "tags":[
+          "/studylist/{commentId}"
+        ],
+        "description": "댓글 작성",
+        "parameters":[
+          {
+            "name": "commnetId",
+            "in": "path",
+            "required": true,
+            "type": "ObjectId"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "Number",
+                  "example": 1
+                },
+                "content": {
+                  "type": "String",
+                  "example": "댓글내용"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "/auth/kakao": {
@@ -517,7 +613,7 @@
         }
       }
     },
-    "/users/{userId}/like-studylist":{
+    "/users/{userId}/like-studylist": {
       "get": {
         "tags": [
           "/users/{userId}"
@@ -538,7 +634,7 @@
         }
       }
     },
-    "/users/{userId}/apply-studylist":{
+    "/users/{userId}/apply-studylist": {
       "get": {
         "tags": [
           "/users/{userId}"
@@ -559,7 +655,7 @@
         }
       }
     },
-    "/users/{userId}/opened-studylist":{
+    "/users/{userId}/opened-studylist": {
       "get": {
         "tags": [
           "/users/{userId}"
@@ -580,7 +676,7 @@
         }
       }
     },
-    "/users/{userId}/ongoing-studylist":{
+    "/users/{userId}/ongoing-studylist": {
       "get": {
         "tags": [
           "/users/{userId}"
@@ -669,11 +765,11 @@
                     "활발한"
                   ]
                 },
-                "applyMotive":{
+                "applyMotive": {
                   "type": "string",
                   "example": "지원동기입니다"
                 },
-                "message":{
+                "message": {
                   "type": "string",
                   "example": "열심히할게요"
                 }
@@ -741,7 +837,7 @@
                   "type": "number",
                   "example": 22
                 },
-                "applicationName":{
+                "applicationName": {
                   "type": "string",
                   "example": "지원서1"
                 }
@@ -810,7 +906,7 @@
           }
         ],
         "responses": {
-          "400":{
+          "400": {
             "description": "Bad Request"
           },
           "404": {

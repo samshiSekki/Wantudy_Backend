@@ -4,7 +4,7 @@ const AuthController = require('../controllers/AuthController')
 
 
 // 유저 조회
-router.get('/kakao', AuthController.showUser)
+// router.get('/kakao', AuthController.showUser)
 
 // 유저 등록
 router.post('/kakao', AuthController.saveUser)
