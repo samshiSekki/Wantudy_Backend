@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
+const commentList = require('./comment');
 
 const StudySchema = new Schema({
     userId: {
@@ -47,22 +48,18 @@ const StudySchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    // start: {
-    //     type: Date,
-    //     required: true,
-    // },
     period: {
         type: String,
         required: true,
-    }, //기간
+    }, 
     level: {
         type: String,
         required: true
-    } //난이도
-    // report: {
-    //     type: Number,
-    //     default: 0
-    // }
+    },
+    commnets:{
+        type:Schema.Types.ObjectId,
+        ref:'commentList'
+    } 
 });
 
 StudySchema.index({ studyName: 'text' });
@@ -73,6 +70,7 @@ StudySchema.plugin(autoIncrement.plugin, {
     startAt: 1, //시작
     increment: 1 // 증가
 });
+
 
 module.exports = mongoose.model('StudyList', StudySchema);
 //StudyList라는 이름으로 StudySchema에 접근
