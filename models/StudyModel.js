@@ -56,10 +56,6 @@ const StudySchema = new Schema({
         type: String,
         required: true
     },
-    commnets:{
-        type:Schema.Types.ObjectId,
-        ref:'commentList'
-    } 
 });
 
 StudySchema.index({ studyName: 'text' });
