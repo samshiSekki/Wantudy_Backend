@@ -1,10 +1,10 @@
 var router = require('express').Router();
-const StudyController = require('../controllers/StudyController')
+const StudyController = require('../controllers/StudyController') 
+const CommentController = require('../controllers/CommentController')
 
 //스터디 리스트 조회
 router.get('/', StudyController.showStudy)
 //스터디 찜하기
-// router.post('/', StudyController.likeStudy)
 router.post('/:studyId', StudyController.likeStudy)
 //스터디 상세 조회
 router.get('/:studyId', StudyController.detailStudy)
@@ -14,8 +14,14 @@ router.delete('/:studyId', StudyController.deleteStudy)
 router.put('/:studyId', StudyController.updateStudy)
 //스터디 신고(사유 저장)
 router.post('/:studyId/report',StudyController.saveReport)
-// router.patch('/:studyId/report',StudyController.reportStudy)
 //댓글 작성
-router.post('/:studyId/comment',StudyController.commentStudy)
+router.post('/:studyId/comment',CommentController.writeComment)
+//댓글 삭제
+router.delete('/:commentId/comment', CommentController.deleteComment)
+//댓글 수정
+router.patch('/:commentId/comment',CommentController.updateComment)
+//대댓글 작성
+router.post('/:commentId/recomment',CommentController.reComment)
+
 
 module.exports = router;

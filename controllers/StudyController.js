@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const StudyList = require('../models/StudyModel');
 const LikeStudy = require('../models/LikeStudy');
 const commentList = require('../models/comment');
+const recommentList = require('../models/recomment')
 const reportList = require('../models/reportModel');
 const path = require('path');
 const logger = require('../.config/winston');
@@ -87,14 +88,15 @@ exports.detailStudy = async function (req, res) {
 
     try {
         const study = await StudyList.findOne({ StudyId: studyId })
-        const comment = await commentList.findOne({ studyId: studyId })
-        console.log(comment)
+        const comment = await commentList.find({ studyId: studyId })
+        const recomment = await recommentList.find({ studyId: studyId })
+
         if (!study) {
             return res.status(404).end();
         } else {
             return res.status(200).json({
                 status: 'succes',
-                data: study, comment
+                data: study, comment, recomment
             })
         }
     } catch (err) {
@@ -104,7 +106,6 @@ exports.detailStudy = async function (req, res) {
             .json({ error: err });
     }
 }
-
 
 //스터디 검색하기
 exports.searchStudy = async function (req, res) {
@@ -148,6 +149,9 @@ exports.deleteStudy = async function (req, res) {
     console.log(req.params);
     try {
         await StudyList.findOneAndDelete({ StudyId: studyId })
+        //댓글도 삭제
+        await commentList.findOneAndDelete({ StudyId: studyId })
+        await recommentList.findOneAndDelete({ StudyId: studyId })
         return res.status(204).json();
     } catch (err) {
         throw res.status(500).json({ error: err })
@@ -227,53 +231,15 @@ exports.likeStudy = async function (req, res) {
     }
 }
 
-//댓글 작성
-exports.commentStudy = async (req, res) => {
-    const { userId, content } = req.body;
-    const { studyId } = req.params;
-
-    try {
-        const check = await commentList.findOne({ studyId: studyId }).exec();
-        if (check) {
-            const commentupdate = await commentList.findOneAndUpdate({ studyId: studyId },
-                {
-                    $push: {
-                        content: req.body.content
-                    },//댓글 배열에 새로운 댓글 추가
-                    updated: Date.now()
-                },
-                { new: true })
-                .exec();
-            return res
-                .status(200)
-                .json(commentupdate)
-        }
-        else {
-            const comment = new commentList({
-                studyId,
-                userId,
-                content,
-            })
-            await comment.save();
-            return res
-                .status(200)
-                .json(comment);
-        }
-    } catch (err) {
-        logger.error("댓글 저장 error : " + err)
-        throw res.status(500).json({ error: err })
-    }
-};
 
 //스터디 신고
-
 exports.saveReport = async (req, res) => {
     const { studyId } = req.params;
     const { reason } = req.body;
 
     try {
         const check = await reportList.findOne({ studyId: studyId }).exec();
-        if(check){
+        if (check) {
             const reportupdate = await reportList.findOneAndUpdate({ studyId: studyId },
                 {
                     $push: {
@@ -286,7 +252,7 @@ exports.saveReport = async (req, res) => {
                 .status(200)
                 .json(reportupdate)
         }
-        else{
+        else {
             const report = new reportList({
                 studyId,
                 reason

@@ -9,6 +9,11 @@ const commentSchema = new Schema({
         type: Number,
         ref: "StudyList"
     },
+    parentComment: {
+        type: Schema.Types.ObjectId,
+        ref: "commentList",
+        default: null
+    },
     content: {
         type: String,
         required: true,
@@ -24,4 +29,5 @@ const commentSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('commentList', commentSchema);
+
+module.exports = mongoose.model('recommentList', commentSchema);
