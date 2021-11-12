@@ -99,9 +99,8 @@ exports.detailApplication = async function (req, res) {
 // 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application
 exports.registerApplication = async function (req, res) {
     const { studyId } = req.params;
-    // const { userId, applicationId } = req.body; // 기존 코드
-    const { userId, applicationId, state } = req.body; // 스터디장이 수락한 경우 (state 변수 바꾸기 테스트용)
-
+    const { userId, applicationId } = req.body; // 기존 코드
+    // const { userId, applicationId, state } = req.body; // 스터디장이 수락한 경우 (state 변수 바꾸기 테스트용)
 
     try{
         const study = await StudyList.findOne({StudyId: studyId});
@@ -123,7 +122,7 @@ exports.registerApplication = async function (req, res) {
             userId,
             study,
             application,
-            state, // 테스트용 (원래는 없어야 함) 
+//            state, // 테스트용 (원래는 없어야 함) 
             registered:Date.now()        
         })
 

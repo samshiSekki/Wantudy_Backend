@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/UserController')
 
+// 유저 정보 조회
+router.get('/:userId', UserController.showUser)
+
 // 닉네임 수정
 router.post('/:userId/profile', UserController.editNickname)
 

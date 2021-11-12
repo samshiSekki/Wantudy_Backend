@@ -96,7 +96,7 @@ exports.detailStudy = async function (req, res) {
         } else {
             return res.status(200).json({
                 status: 'succes',
-                data: study,comment,recomment
+                data: study, comment
             })
         }
     } catch (err) {
