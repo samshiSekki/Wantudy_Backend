@@ -96,7 +96,11 @@ exports.detailStudy = async function (req, res) {
         } else {
             return res.status(200).json({
                 status: 'succes',
+<<<<<<< HEAD
                 data: study, comment, recomment
+=======
+                data: study, comment
+>>>>>>> 568ddf00d8acfde250f22690bd9d9ebaf94f7dc3
             })
         }
     } catch (err) {
