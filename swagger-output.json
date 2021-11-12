@@ -419,7 +419,7 @@
         "tags": [
           "/studylist/{commentId}"
         ],
-        "description": "스터디 수정하기",
+        "description": "댓글 수정하기",
         "parameters": [
           {
             "name": "commentId",
@@ -456,7 +456,7 @@
         "tags":[
           "/studylist/{commentId}"
         ],
-        "description": "댓글 작성",
+        "description": "대댓글 작성",
         "parameters":[
           {
             "name": "commnetId",
