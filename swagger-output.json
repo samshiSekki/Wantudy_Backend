@@ -459,7 +459,7 @@
         "description": "대댓글 작성",
         "parameters": [
           {
-            "name": "commnetId",
+            "name": "commentId",
             "in": "path",
             "required": true,
             "type": "string"
