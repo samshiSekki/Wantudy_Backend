@@ -5,7 +5,7 @@
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "13.209.66.117:8080",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [],
   "schemes": [
@@ -406,7 +406,7 @@
             "name": "commentId",
             "in": "path",
             "required": true,
-            "type": "String"
+            "type": "string"
           }
         ],
         "responses": {
@@ -425,7 +425,7 @@
             "name": "commentId",
             "in": "path",
             "required": true,
-            "type": "String"
+            "type": "string"
           },
           {
             "name": "obj",
@@ -451,18 +451,18 @@
         }
       }
     },
-    "/studylist/{commentId}/recomment":{
-      "post":{
-        "tags":[
+    "/studylist/{commentId}/recomment": {
+      "post": {
+        "tags": [
           "/studylist/{commentId}"
         ],
         "description": "대댓글 작성",
-        "parameters":[
+        "parameters": [
           {
             "name": "commnetId",
             "in": "path",
             "required": true,
-            "type": "ObjectId"
+            "type": "string"
           },
           {
             "name": "obj",
@@ -481,7 +481,15 @@
               }
             }
           }
-        ]
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/auth/kakao": {

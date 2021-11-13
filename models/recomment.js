@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const autoIncrement = require('mongoose-auto-increment');
 
 const commentSchema = new Schema({
     userId: {
         type: Number
+    },
+    recommentId: {
+        type: Number,
+        default: 0,
     },
     studyId: {
         type: Number,
@@ -11,8 +16,7 @@ const commentSchema = new Schema({
     },
     parentComment: {
         type: Schema.Types.ObjectId,
-        ref: "commentList",
-        default: null
+        ref:"commentList"
     },
     content: {
         type: String,
@@ -28,6 +32,14 @@ const commentSchema = new Schema({
     },
 });
 
+commentSchema.index({ content: 'text' });
+
+commentSchema.plugin(autoIncrement.plugin, {
+    model: 'recommentList',
+    field: 'recommentId',
+    startAt: 1,
+    increment: 1
+});
 
 
 module.exports = mongoose.model('recommentList', commentSchema);
