@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const autoIncrement = require('mongoose-auto-increment');
 
 const commentSchema = new Schema({
     userId: {
@@ -24,13 +23,5 @@ const commentSchema = new Schema({
     },
 });
 
-commentSchema.index({ content: 'text' });
-
-commentSchema.plugin(autoIncrement.plugin, {
-    model: 'commentList',
-    field: 'commentId',
-    startAt: 1,
-    increment: 1
-});
 
 module.exports = mongoose.model('commentList', commentSchema);
