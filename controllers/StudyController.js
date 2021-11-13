@@ -21,6 +21,7 @@ exports.saveStudy = async function (req, res) {
     logger.info("requiredInfo : " + req.body.requiredInfo)
     logger.info("deadline : " + req.body.deadline)
     logger.info("period : " + req.body.period)
+    logger.info("level : " + req.body.level)
     // console.log(req.body)
     const study = new StudyList({
         userId,

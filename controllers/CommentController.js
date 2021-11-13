@@ -49,6 +49,7 @@ exports.reComment = async (req, res) => {
 
     try {
         parent = await commentList.findById(commentId)
+        console.log(parent.studyId)
         const recomment = new recommentList({
             userId,
             content,
@@ -72,15 +73,15 @@ exports.deleteComment = async (req, res) => {
     try {
         const parent = await commentList.findById(commentId)
         const child = await recommentList.findById(commentId)
-        
-        if(parent){
+
+        if (parent) {
             await commentList.findByIdAndDelete(commentId)
         }
-        else if(child){
+        else if (child) {
             await recommentList.findByIdAndDelete(commentId)
         }
-        else{
-            return res.status(404).json({msg:'없는 댓글'})
+        else {
+            return res.status(404).json({ msg: '없는 댓글' })
         }
         return res.status(204).json({ msg: '삭제 성공' });
     } catch (err) {
@@ -94,20 +95,41 @@ exports.updateComment = async (req, res) => {
     const { content } = req.body
 
     try {
-        const comment = await commentList.findByIdAndUpdate(commentId, {
-            $set: {
-                content: content
+
+        const parent = await commentList.findById(commentId)
+        const child = await recommentList.findById(commentId)
+
+        if(parent){
+            const comment = await commentList.findByIdAndUpdate(commentId, {
+                $set: {
+                    content: content
+                },
+                updated: Date.now()
             },
-            updated: Date.now()
-        },
-            { new: true })
-            .exec();
-        if (!comment) {
-            return res.status(404)
+                { new: true })
+                .exec();
+                return res
+                .status(200)
+                .json(comment)
         }
-        return res
+        else if(child){
+            const recomment = await recommentList.findByIdAndUpdate(commentId,{
+                $set:{
+                    content: content
+                },
+                updated: Date.now()
+            },
+            {new: true})
+            .exec();
+            return res
             .status(200)
-            .json(comment)
+            .json(recomment)
+        }
+        else{
+            return res
+                .status(404)
+                .json({msg:'없는 댓글입니다.'})
+        }
     } catch (err) {
         throw res.status(500).json({ error: err })
     }

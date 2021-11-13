@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
-const commentList = require('./comment');
 
 const StudySchema = new Schema({
     userId: {
