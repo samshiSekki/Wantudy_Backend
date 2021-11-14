@@ -689,13 +689,13 @@
         "tags": [
           "/users/{userId}"
         ],
-        "description": "마이페이지 신청한 스터디 조회",
+        "description": "마이페이지 참여 스터디 조회",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "number"
+            "type": "number" 
           }
         ],
         "responses": {
