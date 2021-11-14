@@ -163,23 +163,43 @@ exports.openedStudyList = async function (req, res){
     try{
         var openedAndApplication =new Array();
         const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
-        const user = await User.findOne({userId: userId}); // 열정온도 불러오기 위해서
-        var temperature = user.temperature; // 열정온도
-
+        console.log(openedStudyList.length) // 2
+        
         if(openedStudyList.length==0){ // 개설한 스터디가 없는 경우
             return res
                 .status(200)
                 .json({msg : '개설한 스터디가 없습니다'})
         }
         
-        for(var i=0;i<openedStudyList.length;i++){
-            var application = await RegisterApplication.findOne({study : openedStudyList[i]._id})  // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
-            openedAndApplication[i]={ 
-                study:openedStudyList[i], // 개설한 스터디 정보
-                application, // 그 스터디에 등록되어있는 지원서 목록
-                temperature
+        for(var i=0;i<openedStudyList.length;i++){ // a가 개설한 스터디 목록을 모두 돌면서
+            var study = openedStudyList[i];
+            var applicationObject = await RegisterApplication.find({study : study._id}).exec()  // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
+
+            if(applicationObject.length==0) { // 스터디에 등록된 지원서가 없는 경우
+                openedAndApplication[i]={
+                    study:openedStudyList[i], // 개설한 스터디 정보
+                    application:[null]
+                }
             }
-            console.log(openedAndApplication[i]);
+            else{
+                var info = new Array()
+                for(var j=0;j<applicationObject.length;j++){                       
+                    var user = await User.findOne({userId: applicationObject[j].userId}); // 열정온도 불러오기 위해서 유저부터 가져옴
+                    var temperature = user.temperature; // 지원자의 열정온도
+                    var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
+                    var registered = await applicationObject[j].registered // 지원서 등록시기
+
+                    info[j]={
+                        application,
+                        temperature,
+                        registered
+                    } 
+                }
+                openedAndApplication[i]={
+                    study:openedStudyList[i], // 스터디 1개당 지원서 여러개 넣기 위해 이렇게 구조 짬
+                    applications:info
+                }
+            }
         }
         
         return res
@@ -191,6 +211,13 @@ exports.openedStudyList = async function (req, res){
             .status(500)
             .json({ error: err })       
     }
+}
+
+// 개설한 스터디 - 스터디원 수락/거절 
+exports.manageMember = async function (req, res){
+    const { userId, applicationId } = req.params;
+
+
 }
 
 // 참여하고 있는 스터디 조회 
