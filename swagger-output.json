@@ -323,6 +323,33 @@
         }
       }
     },
+    "/studylist/{studyId}/cancel-like": {
+      "delete": {
+        "tags": [
+          "/studylist/{studyId}"
+        ],
+        "description": "찜하기 취소",
+        "parameters": [
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404":{
+            "description": "No Study"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/studylist/{studyId}/comment": {
       "post": {
         "tags": [
@@ -695,7 +722,7 @@
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "number" 
+            "type": "number"
           }
         ],
         "responses": {
