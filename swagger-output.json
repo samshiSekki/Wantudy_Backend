@@ -684,6 +684,53 @@
         }
       }
     },
+    "/users/{userId}/opened-studylist/{applicationId}": {
+      "put": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 개설한 스터디_스터디원 수락/거절",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "choice": {
+                  "type": "string",
+                  "example": "수락"
+                },
+                "studyId": {
+                  "type": "number",
+                  "example": 64
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/ongoing-studylist": {
       "get": {
         "tags": [
