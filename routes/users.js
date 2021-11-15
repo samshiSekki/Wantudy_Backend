@@ -20,8 +20,8 @@ router.get('/:userId/apply-studylist', UserController.applyStudyList)
 // 개설한 스터디 조회
 router.get('/:userId/opened-studylist', UserController.openedStudyList)
 
-// 개설한 스터디 - 스터디원 수락/거절 
-router.post('/:userId/opened-studylist/:applicationId', UserController.manageMember)
+// 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
+router.put('/:userId/opened-studylist/:applicationId', UserController.manageMember)
 
 // 참여 스터디 조회 
 router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
