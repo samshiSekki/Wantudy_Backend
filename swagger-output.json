@@ -326,7 +326,7 @@
     "/studylist/{studyId}/cancel-like": {
       "delete": {
         "tags": [
-          "/studylist/{studyId}"
+          "/studylist"
         ],
         "description": "찜하기 취소",
         "parameters": [
