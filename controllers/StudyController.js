@@ -232,6 +232,30 @@ exports.likeStudy = async function (req, res) {
     }
 }
 
+//스크랩 취소
+
+exports.deleteLike = async (req, res)=>{
+    const { studyId } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const study = await StudyList.findOne({ StudyId: studyId }); // 스터디 찾아오기
+        const like = await LikeStudy.find({ userId: userId, study: study._id });
+        if (!study) {
+            return res.status(404).end();
+        }
+        else if (like) {
+            await LikeStudy.findByIdAndDelete(like[0]._id)
+            return res.status(204).json({msg:'스크랩 취소'});
+        }
+    } catch (err) {
+        logger.error("스터디 스크랩 취소 err: " + err)
+        throw res
+            .status(500)
+            .json({ error: err });
+    }
+}
+
 
 //스터디 신고
 exports.saveReport = async (req, res) => {

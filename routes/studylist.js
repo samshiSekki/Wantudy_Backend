@@ -6,6 +6,7 @@ const CommentController = require('../controllers/CommentController')
 router.get('/', StudyController.showStudy)
 //스터디 찜하기
 router.post('/:studyId', StudyController.likeStudy)
+router.delete('/:studyId/cancel-like',StudyController.deleteLike)
 //스터디 상세 조회
 router.get('/:studyId', StudyController.detailStudy)
 //스터디 삭제
