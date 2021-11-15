@@ -187,6 +187,9 @@ exports.openedStudyList = async function (req, res){
                     var user = await User.findOne({userId: applicationObject[j].userId}); // 열정온도 불러오기 위해서 유저부터 가져옴
                     var temperature = user.temperature; // 지원자의 열정온도
                     var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
+                    if(!application){
+                       continue;
+                    }
                     var registered = await applicationObject[j].registered // 지원서 등록시기
 
                     info[j]={
@@ -213,10 +216,68 @@ exports.openedStudyList = async function (req, res){
     }
 }
 
-// 개설한 스터디 - 스터디원 수락/거절 
+// 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
 exports.manageMember = async function (req, res){
     const { userId, applicationId } = req.params;
+    const { choice, studyId } = req.body;
+    // applicationId를 받아서 applications에 있는 _id를 가져오고 그게 Register applicationId랑 같은지
+    try{
+        const study = await StudyList.findOne({StudyId: studyId})
+        var peopleNum = study.peopleNum; // 스터디 총 인원
+        var currentNum = study.currentNum; // 스터디 현재 등록된 인원
+        const application = await Application.findOne({applicationId: applicationId})
+        var result;
 
+        if(choice=="수락"){ // 스터디장이 수락한 경우
+            // 해당 스터디번호에 맞는 지원서를 찾고 state=1 (수락)으로 만들어줌
+            if(peopleNum==currentNum)
+                return res
+                    .status(200)
+                    .json({ msg : '더이상 수락할 수 없습니다.' }) 
+            
+            result = await RegisterApplication.findOneAndUpdate({study:study._id, application: application._id}, {
+                $set:{
+                    state:1
+                }
+            },{new:true}).exec();
+
+            // 수락한 경우 currentNum 증가
+            await StudyList.findOneAndUpdate({_id:study._id},{
+                $set:{
+                    currentNum:currentNum+1
+                }
+            },{new:true}).exec();
+
+            if(!result){
+                return res
+                    .status(400)
+                    .json({ error: err }) 
+            }
+
+        }else if(choice=="거절"){ // 스터디장이 거절한 경우
+            // 해당 스터디번호에 맞는 지원서를 찾고 state=2 (거절)로 만들어줌
+            result = await RegisterApplication.findOneAndUpdate({study:study._id,application: application._id}, {
+                $set:{
+                    state:2
+                }
+            },{new:true}); 
+            
+            if(!result){
+                return res
+                    .status(400)
+                    .json({ error: err }) 
+            }
+        }
+
+        return res
+            .status(200)
+            .json(currentNum);
+
+    } catch (err){
+        throw res
+            .status(500)
+            .json({ error: err })       
+    }
 
 }
 
