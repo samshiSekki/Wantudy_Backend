@@ -1,4 +1,5 @@
-const Application = require("../models/Application");
+ const Application = require("../models/Application");
+const Assignment = require("../models/Assignment");
 const LikeStudy = require("../models/LikeStudy");
 const RegisterApplication = require("../models/RegisterApplication");
 const StudyList = require('../models/StudyModel');
@@ -122,7 +123,6 @@ exports.applyStudyList = async function (req, res){
     try{
         var studyAndApplication =new Array();
         const applyStudyList = await RegisterApplication.find({userId: userId}) // 등록지원서DB에서 userId에 해당하는 목록찾기
-        var state = applyStudyList
         if(applyStudyList.length==0){ // 신청한 스터디가 없는 경우
             return res
                 .status(200)
@@ -142,7 +142,6 @@ exports.applyStudyList = async function (req, res){
                 application
             }
             studyAndApplication[i]=result;
-            console.log(studyAndApplication[i]);
         }
         console.log(studyAndApplication);
 
@@ -310,7 +309,70 @@ exports.ongoingStudyList = async function (req, res){
     }
 }
 
+// 과제 부여
+exports.giveAssignment = async function (req, res){
+    const { userId  } = req.params;
+    const { assignmentName, description, deadline } = req.body;
 
-// 과제 관리
-// router.get('/:userId/assignment', UserController.getAssignment);
+    try {
+        const assignment = new Assignment({
+            userId,
+            study,
+            assignmentName,
+            description,
+            deadline
+        });
 
+        await assignment.save();
+        return res
+            .status(200)
+            .json(assignment); // 등록한 과제 반환
+
+    } catch (err){
+        throw res
+            .status(500)
+            .json({ error: err })       
+    }
+}
+
+// 과제 관리 - 해야할 과제 조회 (내가 신청한 스터디에서 부여한 과제)
+exports.manageAssignment = async function (req, res){
+    const { userId } = req.params;
+    try{
+        var assignmentTodo =new Array();
+
+        // 등록지원서DB에서 userId에 해당하고 state=1인(수락된) 목록찾기
+        const acceptedStudyList = await RegisterApplication.find({userId: userId, state:1})
+        if(acceptedStudyList.length==0){ // 신청한 스터디가 없는 경우 과제도 없음
+            return res
+                .status(200)
+                .json({msg : '해야 할 과제가 없습니다'})
+        }
+
+        // 수락된 스터디 리스트에 과제가 있는지 확인하고 띄워주기
+        for(var i=0;i<acceptedStudyList.length;i++){
+            var study = await StudyList.findOne({_id : acceptedStudyList[i].study}) // 스터디 찾아오기
+            // 해당 스터디에 생성된 과제가 있는지 확인 
+            var assignments = await Assignment.find({study:study._id}) 
+
+            const result = {
+                studyName: study.studyName,
+                assignments:[assignments]
+            }
+            assignmentTodo[i]=result;
+            console.log(studyAndApplication[i]);
+        }
+        console.log(assignmentTodo);
+
+        return res
+            .status(200)
+            .json(assignmentTodo);
+
+    } catch (err){
+        throw res
+            .status(500)
+            .json({ error: err })       
+    }
+}
+
+// 과제 관리 - 관리할 과제 조회
