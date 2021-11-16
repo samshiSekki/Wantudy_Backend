@@ -26,8 +26,11 @@ router.put('/:userId/opened-studylist/:applicationId', UserController.manageMemb
 // 참여 스터디 조회 
 router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 
-// // 과제 관리
-// router.get('/:userId/assignment', UserController.getAssignment);
+// 과제 부여
+router.post('/:userId/opened-studylist/{studyId}/assignment', UserController.giveAssignment)
+
+// 과제 관리 - 해야할 과제 조회 (내가 신청한 스터디에서 부여한 과제)
+router.get('/:userId/assignment', UserController.manageAssignment);
 
 
 
