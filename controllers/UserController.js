@@ -379,12 +379,13 @@ exports.manageAssignment = async function (req, res) {
 // 과제 관리 - 관리할 과제 조회
 
 
-//일정 조율
+//일정 조율 (참여 스터디 유저들 보여주기)
 exports.schedule = async ( req, res ) =>{
     const { studyId } = req.params;
 
     try {
-        var ongoingUser = new Array();
+        // var ongoingUser = new Array();
+        var UserTime = new Array();
         const study = await StudyList.findOne({StudyId : studyId})
         console.log(study)
         const registeredStudyList = await RegisterApplication.find({ study: study._id , state: 1 })
@@ -392,15 +393,22 @@ exports.schedule = async ( req, res ) =>{
         //해당 스터디에 지원한 지원서 중 수락된 지원서들
 
         for (var i = 0; i < registeredStudyList.length; i++) {
-            var users = await User.findOne ({userId : registeredStudyList[i].userId})
-            //해당 스터디에 수락된 유저들 불러오기 
-            ongoingUser[i] = users;
+            // var users = await User.findOne ({userId : registeredStudyList[i].userId})
+            // //해당 스터디에 수락된 유저들 불러오기 
+            // ongoingUser[i] = users;
+            var time = await Schedule.findOne({userId :registeredStudyList[i].userId})
+            UserTime[i] = time;
+            //유저별 가능한 시간대 불러오기
         }
+        // return res.status(200).json({
+        //     status: 'succes',
+        //     data: UserTime
+        // })
         return res
             .status(200)
-            .json(ongoingUser);
-
+            .json(UserTime)
     } catch (err) {
+        logger.error("일정 조율 get error : " + err)
         throw res
             .status(500)
             .json({ error: err })
@@ -422,7 +430,7 @@ exports.scheduleSave = async (req, res) => {
             .status(200)
             .json(schedule);
     } catch (err) {
-        logger.error("일정 조율 error : " + err)
+        logger.error("일정 조율 post error : " + err)
         throw res.stats(500).json({ error: err })
     }
 }
@@ -430,8 +438,8 @@ exports.scheduleSave = async (req, res) => {
 exports.scheduleCommon = async (req, res) => {
     const { studyId } = req.params;
 
-    var commonTime = new Array();
     try{
+        var commonTime = new Array();
         const schedule = await Schedule.find({studyId : studyId })
         // console.log(schedule)
         // console.log(schedule[1].time[0])
@@ -440,7 +448,7 @@ exports.scheduleCommon = async (req, res) => {
             for(var j = 0; j< 7; j++){
                 common = schedule[i].time[j].filter(x=>schedule[i+1].time[j].includes(x))
                 if(common.length>1){
-                    commonTime.push(common)
+                    commonTime.push(common) //commonTime에 공통 시간대 추가
                 } // 요일만 겹치는 경우 제외
             }
             return res
@@ -448,6 +456,7 @@ exports.scheduleCommon = async (req, res) => {
             .json(commonTime)
         }
     }catch(err){
+        logger.error("일정 공통시간대 error : " + err)
         return res
             .status(500)
             .json({error : err})
