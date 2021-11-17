@@ -156,6 +156,23 @@ exports.applyStudyList = async function (req, res) {
             .json({ error: err })
     }
 }
+
+// 신청한 스터디 신청 취소
+exports.cancelStudy = async function (req, res) {
+    const { userId, applicationId } = req.params;
+    try{
+        const application = await Application.findOne({applicationId : applicationId})
+        await RegisterApplication.findOneAndDelete({ application: application._id})
+        return res
+            .status(200)
+            .json({msg : '스터디 신청이 취소되었습니다'})
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })    
+    }
+}
+
 // 개설한 스터디 조회
 exports.openedStudyList = async function (req, res) {
     const { userId } = req.params;
@@ -307,7 +324,7 @@ exports.ongoingStudyList = async function (req, res){
           
         for(var i=registeredStudyList.length;i<length;i++){
             ongoingList[i]=openedStudyList[i-registeredStudyList.length];
-                        // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
+            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
         }
         console.log(ongoingList)
         return res
@@ -348,7 +365,7 @@ exports.giveAssignment = async function (req, res) {
     }
 }
 
-// 과제 관리 - 해야할 과제 조회 (내가 신청한 스터디에서 부여한 과제)
+// 과제 관리 - 해야할 과제 조회
 exports.manageAssignment = async function (req, res) {
     const { userId } = req.params;
     try {
@@ -391,13 +408,14 @@ exports.manageAssignment = async function (req, res) {
 // 과제 관리 - 관리할 과제 조회
 
 
+
 //일정 조율 (참여 스터디 유저들 보여주기)
 exports.schedule = async ( req, res ) =>{
     const { studyId } = req.params;
 
     try {
         // var ongoingUser = new Array();
-        var UserTime = new Array();
+        var UserTime = new  Array();
         const study = await StudyList.findOne({StudyId : studyId})
         console.log(study)
         const registeredStudyList = await RegisterApplication.find({ study: study._id , state: 1 })

@@ -21,7 +21,6 @@ router.put('/application/:applicationId', ApplicationController.updateApplicatio
 router.delete('/application/:applicationId', ApplicationController.deleteApplication)
 
 
-
 const StudyController = require('../controllers/StudyController')
 
 //스터디 개설 페이지 보여주기
