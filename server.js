@@ -63,11 +63,12 @@ const userRouter = require('./routes/users');
 app.use('/users', userRouter);
 
 // multer 세팅 
-app.use(multer({
-    dest: "upload/", // 파일 업로드 폴더 경로 설정
-    limits: {           // 파일 용량 제한 설정
-       fileSize: 1024*1000*16 // 파일사이즈를 16MB로 제한합니다.
-    } 
-}));
+
+// app.use(multer({
+//     dest: "upload/", // 파일 업로드 폴더 경로 설정
+//     limits: {           // 파일 용량 제한 설정
+//        fileSize: 1024*1000*16 // 파일사이즈를 16MB로 제한합니다.
+//     } 
+// }));
 
 

@@ -359,64 +359,60 @@ exports.giveAssignment = async function (req, res) {
 
     // 제한 용량을 넘어서서 데이터가 짤리면 truncated​값이 true를 갖습니다.
 
-    if(assignment.truncated){
+//     if(assignment.truncated){
 
-       var err = new Error("파일 용량이 16MB를 초과했습니다.");
+//        var err = new Error("파일 용량이 16MB를 초과했습니다.");
 
-       next(err);  // 인자로 err를 받는 함수가 실행됩니다(보틍 err처리 페이지 return)
+//        next(err);  // 인자로 err를 받는 함수가 실행됩니다(보틍 err처리 페이지 return)
 
-       return;
+//        return;
 
-    }​
+//     }
 
-    var orgFileName = fileObj.originalname; // 원본 파일명을 저장한다.
+//     var orgFileName = fileObj.originalname; // 원본 파일명을 저장한다.
 
-    var filesize = fileObj.size; // 파일 사이즈를 저장한다.
+//     var filesize = fileObj.size; // 파일 사이즈를 저장한다.
 
-    var savePath = __dirname + "/../upload/ " + saveFileName;​ // 파일의 경로를 저장한다.
+//     var savePath = __dirname + "/../upload/ " + saveFileName;​ // 파일의 경로를 저장한다.
 
-    // 파일시스템에서 파일 읽기
+//     // 파일시스템에서 파일 읽기
 
-​     fs.open(savePath, "r", function(err, fd){ // fs 모듈 활용
+// ​     fs.open(savePath, "r", function(err, fd){ // fs 모듈 활용
 
-    //   ※ MongoDB에 데이터를 저장하기 위해서는 Buffer Type의 공간에 담아 저장해야 합니다!!
+//     //   ※ MongoDB에 데이터를 저장하기 위해서는 Buffer Type의 공간에 담아 저장해야 합니다!!
 
-           // binary 데이터를 저장하기 위해 파일 사이즈 만큼의 크기를 갖는 Buffer 객체 생성​ 
+//            // binary 데이터를 저장하기 위해 파일 사이즈 만큼의 크기를 갖는 Buffer 객체 생성​ 
 
-      var buffer = new Buffer(filesize); 
+//       var buffer = new Buffer(filesize); 
 
-      fs.read(fd, buffer, 0, buffer.length, null, function(err, bytes, buffer){
+//       fs.read(fd, buffer, 0, buffer.length, null, function(err, bytes, buffer){
 
-      // 객체에 파일 정보를 담는다.
+//       // 객체에 파일 정보를 담는다.
 
-      var obj={
+//       var obj={
 
-             "title":title,
+//              "title":title,
 
-             "filename":orgFileName,
+//              "filename":orgFileName,
 
-             "filesize":filesize,
+//              "filesize":filesize,
 
-             "file":buffer
+//              "file":buffer
 
-       };
+//        };
 
-       // DB 저장 작업 수행
+//        // DB 저장 작업 수행
 
-       var newData = new DBData(obj);
+//        var newData = new DBData(obj);
 
-       newData.save(function(err){
+//        newData.save(function(err){
 
-          if(err) res.send(err);    
+//           if(err) res.send(err);    
 
-          // db에 모든 작업이 올라간 후에 upload에 있는 파일이 지워진다.
+//           // db에 모든 작업이 올라간 후에 upload에 있는 파일이 지워진다.
 
-          fs.unlink(savePath, function(){}); // 파일 삭제        
-        });
-
-    });
-
-}); 
+//           fs.unlink(savePath, function(){}); // 파일 삭제        
+//         });
 }
 
 
