@@ -309,11 +309,11 @@ exports.ongoingStudyList = async function (req, res){
             ongoingList[i]=openedStudyList[i-registeredStudyList.length];
                         // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
         }
-
         console.log(ongoingList)
         return res
             .status(200)
             .json(ongoingList);
+        }
 
     } catch (err) {
         throw res
