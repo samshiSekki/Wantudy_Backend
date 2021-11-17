@@ -35,7 +35,7 @@ router.get('/:userId/assignment', UserController.manageAssignment);
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', UserController.schedule)
 router.post('/:userId/ongoing-studylist/:studyId/schedule', UserController.scheduleSave)
-
+//참여 스터디 공통 일정
 router.get('/:userId/ongoing-studylist/:studyId/schedule-common', UserController.scheduleCommon)
 
 module.exports = router;
