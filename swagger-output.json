@@ -690,6 +690,33 @@
         }
       }
     },
+    "/users/{userId}/apply-studylist/{applicationId}": {
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 신청한 스터디에서 스터디 신청 취소",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/opened-studylist": {
       "get": {
         "tags": [

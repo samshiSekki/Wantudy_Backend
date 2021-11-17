@@ -17,6 +17,9 @@ router.get('/:userId/like-studylist', UserController.likeStudyList)
 // 신청한 스터디 조회
 router.get('/:userId/apply-studylist', UserController.applyStudyList)
 
+// 스터디 신청 취소
+router.delete('/:userId/apply-studylist/:applicationId', UserController.cancelStudy);
+
 // 개설한 스터디 조회
 router.get('/:userId/opened-studylist', UserController.openedStudyList)
 
