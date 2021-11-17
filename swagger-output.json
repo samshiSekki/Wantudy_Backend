@@ -691,7 +691,7 @@
       }
     },
     "/users/{userId}/apply-studylist/{applicationId}": {
-      "get": {
+      "delete": {
         "tags": [
           "/users/{userId}"
         ],

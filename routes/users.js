@@ -26,18 +26,16 @@ router.get('/:userId/opened-studylist', UserController.openedStudyList)
 // 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
 router.put('/:userId/opened-studylist/:applicationId', UserController.manageMember)
 
-// 참여 스터디 조회 
+// 참여 스터디 조회 (여기서 스터디 정보 다 보내줘야 함..?)
 router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 
-// 과제 부여
-router.post('/:userId/opened-studylist/{studyId}/assignment', UserController.giveAssignment)
-
-// 과제 관리 - 해야할 과제 조회 (내가 신청한 스터디에서 부여한 과제)
-router.get('/:userId/assignment', UserController.manageAssignment);
+// 참여 스터디 내에서 스터디장이 과제 부여
+router.post('/:userId/ongoing-studylist/:studyId/assignment', UserController.giveAssignment)
 
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', UserController.schedule)
 router.post('/:userId/ongoing-studylist/:studyId/schedule', UserController.scheduleSave)
+
 //참여 스터디 공통 일정
 router.get('/:userId/ongoing-studylist/:studyId/schedule-common', UserController.scheduleCommon)
 

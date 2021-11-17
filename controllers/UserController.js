@@ -300,7 +300,7 @@ exports.manageMember = async function (req, res) {
 
 }
 
-// 참여 스터디 조회 (개설한 스터디 + 참여하는 스터디가 모두 보여야 함)
+// 참여 스터디 조회
 exports.ongoingStudyList = async function (req, res){
     const { userId } = req.params;
     try{
@@ -309,23 +309,31 @@ exports.ongoingStudyList = async function (req, res){
         const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
         console.log(registeredStudyList.length)
         console.log(openedStudyList.length)
+
         if(registeredStudyList.length==0 && openedStudyList.length==0){ // 스터디 신청을 한 적이 없는 경우
             return res
                 .status(200)
                 .json({ msg: '참여하는 스터디가 없습니다' })
         }
 
+        // 탭별로 (스터디마다) 해당 정보를 가져와야하는지, 아니면 전체 리스트를 다 가져와야 하는지 
+
+        // 1. 해당 스터디에 참여하는 다른 인원들 리스트 가져오기
+        const members = RegisterApplication.find({})
+        // 2. 해당 스터디에 등록되어 있는 과제 
         var length = registeredStudyList.length + openedStudyList.length
 
         for(var i=0;i<registeredStudyList.length;i++){
             var study = await StudyList.findOne({_id : registeredStudyList[i].study}) // 수락완료된 지원서에 해당하는 스터디 불러오기
-            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
+            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함, 스터디 장이라면 관리 할 과제도 
             ongoingList[i]=study;
           
         for(var i=registeredStudyList.length;i<length;i++){
             ongoingList[i]=openedStudyList[i-registeredStudyList.length];
             // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
         }
+
+        // 스터디장이라면 관리할 과제 보여주기 
         console.log(ongoingList)
         return res
             .status(200)
@@ -341,29 +349,76 @@ exports.ongoingStudyList = async function (req, res){
 
 // 과제 부여
 exports.giveAssignment = async function (req, res) {
-    const { userId } = req.params;
-    const { assignmentName, description, deadline } = req.body;
+    const { userId, studyId} = req.params;
+    const { assignmentName, deadline } = req.body;
+    const { assignment } = req.files
 
-    try {
-        const assignment = new Assignment({
-            userId,
-            study,
-            assignmentName,
-            description,
-            deadline
+
+
+    /* 업로드 용량제한 검증 */
+
+    // 제한 용량을 넘어서서 데이터가 짤리면 truncated​값이 true를 갖습니다.
+
+    if(assignment.truncated){
+
+       var err = new Error("파일 용량이 16MB를 초과했습니다.");
+
+       next(err);  // 인자로 err를 받는 함수가 실행됩니다(보틍 err처리 페이지 return)
+
+       return;
+
+    }​
+
+    var orgFileName = fileObj.originalname; // 원본 파일명을 저장한다.
+
+    var filesize = fileObj.size; // 파일 사이즈를 저장한다.
+
+    var savePath = __dirname + "/../upload/ " + saveFileName;​ // 파일의 경로를 저장한다.
+
+    // 파일시스템에서 파일 읽기
+
+​     fs.open(savePath, "r", function(err, fd){ // fs 모듈 활용
+
+    //   ※ MongoDB에 데이터를 저장하기 위해서는 Buffer Type의 공간에 담아 저장해야 합니다!!
+
+           // binary 데이터를 저장하기 위해 파일 사이즈 만큼의 크기를 갖는 Buffer 객체 생성​ 
+
+      var buffer = new Buffer(filesize); 
+
+      fs.read(fd, buffer, 0, buffer.length, null, function(err, bytes, buffer){
+
+      // 객체에 파일 정보를 담는다.
+
+      var obj={
+
+             "title":title,
+
+             "filename":orgFileName,
+
+             "filesize":filesize,
+
+             "file":buffer
+
+       };
+
+       // DB 저장 작업 수행
+
+       var newData = new DBData(obj);
+
+       newData.save(function(err){
+
+          if(err) res.send(err);    
+
+          // db에 모든 작업이 올라간 후에 upload에 있는 파일이 지워진다.
+
+          fs.unlink(savePath, function(){}); // 파일 삭제        
         });
 
-        await assignment.save();
-        return res
-            .status(200)
-            .json(assignment); // 등록한 과제 반환
+    });
 
-    } catch (err) {
-        throw res
-            .status(500)
-            .json({ error: err })
-    }
+}); 
 }
+
 
 // 과제 관리 - 해야할 과제 조회
 exports.manageAssignment = async function (req, res) {
@@ -405,7 +460,6 @@ exports.manageAssignment = async function (req, res) {
     }
 }
 
-// 과제 관리 - 관리할 과제 조회
 
 
 
