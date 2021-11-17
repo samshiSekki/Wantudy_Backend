@@ -155,8 +155,8 @@ exports.applyStudyList = async function (req, res){
             .json({ error: err })       
     }
 }
-
-// 개설한 스터디 조회
+ 
+// 개설한 스터디 조회 (등록된 신청서 열람 페이지 포함)
 exports.openedStudyList = async function (req, res){
     const { userId } = req.params;
     try{
@@ -186,6 +186,7 @@ exports.openedStudyList = async function (req, res){
                     var user = await User.findOne({userId: applicationObject[j].userId}); // 열정온도 불러오기 위해서 유저부터 가져옴
                     var temperature = user.temperature; // 지원자의 열정온도
                     var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
+                    var state = await applicationObject[j].state // 수락된 상태인지 아닌지 보여주기
                     if(!application){
                        continue;
                     }
@@ -194,7 +195,8 @@ exports.openedStudyList = async function (req, res){
                     info[j]={
                         application,
                         temperature,
-                        registered
+                        registered,
+                        state
                     } 
                 }
                 openedAndApplication[i]={
@@ -280,24 +282,36 @@ exports.manageMember = async function (req, res){
 
 }
 
-// 참여하고 있는 스터디 조회 
+// 참여 스터디 조회 (개설한 스터디 + 참여하는 스터디가 모두 보여야 함)
 exports.ongoingStudyList = async function (req, res){
     const { userId } = req.params;
     try{
         var ongoingList =new Array();
         const registeredStudyList = await RegisterApplication.find({userId: userId, state:1}) // 유저가 등록한 지원서 중 수락완료된 지원서 목록
-        
-        if(registeredStudyList.length==0){ // 스터디 신청을 한 적이 없는 경우
+        const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
+        console.log(registeredStudyList.length)
+        console.log(openedStudyList.length)
+        if(registeredStudyList.length==0 && openedStudyList.length==0){ // 스터디 신청을 한 적이 없는 경우
             return res
                 .status(200)
                 .json({msg : '참여하는 스터디가 없습니다'})
         }
 
+        var length = registeredStudyList.length + openedStudyList.length
+
         for(var i=0;i<registeredStudyList.length;i++){
             var study = await StudyList.findOne({_id : registeredStudyList[i].study}) // 수락완료된 지원서에 해당하는 스터디 불러오기
-            console.log(study); 
+            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
             ongoingList[i]=study;
         }
+
+        for(var i=registeredStudyList.length;i<length;i++){
+            ongoingList[i]=openedStudyList[i-registeredStudyList.length];
+                        // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
+
+        }
+
+        console.log(ongoingList)
         return res
             .status(200)
             .json(ongoingList);
@@ -346,7 +360,7 @@ exports.manageAssignment = async function (req, res){
         if(acceptedStudyList.length==0){ // 신청한 스터디가 없는 경우 과제도 없음
             return res
                 .status(200)
-                .json({msg : '해야 할 과제가 없습니다'})
+                .json ({msg : '해야 할 과제가 없습니다'})
         }
 
         // 수락된 스터디 리스트에 과제가 있는지 확인하고 띄워주기
