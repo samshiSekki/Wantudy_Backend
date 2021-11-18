@@ -24,11 +24,12 @@ const assignmentSchema = new Schema({
         required:true
     },
     assignment:{
-        type:Buffer,
+        type:String // 테스트용
+        // type:Buffer,
     },
     deadline:{
         type:Date,
-        required:true
+        default:Date.now() // 테스트용
     },
     currentNum : { // 현재 제출한 인원
         type:Number,
