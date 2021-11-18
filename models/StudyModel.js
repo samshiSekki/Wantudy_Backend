@@ -61,6 +61,10 @@ const StudySchema = new Schema({
         type: String,
         required: true
     },
+    state: {
+        type:Number,
+        default: 0  // 1이면 시작 / 2이면 종료?
+    }
 });
 
 StudySchema.index({ studyName: 'text' });

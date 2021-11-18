@@ -23,14 +23,20 @@ router.delete('/:userId/apply-studylist/:applicationId', UserController.cancelSt
 // 개설한 스터디 조회
 router.get('/:userId/opened-studylist', UserController.openedStudyList)
 
-// 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
-router.put('/:userId/opened-studylist/:applicationId', UserController.manageMember)
+// 개설한 스터디에서 스터디 시작하기
+router.put('/:userId/opened-studylist/:studyId', UserController.startStudy)
 
-// 참여 스터디 조회 (여기서 스터디 정보 다 보내줘야 함..?)
+// 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
+router.put('/:userId/opened-studylist/manageMember/:applicationId', UserController.manageMember)
+
+// 참여 스터디 조회 (여기서 스터디 정보 다 보내줘야 함) 
 router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 
-// 참여 스터디 내에서 스터디장이 과제 부여
-router.post('/:userId/ongoing-studylist/:studyId/assignment', UserController.giveAssignment)
+// 참여 스터디 과제 부여
+router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
+
+// 참여 스터디 과제 제출 
+router.post('/:userId/ongoing-studylist/:studyId/submitAssignment', UserController.submitAssignment)
 
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', UserController.schedule)

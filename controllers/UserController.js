@@ -5,6 +5,7 @@ const RegisterApplication = require("../models/RegisterApplication");
 const StudyList = require('../models/StudyModel');
 const User = require("../models/User");
 const Schedule = require('../models/Schedule');
+const RegisterAssignment = require("../models/RegisterAssignment");
 
 /* 마이페이지 화면 controller */
 
@@ -235,6 +236,26 @@ exports.openedStudyList = async function (req, res) {
     }
 }
 
+// 개설한 스터디에서 스터디 시작하기
+exports.startStudy = async function (req, res) {
+    const { userId, studyId } = req.params;
+    try {
+        await StudyList.findOneAndUpdate({ StudyId:studyId }, {
+            $set: {
+                state: 1
+            }
+        }, { new: true });
+
+        return res
+            .status(200)
+            .json({msg : '스터디가 시작되었습니다'});
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
 // 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
 exports.manageMember = async function (req, res) {
     const { userId, applicationId } = req.params;
@@ -253,6 +274,12 @@ exports.manageMember = async function (req, res) {
                 return res
                     .status(200)
                     .json({ msg: '더이상 수락할 수 없습니다.' })
+
+            result = await RegisterApplication.findOne({study: study._id, application: application._id})
+            if(result.state==1)
+                return res
+                    .status(200)
+                    .json({ msg: '이미 수락한 지원서입니다' })
 
             result = await RegisterApplication.findOneAndUpdate({ study: study._id, application: application._id }, {
                 $set: {
@@ -287,10 +314,9 @@ exports.manageMember = async function (req, res) {
                     .json({ error: err })
             }
         }
-
         return res
             .status(200)
-            .json(currentNum);
+            .json({msg: `스터디원을 ${choice}했습니다`});
 
     } catch (err) {
         throw res
@@ -304,41 +330,94 @@ exports.manageMember = async function (req, res) {
 exports.ongoingStudyList = async function (req, res){
     const { userId } = req.params;
     try{
-        var ongoingList =new Array();
-        const registeredStudyList = await RegisterApplication.find({userId: userId, state:1}) // 유저가 등록한 지원서 중 수락완료된 지원서 목록
-        const openedStudyList = await StudyList.find({userId: userId}) // a가 개설한 스터디 목록 모두 담기 a,b,c
-        console.log(registeredStudyList.length)
-        console.log(openedStudyList.length)
+        var ongoingList = new Array();
+        const openedStudyList = await StudyList.find({userId: userId, state:1}) // a가 개설한 스터디했고 시작된 스터디 목록
+        const participated = await RegisterApplication.find({userId: userId, state:1},{_id:0, study:1}) 
+        // 유저가 등록한 지원서 중 수락완료된 지원서 목록이 등록된 스터디 목록 (이게 없으면 지원도 안한거니까 참여하는 게 없음)
+        var participatedStudyList = new Array()
 
-        if(registeredStudyList.length==0 && openedStudyList.length==0){ // 스터디 신청을 한 적이 없는 경우
+        // 스터디원으로 참여하는 스터디 정보 가져오기 
+        for(var i=0;i<participated.length;i++){
+            participatedStudyList[i] = await StudyList.findOne({_id:participated[i].study})
+        }
+        console.log(participatedStudyList)
+
+        // console.log(openedStudyList.length)
+        // console.log(participatedStudyList.length)
+
+        if(participatedStudyList.length==0 && openedStudyList.length==0){ // 스터디 신청x + 개설x 인 경우
             return res
                 .status(200)
                 .json({ msg: '참여하는 스터디가 없습니다' })
         }
 
-        // 탭별로 (스터디마다) 해당 정보를 가져와야하는지, 아니면 전체 리스트를 다 가져와야 하는지 
+        // 1. 개설한 스터디
+        var openedStudy = new Array();
+        for(var i=0;i<openedStudyList.length;i++){ // studylists 모델의 여러 개 가져온 것
+            // 참여자 목록
+            var members = new Array();
+            const member = await RegisterApplication.find({study:openedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
+           
+            for(var j=0;j<member.length;j++){
+                const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
+                members[j]=user
+            }
+            console.log(members);
 
-        // 1. 해당 스터디에 참여하는 다른 인원들 리스트 가져오기
-        const members = RegisterApplication.find({})
-        // 2. 해당 스터디에 등록되어 있는 과제 
-        var length = registeredStudyList.length + openedStudyList.length
+            // 해야 할 과제 
+            var assignment =await Assignment.find({studyId: openedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
+            console.log(assignment);
+            if(!assignment)
+                assignment = '해야 할 과제가 없습니다'
 
-        for(var i=0;i<registeredStudyList.length;i++){
-            var study = await StudyList.findOne({_id : registeredStudyList[i].study}) // 수락완료된 지원서에 해당하는 스터디 불러오기
-            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함, 스터디 장이라면 관리 할 과제도 
-            ongoingList[i]=study;
-          
-        for(var i=registeredStudyList.length;i<length;i++){
-            ongoingList[i]=openedStudyList[i-registeredStudyList.length];
-            // 그리고 해당스터디에서 부여한 과제리스트도 보내줘야 함
+            // 관리 할 과제            
+            var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
+            if(!manageAssignment)
+                manageAssignment = '관리 할 과제가 없습니다'
+
+            const study = {
+                '스터디 정보' : openedStudyList[i],
+                '참여자': members,
+                '해야 할 과제': assignment,
+                '관리 할 과제': manageAssignment
+            }
+            
+            openedStudy[i]=study            
         }
 
-        // 스터디장이라면 관리할 과제 보여주기 
-        console.log(ongoingList)
+        // 2. 참여하는 스터디  participatedStudyList
+        var participatedStudy = new Array();
+        for(var i=0;i<participatedStudyList.length;i++){ // 참여하는 스터디 목록 돌면서
+            // 참여자 목록
+            var members = new Array();
+            const member = await RegisterApplication.find({study:participatedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
+            console.log(member)
+            for(var j=0;j<member.length;j++){
+                const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
+                members[j]=user
+            }
+
+            // 해야 할 과제 
+            var assignment =await Assignment.find({studyId: participatedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
+            if(!assignment)
+                assignment = '해야 할 과제가 없습니다'
+
+            const study = {
+                '스터디 정보' : participatedStudyList[i],
+                '참여자': members,
+                '해야 할 과제': assignment,
+            } 
+            participatedStudy[i]=study            
+        }
+
+        ongoingList={
+            '스터디장 스터디' : openedStudy,
+            '스터디원 스터디' : participatedStudy
+        }
+
         return res
             .status(200)
             .json(ongoingList);
-        }
 
     } catch (err) {
         throw res
@@ -348,48 +427,54 @@ exports.ongoingStudyList = async function (req, res){
 }
 
 // 과제 부여
+// router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
 exports.giveAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
-    const { assignmentName, deadline } = req.body;
-    const { assignment } = req.files
-
-
-}
-
-
-// 과제 관리 - 해야할 과제 조회
-exports.manageAssignment = async function (req, res) {
-    const { userId } = req.params;
-    try {
-        var assignmentTodo = new Array();
-
-        // 등록지원서DB에서 userId에 해당하고 state=1인(수락된) 목록찾기
-        const acceptedStudyList = await RegisterApplication.find({ userId: userId, state: 1 })
-        if (acceptedStudyList.length == 0) { // 신청한 스터디가 없는 경우 과제도 없음
-            return res
-                .status(200)
-              .json({ msg: '해야 할 과제가 없습니다' })
-        }
-
-        // 수락된 스터디 리스트에 과제가 있는지 확인하고 띄워주기
-        for (var i = 0; i < acceptedStudyList.length; i++) {
-            var study = await StudyList.findOne({ _id: acceptedStudyList[i].study }) // 스터디 찾아오기
-            // 해당 스터디에 생성된 과제가 있는지 확인 
-            var assignments = await Assignment.find({ study: study._id })
-
-            const result = {
-                studyName: study.studyName,
-                assignments: [assignments]
-            }
-            assignmentTodo[i] = result;
-            console.log(studyAndApplication[i]);
-        }
-        console.log(assignmentTodo);
+    // const { assignmentName, deadline } = req.body;
+    const { assignmentName, assignment } = req.body; // 테스트용
+    // const { assignment } = req.files
+    
+    try{
+        const todo = new Assignment({
+            userId,
+            studyId,
+            assignmentName,
+            assignment,
+        })
+        await todo.save();
 
         return res
             .status(200)
-            .json(assignmentTodo);
+            .json(todo);
 
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
+// 과제 제출
+// router.post('/:userId/ongoing-studylist/:studyId/submitAssignment', UserController.submitAssignment)
+
+exports.submitAssignment = async function (req, res) {
+    const { userId, studyId} = req.params;
+    // const { assignmentName, deadline } = req.body;
+    const { assignment, assignmentId } = req.body; // 테스트용
+    // const { assignment } = req.files
+    
+    try{
+        const submit = new RegisterAssignment({
+            userId,
+            studyId,
+            assignmentId,
+            assignment,
+        })
+        await submit.save();
+
+        return res
+            .status(200)
+            .json(submit);
     } catch (err) {
         throw res
             .status(500)
@@ -399,8 +484,49 @@ exports.manageAssignment = async function (req, res) {
 
 
 
+// 과제 관리 - 해야할 과제 조회
+// exports.manageAssignment = async function (req, res) {
+//     const { userId } = req.params;
+//     try {
+//         var assignmentTodo = new Array();
 
-//일정 조율 (참여 스터디 유저들 보여주기)
+//         // 등록지원서DB에서 userId에 해당하고 state=1인(수락된) 목록찾기
+//         const acceptedStudyList = await RegisterApplication.find({ userId: userId, state: 1 })
+//         if (acceptedStudyList.length == 0) { // 신청한 스터디가 없는 경우 과제도 없음
+//             return res
+//                 .status(200)
+//               .json({ msg: '해야 할 과제가 없습니다' })
+//         }
+
+//         // 수락된 스터디 리스트에 과제가 있는지 확인하고 띄워주기
+//         for (var i = 0; i < acceptedStudyList.length; i++) {
+//             var study = await StudyList.findOne({ _id: acceptedStudyList[i].study }) // 스터디 찾아오기
+//             // 해당 스터디에 생성된 과제가 있는지 확인 
+//             var assignments = await Assignment.find({ study: study._id })
+
+//             const result = {
+//                 studyName: study.studyName,
+//                 assignments: [assignments]
+//             }
+//             assignmentTodo[i] = result;
+//             console.log(studyAndApplication[i]);
+//         }
+//         console.log(assignmentTodo);
+
+//         return res
+//             .status(200)
+//             .json(assignmentTodo);
+
+//     } catch (err) {
+//         throw res
+//             .status(500)
+//             .json({ error: err })
+//     }
+// }
+
+
+
+// 일정 조율 (참여 스터디 유저들 보여주기)
 exports.schedule = async ( req, res ) =>{
     const { studyId } = req.params;
 
