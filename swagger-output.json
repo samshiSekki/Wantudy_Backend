@@ -738,6 +738,33 @@
         }
       }
     },
+    "/users/{userId}/opened-studylist/{studyId}": {
+      "get": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 개설한 스터디_스터디 시작하기",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/opened-studylist/{applicationId}": {
       "put": {
         "tags": [
