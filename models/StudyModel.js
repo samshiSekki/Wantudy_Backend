@@ -64,6 +64,10 @@ const StudySchema = new Schema({
     state: {
         type:Number,
         default: 0  // 1이면 시작 / 2이면 종료?
+    },
+    commonSchedule:{
+        type:[[String]],
+        default: null
     }
 });
 
