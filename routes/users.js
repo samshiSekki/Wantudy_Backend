@@ -45,4 +45,13 @@ router.post('/:userId/ongoing-studylist/:studyId/schedule', UserController.sched
 //참여 스터디 공통 일정
 router.get('/:userId/ongoing-studylist/:studyId/schedule-common', UserController.scheduleCommon)
 
+// // 과제 테스트
+// router.post('/uploadFileWithOriginalFilename', uploadWithOriginalFilename.single('attachment'), function(req,res){ // 5
+//     res.render('confirmation', { file:req.file, files:null });
+// });
+
+// router.get('/', function(req,res){
+//     res.render('upload');
+// });
+
 module.exports = router;

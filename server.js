@@ -18,7 +18,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // multer 
 const multer = require('multer');
-const fs = require('fs')
+const fs = require('fs'); // 업로드될 파일을 저장할 폴더를 생성하기 위해서만 사용
 
 // DB connection
 const id = process.env.DBid
@@ -36,11 +36,14 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
 
     // Server Open
     app.listen(8080, function () {
+        var dir = './uploadedFiles';
+        if(!fs.existsSync(dir)) // 폴더가 존재하는지 확인 하고 없으면 생성
+            fs.mkdirSync(dir);
+
         console.log("Server listening on port 8080!");
     });
 });
 autoIncrement.initialize(connection);
-
 
 //router 사용
 // const Router=require("./routes/*.js");
@@ -64,7 +67,28 @@ app.use('/users', userRouter);
 
 // multer 세팅 
 
-// app.use(multer({
+// var storage  = multer.diskStorage({ // 2 : 업로드한 파일명을 유지하기 위해 필요한 변수
+//     destination(req, file, cb) {
+//       cb(null, 'uploadedFiles/');
+//     },
+//     filename(req, file, cb) {
+//       cb(null, `${Date.now()}__${file.originalname}`); 
+//       /*
+//         업로드된 파일명과 서버의 파일명이 완전히 동일하게 되면 
+//         중복된 파일 업로드에서 문제가 생길 수 있으니 
+//         파일명 앞에 시간을 정수로 달아줬습니다 
+//       */
+//     },
+//   });
+//   var upload = multer({ dest: 'uploadedFiles/' }); // 3-1
+//   var uploadWithOriginalFilename = multer({ storage: storage }); // 3-2
+  
+//   router.get('/', function(req,res){
+//     res.render('upload');
+// });
+
+
+// app.use('/users', multer({
 //     dest: "upload/", // 파일 업로드 폴더 경로 설정
 //     limits: {           // 파일 용량 제한 설정
 //        fileSize: 1024*1000*16 // 파일사이즈를 16MB로 제한합니다.
