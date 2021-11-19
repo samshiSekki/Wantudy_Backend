@@ -50,9 +50,6 @@ const applicationSchema = new Schema({
         type:[String],
         validate: v => Array.isArray(v) && v.length > 0, 
     },
-    applyMotive:{
-        type:String,
-    },
     message:{
         type:String
     }

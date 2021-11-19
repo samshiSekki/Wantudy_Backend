@@ -430,9 +430,9 @@ exports.ongoingStudyList = async function (req, res){
 // router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
 exports.giveAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
-    // const { assignmentName, deadline } = req.body;
-    const { assignmentName, assignment } = req.body; // 테스트용
-    // const { assignment } = req.files
+    const { assignmentName, deadline } = req.body;
+    // const { assignmentName, assignment } = req.body; // 테스트용
+    const { assignment } = req.file; // 폼데이터나 폼태그를 통해 업로드한 이미지가 들어옴
     
     try{
         const todo = new Assignment({
@@ -461,7 +461,7 @@ exports.submitAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
     // const { assignmentName, deadline } = req.body;
     const { assignment, assignmentId } = req.body; // 테스트용
-    // const { assignment } = req.files
+    // const { assignment } = req.file
     
     try{
         const submit = new RegisterAssignment({
@@ -471,6 +471,8 @@ exports.submitAssignment = async function (req, res) {
             assignment,
         })
         await submit.save();
+
+
 
         return res
             .status(200)
