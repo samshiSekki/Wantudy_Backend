@@ -370,16 +370,16 @@ exports.ongoingStudyList = async function (req, res){
             if(!assignment)
                 assignment = '해야 할 과제가 없습니다'
 
-            // 관리 할 과제            
-            var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
-            if(!manageAssignment)
-                manageAssignment = '관리 할 과제가 없습니다'
+            // // 관리 할 과제            
+            // var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
+            // if(!manageAssignment)
+            //     manageAssignment = '관리 할 과제가 없습니다'
 
             const study = {
                 '스터디 정보' : openedStudyList[i],
                 '참여자': members,
                 '해야 할 과제': assignment,
-                '관리 할 과제': manageAssignment
+                // '관리 할 과제': manageAssignment
             }
             
             openedStudy[i]=study            
@@ -430,16 +430,15 @@ exports.ongoingStudyList = async function (req, res){
 // router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
 exports.giveAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
-    const { assignmentName, deadline } = req.body;
-    // const { assignmentName, assignment } = req.body; // 테스트용
-    const { assignment } = req.file; // 폼데이터나 폼태그를 통해 업로드한 이미지가 들어옴
-    
+    const { assignmentName, assignment, deadline } = req.body; 
+
     try{
         const todo = new Assignment({
             userId,
             studyId,
             assignmentName,
             assignment,
+            deadline
         })
         await todo.save();
 
@@ -452,25 +451,64 @@ exports.giveAssignment = async function (req, res) {
             .status(500)
             .json({ error: err })
     }
+
+    // const { assignment } = req.file; // 폼데이터나 폼태그를 통해 업로드한 이미지가 들어옴
+    
+    // var orgFileName = assignment.originalname; // 원본 파일명을 저장한다.
+    // var filesize = assignment.size; // 파일 사이즈를 저장한다.
+    // console.log(__dirname)
+    // // var savePath = __dirname + "/../upload/" + orgFileName;​ // 파일의 경로를 저장한다.
+
+    // // 파일시스템에서 파일 읽기
+    // fs.open(savePath, "r", async function(err, fd){ // fs 모듈 활용
+    // // MongoDB에 데이터를 저장하기 위해서는 Buffer Type의 공간에 담아 저장해야 합니다!!
+    // // binary 데이터를 저장하기 위해 파일 사이즈 만큼의 크기를 갖는 Buffer 객체 생성​ 
+    //     var buffer = new Buffer(filesize); 
+    //     fs.read(fd, buffer, 0, buffer.length, null, async function(err, bytes, buffer){
+    //         try{
+    //             const todo = new Assignment({
+    //                 userId,
+    //                 studyId,
+    //                 assignmentName,
+    //                 assignment:buffer,
+    //             })
+
+    //             await todo.save(function(err){
+    //                 if(err) res.send(err);    
+    //                 // db에 모든 작업이 올라간 후에 upload에 있는 파일이 지워진다.
+    //                 fs.unlink(savePath, function(){}); // 파일 삭제        
+    //                 // ※​​ DB에 모두 올라간 다음 upload에 있는 파일이 지워지기 때문에 조금 시간이 걸릴 수 있다.                  
+    //                 res.end("ok");
+    //             });
+
+    //             return res
+    //                 .status(200)
+    //                 .json(todo);
+        
+    //         } catch (err) {
+    //             throw res
+    //                 .status(500)
+    //                 .json({ error: err })
+    //         }
+    //     });
+    // });
 }
 
-// 과제 제출
-// router.post('/:userId/ongoing-studylist/:studyId/submitAssignment', UserController.submitAssignment)
-
-exports.submitAssignment = async function (req, res) {
+// 과제 완료 체크
+exports.checkAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
-    // const { assignmentName, deadline } = req.body;
     const { assignment, assignmentId } = req.body; // 테스트용
     // const { assignment } = req.file
     
+    // currentNum 체크 해야 됨 / 과제 완료 체크하면 
+    
     try{
-        const submit = new RegisterAssignment({
+        const check = new RegisterAssignment({
             userId,
             studyId,
             assignmentId,
-            assignment,
         })
-        await submit.save();
+        await check.save();
 
 
 
@@ -483,8 +521,6 @@ exports.submitAssignment = async function (req, res) {
             .json({ error: err })
     }
 }
-
-
 
 // 과제 관리 - 해야할 과제 조회
 // exports.manageAssignment = async function (req, res) {

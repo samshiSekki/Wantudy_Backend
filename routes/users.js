@@ -35,8 +35,8 @@ router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 // 참여 스터디 과제 부여
 router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
 
-// 참여 스터디 과제 제출 
-router.post('/:userId/ongoing-studylist/:studyId/submitAssignment', UserController.submitAssignment)
+// 참여 스터디 과제 완료 체크
+router.post('/:userId/ongoing-studylist/:studyId/checkAssignment', UserController.checkAssignment)
 
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', UserController.schedule)
@@ -50,8 +50,5 @@ router.get('/:userId/ongoing-studylist/:studyId/schedule-common', UserController
 //     res.render('confirmation', { file:req.file, files:null });
 // });
 
-// router.get('/', function(req,res){
-//     res.render('upload');
-// });
 
 module.exports = router;
