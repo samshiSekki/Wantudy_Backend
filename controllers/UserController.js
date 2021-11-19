@@ -361,6 +361,7 @@ exports.ongoingStudyList = async function (req, res){
             for(var j=0;j<member.length;j++){
                 const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
                 members[j]=user
+                // 스터디장도 추가
             }
             console.log(members);
 
@@ -498,23 +499,24 @@ exports.giveAssignment = async function (req, res) {
 exports.checkAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
     const { assignment, assignmentId } = req.body; // 테스트용
-    // const { assignment } = req.file
     
     // currentNum 체크 해야 됨 / 과제 완료 체크하면 
-    
+    const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum});
+    const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum});
     try{
         const check = new RegisterAssignment({
             userId,
             studyId,
-            assignmentId,
+            assignmentId
         })
         await check.save();
 
 
 
+
         return res
             .status(200)
-            .json(submit);
+            .json(check);
     } catch (err) {
         throw res
             .status(500)
