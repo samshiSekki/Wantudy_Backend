@@ -12,10 +12,6 @@ const assignmentSchema = new Schema({
     userId: { // 과제 부여한  사람
         type: Number
     },
-    // study: { // 어떤 스터디에 과제부여했는지
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'StudyList',
-    // },
     studyId: {
         type:Number
     },
@@ -24,8 +20,7 @@ const assignmentSchema = new Schema({
         required:true
     },
     assignment:{
-        type:String // 테스트용
-        // type:Buffer,
+        type:String
     },
     deadline:{
         type:Date,
