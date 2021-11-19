@@ -623,52 +623,57 @@ exports.scheduleCommon = async (req, res) => {
             switch(commonTime[k][0]){
                 case '월':
                     if(schedule[schedule.length-1].time[0].length > 1){
-                        Mon = commonTime[k].filter(x => schedule[schedule.length-1].time[0])
+                        Mon = commonTime[k].filter(x => schedule[schedule.length-1].time[0].includes(x))
                         LastCommonTime.push(Mon)
                     }
                     break;
                 case '화':
                     if(schedule[schedule.length-1].time[1].length > 1){
-                        Tue = commonTime[k].filter(x => schedule[schedule.length-1].time[1])
+                        Tue = commonTime[k].filter(x => schedule[schedule.length-1].time[1].includes(x))
                         LastCommonTime.push(Tue)
                     }
                     break;
                 case '수':
                     if(schedule[schedule.length-1].time[2].length > 1){
-                        Wed = commonTime[k].filter(x => schedule[schedule.length-1].time[2])
+                        Wed = commonTime[k].filter(x => schedule[schedule.length-1].time[2].includes(x))
                         LastCommonTime.push(Wed)
                     }
                     break;
                 case '목':
                     if(schedule[schedule.length-1].time[3].length > 1){
-                        Thu = commonTime[k].filter(x => schedule[schedule.length-1].time[3])
+                        Thu = commonTime[k].filter(x => schedule[schedule.length-1].time[3].includes(x))
                         LastCommonTime.push(Thu)
                     }
                     break;
                 case '금':
                     if(schedule[schedule.length-1].time[4].length > 1){
-                        Fri = commonTime[k].filter(x => schedule[schedule.length-1].time[4])
+                        Fri = commonTime[k].filter(x => schedule[schedule.length-1].time[4].includes(x))
                         LastCommonTime.push(Fri)
                     }
                     break;
                 case '토':
                     if(schedule[schedule.length-1].time[5].length > 1){
-                        Sat = commonTime[k].filter(x => schedule[schedule.length-1].time[5])
+                        Sat = commonTime[k].filter(x => schedule[schedule.length-1].time[5].includes(x))
                         LastCommonTime.push(Sat)
                     }
                     break;
                 case '일':
                     if(schedule[schedule.length-1].time[6].length > 1){
-                        Sun = commonTime[k].filter(x => schedule[schedule.length-1].time[6])
+                        Sun = commonTime[k].filter(x => schedule[schedule.length-1].time[6].includes(x))
                         LastCommonTime.push(Sun)
                     }
                     break;
             }
         }
-        console.log(LastCommonTime)
+        const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
+            {
+                $set:{
+                    commonSchedule: LastCommonTime
+                }
+            }); // 스터디 찾아와서 디비에 공통시간대 추가해줌
         return res
             .status(200)
-            .json(LastCommonTime)
+            .json(study.commonSchedule)
     } catch (err) {
         logger.error("공통 시간대 error : " + err)
         return res
