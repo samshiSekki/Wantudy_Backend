@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/UserController')
+const ScheduleController = require('../controllers/ScheduleController')
 
 // 유저 정보 조회
 router.get('/:userId', UserController.showUser)
@@ -39,11 +40,12 @@ router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController
 router.post('/:userId/ongoing-studylist/:studyId/submitAssignment', UserController.submitAssignment)
 
 //참여 스터디 일정 조율
-router.get('/:userId/ongoing-studylist/:studyId/schedule', UserController.schedule)
-router.post('/:userId/ongoing-studylist/:studyId/schedule', UserController.scheduleSave)
+router.get('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.schedule)
+router.post('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.scheduleSave)
+router.put('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.scheduleUpdate)
 
 //참여 스터디 공통 일정
-router.get('/:userId/ongoing-studylist/:studyId/schedule-common', UserController.scheduleCommon)
+router.get('/:userId/ongoing-studylist/:studyId/schedule-common', ScheduleController.scheduleCommon)
 
 // // 과제 테스트
 // router.post('/uploadFileWithOriginalFilename', uploadWithOriginalFilename.single('attachment'), function(req,res){ // 5
