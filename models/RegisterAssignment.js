@@ -14,4 +14,9 @@ const registerAssignmentSchema = new Schema({
     }
 });
 
+/*
+    3번 유저가 1번 스터디에 2번 과제 등록
+    3번 유저가 1번 스터디에 3번 과제 등록
+
+ */
 module.exports = mongoose.model('RegisterAssignment', registerAssignmentSchema);
