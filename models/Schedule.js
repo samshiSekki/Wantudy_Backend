@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const scheduleSchema = new Schema({
     userId: {
-        type: Number
+        type: Number,
+        ref: "User"
     },
     studyId: {
         type: Number,

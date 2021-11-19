@@ -528,24 +528,22 @@ exports.submitAssignment = async function (req, res) {
 
 //일정 조율 (참여 스터디 유저들 보여주기)
 exports.schedule = async (req, res) => {
-    const { studyId } = req.params;
+    const { userId, studyId } = req.params;
 
     try {
         // var ongoingUser = new Array();
         var UserTime = new Array();
         const study = await StudyList.findOne({ StudyId: studyId })
-        console.log(study)
         const registeredStudyList = await RegisterApplication.find({ study: study._id, state: 1 })
-        console.log(registeredStudyList)
         //해당 스터디에 지원한 지원서 중 수락된 지원서들
 
         for (var i = 0; i < registeredStudyList.length; i++) {
-            // var users = await User.findOne ({userId : registeredStudyList[i].userId})
-            // //해당 스터디에 수락된 유저들 불러오기 
-            // ongoingUser[i] = users;
-            var time = await Schedule.findOne({ userId: registeredStudyList[i].userId })
-            UserTime[i] = time;
-            //유저별 가능한 시간대 불러오기
+                // var users = await User.findOne ({userId : registeredStudyList[i].userId})
+                // //해당 스터디에 수락된 유저들 불러오기 
+                // ongoingUser[i] = users;
+                var time = await Schedule.findOne({ userId: registeredStudyList[i].userId })
+                UserTime[i] = time;
+                //유저별 가능한 시간대 불러오기
         }
         // return res.status(200).json({
         //     status: 'succes',
@@ -563,8 +561,8 @@ exports.schedule = async (req, res) => {
 }
 
 exports.scheduleSave = async (req, res) => {
-    const { studyId } = req.params;
-    const { userId, time } = req.body;
+    const { userId, studyId } = req.params;
+    const { time } = req.body;
 
     const schedule = new Schedule({
         userId: userId,
@@ -583,7 +581,7 @@ exports.scheduleSave = async (req, res) => {
 }
 
 exports.scheduleCommon = async (req, res) => {
-    const { studyId } = req.params;
+    const { userId, studyId } = req.params;
 
     try {
         var commonTime = new Array();

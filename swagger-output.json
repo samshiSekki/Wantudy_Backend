@@ -341,7 +341,7 @@
           "204": {
             "description": "No Content"
           },
-          "404":{
+          "404": {
             "description": "No Study"
           },
           "500": {
@@ -829,6 +829,106 @@
         "responses": {
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/ongoing-studylist/{studyId}/schedule": {
+      "get": {
+        "tags": [
+          "/users/{userId}/ongoing-sutydlist/{studyId}"
+        ],
+        "description": "일정 조율 시간 등록하는 페이지 보여주기",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "/users/{userId}/ongoing-sutydlist/{studyId}"
+        ],
+        "description": "일정 조율 개인별 가능한 시간 등록하기(아예 시간이 안 되는 요일은 null 값으로 보내줘야 함)",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type":"Array",
+                  "example":[
+                    ["월","11","12"],
+                    ["화","14"],
+                    [null],
+                    [null],
+                    ["금","11"],
+                    [null],
+                    ["일","9","10"]
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "500":{
+            "description":"Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/ongoing-studylist/{studyId}/schedule-common":{
+      "get":{
+        "tags":[
+          "/users/{userId}/ongoing-sutydlist/{studyId}"
+        ],
+        "description":"공통 시간대 보여주기",
+        "parameters":[
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses":{
+          "500":{
+            "description":"Internal Server Error"
           }
         }
       }
