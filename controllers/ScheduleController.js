@@ -65,13 +65,14 @@ exports.scheduleUpdate = async (req, res) => {
     const { time } = req.body;
 
     try {
-        const schedule = await Schedule.findOneAndUpdate({userId : userId, studyId : studyId},{
-            $set : {
+        const schedule = await Schedule.findOneAndUpdate({ userId: userId, studyId: studyId }, 
+        {
+            $set: {
                 time: time
             },
         },
-        { new: true })
-        .exec();
+            { new: true })
+            .exec();
         return res
             .status(200)
             .json(schedule)
@@ -180,5 +181,29 @@ exports.scheduleCommon = async (req, res) => {
         return res
             .status(500)
             .json({ error: err })
+    }
+}
+
+exports.scheduleCommonLast = async (req, res) => {
+    const { userId, studyId } = req.params;
+    const { time } = req.body;
+
+    try {
+        const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
+        {
+            $set: {
+                commonSchedule: time
+            },
+        },
+        {new : true })
+        .exec();
+        return res
+            .status(200)
+            .json(study.commonSchedule)
+    }catch(err){
+        looger.error("일정 조율 최종 선택 error: "  + err)
+        throw res
+            .status(500)
+            .json({error: err})
     }
 }
