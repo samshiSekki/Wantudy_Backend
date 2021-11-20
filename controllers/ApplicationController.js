@@ -137,7 +137,6 @@ exports.registerApplication = async function (req, res) {
             userId,
             study,
             application,
-//            state, // 테스트용 (원래는 없어야 함) 
             registered:Date.now()        
         })
 
