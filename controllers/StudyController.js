@@ -241,6 +241,8 @@ exports.deleteLike = async (req, res)=>{
     try {
         const study = await StudyList.findOne({ StudyId: studyId }); // 스터디 찾아오기
         const like = await LikeStudy.find({ userId: userId, study: study._id });
+        logger.info("study._id" + study._id)
+        logger.info("like[0]._id" + like[0]._id)
         if (!study) {
             return res.status(404).end();
         }
