@@ -39,6 +39,9 @@ const applicationSchema = new Schema({
         type:[Number],
         validate: v => Array.isArray(v) && v.length > 0,
     },
+    specification:{
+        type:String,
+    },
     address:{
         type:String,
     },
