@@ -11,7 +11,7 @@ router.post('/application', ApplicationController.saveApplication)
 // 스터디 지원서 상세 보기
 router.get('/application/:applicationId', ApplicationController.detailApplication)
 
-// 스터디 지원서 등록
+// 스터디 신청 시에 지원서 등록하기 
 router.post('/:studyId/application', ApplicationController.registerApplication)
 
 //  스터디 지원서 수정
