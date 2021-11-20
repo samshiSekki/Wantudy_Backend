@@ -1217,6 +1217,10 @@
                 "applicationId": {
                   "type": "number",
                   "example": 11
+                },
+                "message":{
+                  "type": "string",
+                  "example":"아열심히한다고요"
                 }
               }
             }
