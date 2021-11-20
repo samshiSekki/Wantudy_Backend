@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 var autoIncrement = require('mongoose-auto-increment');
 
 /* 과제 부여하는 경우 단순 과제 저장 */
-
 const assignmentSchema = new Schema({
     assignmentId: {
         type: Number,
