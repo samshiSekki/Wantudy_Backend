@@ -335,6 +335,19 @@
             "in": "path",
             "required": true,
             "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "Number",
+                  "example": 12
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -884,35 +897,55 @@
               "type": "object",
               "properties": {
                 "time": {
-                  "type":"Array",
-                  "example":[
-                    ["월","11","12"],
-                    ["화","14"],
-                    [null],
-                    [null],
-                    ["금","11"],
-                    [null],
-                    ["일","9","10"]
+                  "type": "Array",
+                  "example": [
+                    [
+                      "월",
+                      "11",
+                      "12"
+                    ],
+                    [
+                      "화",
+                      "14"
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      "금",
+                      "11"
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      "일",
+                      "9",
+                      "10"
+                    ]
                   ]
                 }
               }
             }
           }
         ],
-        "responses":{
-          "500":{
-            "description":"Internal Server Error"
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/users/{userId}/ongoing-studylist/{studyId}/schedule-common":{
-      "get":{
-        "tags":[
+    "/users/{userId}/ongoing-studylist/{studyId}/schedule-common": {
+      "get": {
+        "tags": [
           "/users/{userId}/ongoing-sutydlist/{studyId}"
         ],
-        "description":"공통 시간대 보여주기",
-        "parameters":[
+        "description": "공통 시간대 보여주기",
+        "parameters": [
           {
             "name": "userId",
             "in": "path",
@@ -926,9 +959,57 @@
             "type": "number"
           }
         ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "/users/{userId}/ongoing-sutydlist/{studyId}"
+        ],
+        "description": "공통 시간대 최종 선택하기",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "example": [
+                    [
+                      "월",
+                      "11",
+                      "12"
+                    ],
+                    [
+                      "화",
+                      "14"
+                    ]
+                  ]
+                }
+              }
+            }
+          }
+        ],
         "responses":{
           "500":{
-            "description":"Internal Server Error"
+            "description":"I"
           }
         }
       }
