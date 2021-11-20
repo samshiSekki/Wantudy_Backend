@@ -68,6 +68,10 @@ const StudySchema = new Schema({
     commonSchedule:{
         type:[[String]],
         default: null
+    },
+    likeNum:{
+        type:Number,
+        default:0
     }
 });
 
