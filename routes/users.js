@@ -27,6 +27,9 @@ router.get('/:userId/opened-studylist', UserController.openedStudyList)
 // 개설한 스터디에서 스터디 시작하기
 router.put('/:userId/opened-studylist/:studyId', UserController.startStudy)
 
+// 참여 스터디에서 스터디 종료하기
+router.put('/:userId/ongoing-studylist/:studyId', UserController.endStudy)
+
 // 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
 router.put('/:userId/opened-studylist/manageMember/:applicationId', UserController.manageMember)
 
@@ -37,7 +40,10 @@ router.get('/:userId/ongoing-studylist', UserController.ongoingStudyList)
 router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController.giveAssignment)
 
 // 참여 스터디 과제 완료 체크
-router.post('/:userId/ongoing-studylist/:studyId/checkAssignment', UserController.checkAssignment)
+router.post('/:userId/ongoing-studylist/:studyId/checkAssignment/:assignmentId', UserController.checkAssignment)
+
+// 참여 스터디 열정 평가
+router.put('/:userId/ongoing-studylist/passion-test/:memberId', UserController.passionTest)
 
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.schedule)

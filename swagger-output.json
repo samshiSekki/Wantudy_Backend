@@ -778,6 +778,33 @@
         }
       }
     },
+    "/users/{userId}/ongoing-studylist/{studyId}": {
+      "put": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 참여 스터디_스터디 종료하기",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/opened-studylist/manageMember/{applicationId}": {
       "put": {
         "tags": [
@@ -846,10 +873,102 @@
         }
       }
     },
+    "/users/{userId}/ongoing-studylist/{studyId}/giveAssignment": {
+      "post": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 참여 스터디 과제 부여",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "assignmentName": {
+                  "type": "string",
+                  "example": "react 설치하기"
+                },
+                "assignment": {
+                  "type": "number",
+                  "example": "코딩애플 #3 강의를 참고하여 react를 설치해오면 됩니다~"
+                },
+                "deadline": {
+                  "type": "date",
+                  "example": "2021-12-10"
+                }
+              } 
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/ongoing-studylist/passion-test/{memberId}": {
+      "put": {
+        "tags": [
+          "/users/{userId}"
+        ],
+        "description": "마이페이지 참여 스터디 열정평가",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "type": "number",
+                  "example": 3
+                },
+                "negative": {
+                  "type": "number",
+                  "example": 2
+                }
+              } 
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/ongoing-studylist/{studyId}/schedule": {
       "get": {
         "tags": [
-          "/users/{userId}/ongoing-sutydlist/{studyId}"
+          "/users/{userId}/ongoing-studylist/{studyId}"
         ],
         "description": "일정 조율 시간 등록하는 페이지 보여주기",
         "parameters": [
@@ -874,7 +993,7 @@
       },
       "post": {
         "tags": [
-          "/users/{userId}/ongoing-sutydlist/{studyId}"
+          "/users/{userId}/ongoing-studylist/{studyId}"
         ],
         "description": "일정 조율 개인별 가능한 시간 등록하기(아예 시간이 안 되는 요일은 null 값으로 보내줘야 함)",
         "parameters": [

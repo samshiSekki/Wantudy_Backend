@@ -4,7 +4,6 @@ const LikeStudy = require("../models/LikeStudy");
 const RegisterApplication = require("../models/RegisterApplication");
 const StudyList = require('../models/StudyModel');
 const User = require("../models/User");
-const Schedule = require('../models/Schedule');
 const RegisterAssignment = require("../models/RegisterAssignment");
 
 /* 마이페이지 화면 controller */
@@ -261,6 +260,26 @@ exports.startStudy = async function (req, res) {
     }
 }
 
+// 참여 스터디에서 스터디 종료하기
+exports.endStudy = async function (req, res) {
+    const { userId, studyId } = req.params;
+    try {
+        await StudyList.findOneAndUpdate({ StudyId:studyId }, {
+            $set: {
+                state: 2
+            }
+        }, { new: true });
+
+        return res
+            .status(200)
+            .json({msg : '스터디가 종료되었습니다'});
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
 // 개설한 스터디 상세보기 지원서 조회 - 스터디원 수락/거절 
 exports.manageMember = async function (req, res) {
     const { userId, applicationId } = req.params;
@@ -316,13 +335,6 @@ exports.manageMember = async function (req, res) {
                     }
                 }, { new: true }).exec();
             }
-            
-            // await StudyList.findOneAndUpdate({ StudyId: studyId },
-            //     {
-            //         $inc: {
-            //             likeNum: 1
-            //         }
-            //     })
 
             // 해당 스터디번호에 맞는 지원서를 찾고 state=2 (거절)로 만들어줌
             result = await RegisterApplication.findOneAndUpdate({ study: study._id, application: application._id }, {
@@ -392,7 +404,13 @@ exports.ongoingStudyList = async function (req, res){
 
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: openedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
-            console.log(assignment);
+            console.log(assignment[0].assignment);
+
+            // 완료 여부 추가해야하는데 ㅋ(2/4 완료)
+            // openedStudyList[i].peopleNum;
+            // const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum:1}); // 스터디 참여 인원
+            // console.log(openedStudyList[i].peopleNum);
+
             if(!assignment)
                 assignment = '해야 할 과제가 없습니다'
 
@@ -405,7 +423,8 @@ exports.ongoingStudyList = async function (req, res){
                 studyInfo : openedStudyList[i], // 스터디정보
                 participants : members, // 참여자 
                 todoAssignment : assignment, // 해야 할 과제
-                manageAssignment: manageAssignment // 관리 할 과제
+                manageAssignment: manageAssignment, // 관리 할 과제
+                studyState: openedStudyList[i].state // 스터디 종료 여부
             }
             
             openedStudy[i]=study            
@@ -434,9 +453,10 @@ exports.ongoingStudyList = async function (req, res){
                 assignment = '해야 할 과제가 없습니다'
 
             const study = {
-                studyInfo : participatedStudyList[i],
-                participants: members,
-                todoAssignment: assignment,
+                studyInfo : participatedStudyList[i], // 스터디정보
+                participants: members, // 스터디 참여자
+                todoAssignment: assignment, // 해야 할 과제
+                studyState: openedStudyList[i].state // 스터디 종료 여부
             } 
             participatedStudy[i]=study            
         }
@@ -476,13 +496,12 @@ exports.giveAssignment = async function (req, res) {
         return res
             .status(200)
             .json(todo);
-
     } catch (err) {
         throw res
             .status(500)
             .json({ error: err })
     }
-
+}
     // const { assignment } = req.file; // 폼데이터나 폼태그를 통해 업로드한 이미지가 들어옴
     
     // var orgFileName = assignment.originalname; // 원본 파일명을 저장한다.
@@ -523,17 +542,20 @@ exports.giveAssignment = async function (req, res) {
     //         }
     //     });
     // });
-}
+
 
 // 과제 완료 체크
 // router.post('/:userId/ongoing-studylist/:studyId/checkAssignment', UserController.checkAssignment)
+// router.post('/:userId/ongoing-studylist/:studyId/checkAssignment/{assignmentId}', UserController.checkAssignment)
 exports.checkAssignment = async function (req, res) {
-    const { userId, studyId} = req.params;
-    const { assignmentId } = req.body; // 과제ID 
+    const { userId, studyId, assignmentId } = req.params;
     
     // 과제 완료 체크하면 currentNum 체크 해야 됨  (현재 과제 제출한 인원 / 스터디참여 인원)
-    const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum}); // 스터디 참여 인원
-    const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum}); // 현재 과제 제출 인원
+    const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum:1}); // 스터디 참여 인원
+    console.log(studyMember)
+    // const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum}); // 현재 과제 제출 인원
+
+    // 어떻게 계속 체크 유지할거냐???????????????
 
     try{
         const check = new RegisterAssignment({
@@ -541,12 +563,39 @@ exports.checkAssignment = async function (req, res) {
             studyId,
             assignmentId
         })
-        await check.save();
-        // Assignment.findOneAnd/
+        await check.save(); // 제출한 과제 DB에 저장 
+
+        const checkedMember = await Assignment.findOneAndUpdate({assignmentId:assignmentId},{
+            $inc:{
+                currentNum:1
+            }
+        }); // 제출 인원 늘려주기
+        console.log(checkedMember)
 
         return res
             .status(200)
             .json(check);
+    } catch (err) {
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
+// 열정 평가
+exports.passionTest = async function (req, res) {
+    const { userId, memberId } = req.params;
+    const { positive, negative } = req.body;
+    try{
+        const changeTemp = await User.findOneAndUpdate({userId:memberId},{
+            $inc:{
+                temperature: positive+negative*(-1)
+            }
+        },{new:true}); // 상대방 온도 조정
+
+        return res
+            .status(200)
+            .json({msg : '열정 평가를 완료했습니다'});
     } catch (err) {
         throw res
             .status(500)
