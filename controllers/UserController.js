@@ -366,7 +366,7 @@ exports.ongoingStudyList = async function (req, res){
 
         // 1. 개설한 스터디
         var openedStudy = new Array();
-        for(var i=0;i<openedStudyList.length;i++){ // studylists 모델의 여러 개 가져온 것
+        for(var i=0;i<openedStudyList.length;i++){ // studylists 모델의 여러 개 가져온 것 _ 해당 사람이 개설한 스터디 
             // 참여자 목록
             var members = new Array();
             const member = await RegisterApplication.find({study:openedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
@@ -374,8 +374,9 @@ exports.ongoingStudyList = async function (req, res){
             for(var j=0;j<member.length;j++){
                 const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
                 members[j]=user
-                // 스터디장도 추가
+                
             }
+            // 스터디장도 추가
             const studyManager = await User.findOne({userId:userId}, {_id:0, userId:1, profileImage:1, nickname:1})
             members[j]=studyManager
             console.log(members);
@@ -386,22 +387,22 @@ exports.ongoingStudyList = async function (req, res){
             if(!assignment)
                 assignment = '해야 할 과제가 없습니다'
 
-            // // 관리 할 과제            
-            // var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
-            // if(!manageAssignment)
-            //     manageAssignment = '관리 할 과제가 없습니다'
+            // 관리 할 과제            
+            var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
+            if(!manageAssignment)
+                manageAssignment = '관리 할 과제가 없습니다'
 
-            const study = {
-                '스터디 정보' : openedStudyList[i],
-                '참여자': members,
-                '해야 할 과제': assignment,
-                // '관리 할 과제': manageAssignment
+            const study = { 
+                studyInfo : openedStudyList[i], // 스터디정보
+                participants : members, // 참여자 
+                todoAssignment : assignment, // 해야 할 과제
+                manageAssignment: manageAssignment // 관리 할 과제
             }
             
             openedStudy[i]=study            
         }
 
-        // 2. 참여하는 스터디  participatedStudyList
+        // 2. 참여하는 스터디  participatedStudyList 3번이라는 사람이 참여하는 스터디 목록 돌면서
         var participatedStudy = new Array();
         for(var i=0;i<participatedStudyList.length;i++){ // 참여하는 스터디 목록 돌면서
             // 참여자 목록
@@ -412,6 +413,11 @@ exports.ongoingStudyList = async function (req, res){
                 const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
                 members[j]=user
             }
+            //스터디장도 추가 
+            const studyManager = await User.findOne({userId:participatedStudyList[i].userId},
+                {_id:0, userId:1, profileImage:1, nickname:1})
+            members[j]=studyManager
+            console.log(members);
 
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: participatedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
@@ -419,16 +425,16 @@ exports.ongoingStudyList = async function (req, res){
                 assignment = '해야 할 과제가 없습니다'
 
             const study = {
-                '스터디 정보' : participatedStudyList[i],
-                '참여자': members,
-                '해야 할 과제': assignment,
+                studyInfo : participatedStudyList[i],
+                participants: members,
+                todoAssignment: assignment,
             } 
             participatedStudy[i]=study            
         }
 
         ongoingList={
-            '스터디장 스터디' : openedStudy,
-            '스터디원 스터디' : participatedStudy
+            studyManager : openedStudy,
+            studyMember : participatedStudy
         }
 
         return res
