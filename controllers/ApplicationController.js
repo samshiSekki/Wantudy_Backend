@@ -95,15 +95,14 @@ exports.detailApplication = async function (req, res) {
     }
 }
 
-// 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application
+// 스터디 신청 시에 지원서 등록하기 /study/{studyId}/application (메세지만 UPDATE 하면 됨)
 exports.registerApplication = async function (req, res) {
     const { studyId } = req.params;
-    const { userId, applicationId } = req.body; // 기존 코드
+    const { userId, applicationId, message } = req.body; // 기존 코드
     // const { userId, applicationId, state } = req.body; // 스터디장이 수락한 경우 (state 변수 바꾸기 테스트용)
 
     try{
         const study = await StudyList.findOne({StudyId: studyId});
-        const application = await Application.findOne({applicationId: applicationId});
 
         if(!study)
             return res
@@ -117,6 +116,13 @@ exports.registerApplication = async function (req, res) {
                     msg:'자신이 개설한 스터디에는 등록할 수 없습니다'
                 });
         
+        // 지원서 메세지 추가
+        const application = await Application.findOneAndUpdate({applicationId:applicationId},{ 
+            $set: {
+                message: message,
+            }
+        },{new: true});
+
         const registerApplication = new RegisterApplication({
             userId,
             study,
@@ -126,7 +132,12 @@ exports.registerApplication = async function (req, res) {
         })
 
         await registerApplication.save();
-    
+
+        if (!application) 
+            return res
+                .status(404)
+                .end();
+
         return res
             .status(200)
             .json({

@@ -211,10 +211,10 @@ exports.openedStudyList = async function (req, res) {
                     var registered = await applicationObject[j].registered // 지원서 등록시기
 
                     info[j] = {
-                        application,
-                        temperature,
-                        registered,
-                        state
+                        application, // 등록한 지원서
+                        temperature, // 등록한 지원자 온도
+                        registered, // 
+                        state // 지원서 수락 여부 
                     } 
                     
                 }
@@ -363,6 +363,8 @@ exports.ongoingStudyList = async function (req, res){
                 members[j]=user
                 // 스터디장도 추가
             }
+            const studyManager = await User.findOne({userId:userId}, {_id:0, userId:1, profileImage:1, nickname:1})
+            members[j]=studyManager
             console.log(members);
 
             // 해야 할 과제 
@@ -500,7 +502,7 @@ exports.checkAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
     const { assignment, assignmentId } = req.body; // 테스트용
     
-    // currentNum 체크 해야 됨 / 과제 완료 체크하면 
+    // 과제 완료 체크하면 currentNum 체크 해야 됨  (과제 제출한 인원 / 스터디참여 인원)
     const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum});
     const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum});
     try{
@@ -510,9 +512,6 @@ exports.checkAssignment = async function (req, res) {
             assignmentId
         })
         await check.save();
-
-
-
 
         return res
             .status(200)
