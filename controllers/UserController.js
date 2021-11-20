@@ -521,9 +521,10 @@ exports.giveAssignment = async function (req, res) {
 }
 
 // 과제 완료 체크
+// router.post('/:userId/ongoing-studylist/:studyId/checkAssignment', UserController.checkAssignment)
 exports.checkAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
-    const { assignment, assignmentId } = req.body; // 테스트용
+    const { assignmentId } = req.body; // 과제ID 
     
     // 과제 완료 체크하면 currentNum 체크 해야 됨  (현재 과제 제출한 인원 / 스터디참여 인원)
     const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum}); // 스터디 참여 인원
