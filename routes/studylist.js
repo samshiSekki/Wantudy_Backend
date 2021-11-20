@@ -13,6 +13,8 @@ router.get('/:studyId', StudyController.detailStudy)
 router.delete('/:studyId', StudyController.deleteStudy)
 //스터디 수정
 router.put('/:studyId', StudyController.updateStudy)
+//채팅
+router.get('/:studyId/chat', StudyController.chatStudy)
 //스터디 신고(사유 저장)
 router.post('/:studyId/report',StudyController.saveReport)
 //댓글 작성

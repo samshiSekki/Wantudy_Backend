@@ -219,6 +219,12 @@ exports.likeStudy = async function (req, res) {
             });
 
             await like.save();
+            await StudyList.findOneAndUpdate({ StudyId: studyId },
+                {
+                    $inc: {
+                        likeNum: 1
+                    }
+                })
             // console.log(like.study._id)
             return res
                 .status(200)
@@ -234,7 +240,7 @@ exports.likeStudy = async function (req, res) {
 
 //스크랩 취소
 
-exports.deleteLike = async (req, res)=>{
+exports.deleteLike = async (req, res) => {
     const { studyId } = req.params;
     const { userId } = req.body;
 
@@ -248,7 +254,11 @@ exports.deleteLike = async (req, res)=>{
         }
         else if (like) {
             await LikeStudy.findByIdAndDelete(like[0]._id)
-            return res.status(204).json({msg:'스크랩 취소'});
+            await StudyList.findOneAndUpdate({ StudyId: studyId },
+                {
+                    $inc: { likeNum: -1 }
+                })
+            return res.status(204).json({ msg: '스크랩 취소' });
         }
     } catch (err) {
         logger.error("스터디 스크랩 취소 err: " + err)
@@ -294,6 +304,15 @@ exports.saveReport = async (req, res) => {
         throw res.status(500).json({ error: err })
     }
 };
+
+exports.chatStudy = async (req, res) => {
+    // io.on('connection',function(socket){
+    //     socket.on('인삿말',function(data){
+    //         console.log(data)
+    //         io.emit('퍼트리기',data)
+    //     })
+    // })
+}
 
 // exports.reportStudy = async (req, res) => {
 //     const { studyId } = req.params;
