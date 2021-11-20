@@ -136,6 +136,11 @@ exports.applyStudyList = async function (req, res) {
             var study = await StudyList.findOne({ _id: applyStudyList[i].study }) // 어떤 스터디인지
             var state = applyStudyList[i].state; // 스터디 등록 상태 (대기, 수락, 거절)
             var application = await Application.findOne({ _id: applyStudyList[i].application }) // 해당스터디에 등록한 지원서
+            console.log(application)
+            if(!application)
+                return res
+                .status(404)
+                .end()
 
             const result = {
                 studyId: study.StudyId,
@@ -195,7 +200,7 @@ exports.openedStudyList = async function (req, res) {
             if (applicationObject.length == 0) { // 스터디에 등록된 지원서가 없는 경우
                 openedAndApplication[i] = {
                     study: openedStudyList[i], // 개설한 스터디 정보
-                    application: [null]
+                    applications: [null]
                 }
             }
             else {
@@ -532,11 +537,12 @@ exports.checkAssignment = async function (req, res) {
 
     try{
         const check = new RegisterAssignment({
-            userId,
+            userId, 
             studyId,
             assignmentId
         })
         await check.save();
+        // Assignment.findOneAnd/
 
         return res
             .status(200)
