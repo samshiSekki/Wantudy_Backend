@@ -301,12 +301,25 @@ exports.manageMember = async function (req, res) {
             }
 
         } else if (choice == "거절") { // 스터디장이 거절한 경우
+            // 원래 state=1 이었는지 확인하고 
+            const state = await RegisterApplication.findOne({ study: study._id, application: application._id },{_id:0, state:1});
+
+            // 수락했다가 거절한 경우 currentNum 감소
+            await StudyList.findOneAndUpdate({ _id: study._id }, {
+                $set: {
+                    currentNum: currentNum - 1
+                }
+            }, { new: true }).exec();
+
             // 해당 스터디번호에 맞는 지원서를 찾고 state=2 (거절)로 만들어줌
             result = await RegisterApplication.findOneAndUpdate({ study: study._id, application: application._id }, {
                 $set: {
                     state: 2
                 }
             }, { new: true });
+
+            result = await RegisterApplication.findOne
+            
 
             if (!result) {
                 return res

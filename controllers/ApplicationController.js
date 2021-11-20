@@ -37,7 +37,7 @@ const logger=require('../.config/winston');
 // 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
     const { userId, name, gender, age, school, 
-        major, attending, semester, address, interests, keyword, message } = req.body;
+        major, attending, semester, specification, address, interests, keyword, message } = req.body;
 
     const application = new Application({ // 뭐가들어올지 모르니까 프론트에서 다 보내주세요
         userId,
@@ -48,6 +48,7 @@ exports.saveApplication = async function (req, res){
         major,
         attending,
         semester,
+        specification,
         address,
         interests,
         keyword,
@@ -154,7 +155,7 @@ exports.registerApplication = async function (req, res) {
 // 지원서 수정 (저장 / 다른 이름으로 저장)
 exports.updateApplication = async function (req, res){
     const { applicationName, name, gender, age, school, 
-        major, attending, semester, address, interests, keyword, message } = req.body;
+        major, attending, specification, semester, address, interests, keyword, message } = req.body;
     const { applicationId } = req.params;
 
     if(applicationName===''){ // 저장인 경우
@@ -167,6 +168,7 @@ exports.updateApplication = async function (req, res){
                     school: school,
                     major: major, 
                     attending: attending,
+                    specification: specification,
                     semester: semester,
                     address: address,
                     interests: interests,
@@ -200,6 +202,7 @@ exports.updateApplication = async function (req, res){
                     school: school,
                     major: major,
                     attending: attending,
+                    specification: specification,
                     semester: semester,
                     address: address,
                     interests: interests,
