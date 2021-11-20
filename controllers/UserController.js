@@ -262,7 +262,7 @@ exports.manageMember = async function (req, res) {
     const { choice, studyId } = req.body;
     // applicationId를 받아서 applications에 있는 _id를 가져오고 그게 Register applicationId랑 같은지
     try {
-        const study = await StudyList.findOne({ StudyId: studyId })
+        const study = await StudyList.findOne({ StudyId: studyId }) // 개설한 스터디 가져오기 
         var peopleNum = study.peopleNum; // 스터디 총 인원
         var currentNum = study.currentNum; // 스터디 현재 등록된 인원
         const application = await Application.findOne({ applicationId: applicationId })
@@ -299,13 +299,12 @@ exports.manageMember = async function (req, res) {
                     .status(400)
                     .json({ error: err })
             }
-
         } else if (choice == "거절") { // 스터디장이 거절한 경우
             // 원래 state=1 이었는지 확인하고 
-            const application = await RegisterApplication.findOne({ study: study._id, application: application._id });
-            
+            const apply = await RegisterApplication.findOne({ study: study._id, application: application._id });
+            console.log(apply)
             // 수락했다가 거절한 경우 currentNum 감소
-            if(application.state == 1){
+            if(apply.state == 1){
                 await StudyList.findOneAndUpdate({ _id: study._id }, {
                     $set: {
                         currentNum: currentNum - 1
@@ -526,9 +525,10 @@ exports.checkAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
     const { assignment, assignmentId } = req.body; // 테스트용
     
-    // 과제 완료 체크하면 currentNum 체크 해야 됨  (과제 제출한 인원 / 스터디참여 인원)
-    const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum});
-    const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum});
+    // 과제 완료 체크하면 currentNum 체크 해야 됨  (현재 과제 제출한 인원 / 스터디참여 인원)
+    const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum}); // 스터디 참여 인원
+    const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum}); // 현재 과제 제출 인원
+
     try{
         const check = new RegisterAssignment({
             userId,
