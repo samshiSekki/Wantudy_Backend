@@ -51,7 +51,8 @@ const applicationSchema = new Schema({
         validate: v => Array.isArray(v) && v.length > 0, 
     },
     message:{
-        type:String
+        type:String,
+        default:""
     }
 })
 
