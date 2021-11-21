@@ -3,6 +3,12 @@ const app = express();
 //post 받아오기 위해 body-parser 사용
 app.use(express.urlencoded({ extended: false }))
 
+
+//socket 사용
+const http = require('http').createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(http);
+
 //react ajax 통신
 app.use(express.json());
 const cors = require('cors');
@@ -35,7 +41,7 @@ mongoose.connect(`mongodb://${id}:${pwd}@13.209.66.117:27017/admin`, { useNewUrl
     console.log("mongoDB Connected!");
 
     // Server Open
-    app.listen(8080, function () {
+    http.listen(8080, function () {
         var dir = './uploadedFiles';
         if(!fs.existsSync(dir)) // 폴더가 존재하는지 확인 하고 없으면 생성
             fs.mkdirSync(dir);
@@ -65,6 +71,29 @@ app.use('/auth', authRouter);
 const userRouter = require('./routes/users');
 app.use('/users', userRouter);
 
+// //채팅 연결
+// io.on('connection',function(socket){
+//     console.log('연결 완료')
+//     socket.on('채팅내용',function(data){
+//         console.log(data)
+//         io.emit('퍼트리기',data)
+//     })
+// })
+
+//개인채팅 연결
+var chat1 = io.of('/채팅방1');
+
+chat1.on('connection',function(socket){
+    //요청에는 스터디에 참여하는 사람만 스터디장과 개인 채팅방(room1)들어갈 수 있도록
+    socket.on('요청',function(msg){
+        socket.join('room1');
+    })
+    socket.on('SEND',function(msg){
+        chat1.to('room1').emit('emit이벤트명',msg)
+    })
+})
+
+
 // multer 세팅 
 // const fileRouter = require('./routes/files');
 // app.use('/files', fileRouter);
@@ -88,7 +117,3 @@ app.use('/users', userRouter);
 //   router.get('/', function(req,res){
 //     res.render('upload');
 // });
-
-
-
-
