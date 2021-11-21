@@ -184,10 +184,11 @@ exports.scheduleCommon = async (req, res) => {
     }
 }
 
+// 일정 조율 최종 선택
 exports.scheduleCommonLast = async (req, res) => {
     const { userId, studyId } = req.params;
     const { time } = req.body;
-
+    console.log(time);
     try {
         const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
         {

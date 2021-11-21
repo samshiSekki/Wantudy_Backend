@@ -5,6 +5,7 @@ const RegisterApplication = require("../models/RegisterApplication");
 const StudyList = require('../models/StudyModel');
 const User = require("../models/User");
 const RegisterAssignment = require("../models/RegisterAssignment");
+const { scheduleSave } = require("./ScheduleController");
 
 /* 마이페이지 화면 controller */
 
@@ -402,6 +403,14 @@ exports.ongoingStudyList = async function (req, res){
             members[j]=studyManager
             console.log(members);
 
+            // 확정된 일정
+            var schedule;
+            if(!openedStudyList[i].commonSchedule)
+                schedule=null;
+            else
+                schedule = openedStudyList[i].commonSchedule
+                
+
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: openedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
             console.log(assignment[0].assignment);
@@ -422,6 +431,7 @@ exports.ongoingStudyList = async function (req, res){
             const study = { 
                 studyInfo : openedStudyList[i], // 스터디정보
                 participants : members, // 참여자 
+                schedule: schedule, // 일정 조율
                 todoAssignment : assignment, // 해야 할 과제
                 manageAssignment: manageAssignment, // 관리 할 과제
                 studyState: openedStudyList[i].state // 스터디 종료 여부
@@ -447,6 +457,13 @@ exports.ongoingStudyList = async function (req, res){
             members[j]=studyManager
             console.log(members);
 
+            // 확정된 일정
+            var schedule;
+            if(!openedStudyList[i].commonSchedule)
+                schedule=null;
+            else
+                schedule = openedStudyList[i].commonSchedule
+
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: participatedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
             if(!assignment)
@@ -455,6 +472,7 @@ exports.ongoingStudyList = async function (req, res){
             const study = {
                 studyInfo : participatedStudyList[i], // 스터디정보
                 participants: members, // 스터디 참여자
+                schedule: schedule, // 일정 조율
                 todoAssignment: assignment, // 해야 할 과제
                 studyState: openedStudyList[i].state // 스터디 종료 여부
             } 
