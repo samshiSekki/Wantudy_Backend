@@ -367,15 +367,17 @@ exports.ongoingStudyList = async function (req, res){
     try{
         var ongoingList = new Array();
         const openedStudyList = await StudyList.find({userId: userId, state:1}) // a가 개설한 스터디했고 시작된 스터디 목록
+        console.log(openedStudyList)
         const participated = await RegisterApplication.find({userId: userId, state:1},{_id:0, study:1}) 
-        // 유저가 등록한 지원서 중 수락완료된 지원서 목록이 등록된 스터디 목록 (이게 없으면 지원도 안한거니까 참여하는 게 없음)
+        // 유저가 등록한 지원서 중 수락완료된 지원서 목록이 등록된 스터디 목록 (이게 없으면 지원도 안한거니까 스터디원으로 참여하는 게 없음)
         var participatedStudyList = new Array()
 
+        console.log("hi:"+participated.length)
         // 스터디원으로 참여하는 스터디 정보 가져오기 
         for(var i=0;i<participated.length;i++){
             participatedStudyList[i] = await StudyList.findOne({_id:participated[i].study})
         }
-        console.log(participatedStudyList)
+        console.log("참여하는 스터디 "+participatedStudyList)
 
         // console.log(openedStudyList.length)
         // console.log(participatedStudyList.length)
@@ -410,10 +412,8 @@ exports.ongoingStudyList = async function (req, res){
             else
                 schedule = openedStudyList[i].commonSchedule
                 
-
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: openedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
-            console.log(assignment[0].assignment);
 
             // 완료 여부 추가해야하는데 ㅋ(2/4 완료)
             // openedStudyList[i].peopleNum;
@@ -443,6 +443,7 @@ exports.ongoingStudyList = async function (req, res){
         // 2. 참여하는 스터디  participatedStudyList 3번이라는 사람이 참여하는 스터디 목록 돌면서
         var participatedStudy = new Array();
         for(var i=0;i<participatedStudyList.length;i++){ // 참여하는 스터디 목록 돌면서
+            // console.log("hiiiiiiiiiii")
             // 참여자 목록
             var members = new Array();
             const member = await RegisterApplication.find({study:participatedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
@@ -478,7 +479,6 @@ exports.ongoingStudyList = async function (req, res){
             } 
             participatedStudy[i]=study            
         }
-
         ongoingList={
             studyManager : openedStudy,
             studyMember : participatedStudy
