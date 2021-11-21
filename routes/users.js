@@ -53,13 +53,7 @@ router.put('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.sc
 //참여 스터디 공통 일정
 router.get('/:userId/ongoing-studylist/:studyId/schedule-common', ScheduleController.scheduleCommon)
 
-//참여 스터디 공통 일정 선택하기
+//참여 스터디 공통 일정 선택하기 _ 최종 선택
 router.put('/:userId/ongoing-studylist/:studyId/schedule-common', ScheduleController.scheduleCommonLast)
-
-// // 과제 테스트
-// router.post('/uploadFileWithOriginalFilename', uploadWithOriginalFilename.single('attachment'), function(req,res){ // 5
-//     res.render('confirmation', { file:req.file, files:null });
-// });
-
 
 module.exports = router;

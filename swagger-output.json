@@ -1061,7 +1061,7 @@
     "/users/{userId}/ongoing-studylist/{studyId}/schedule-common": {
       "get": {
         "tags": [
-          "/users/{userId}/ongoing-sutydlist/{studyId}"
+          "/users/{userId}/ongoing-studylist/{studyId}"
         ],
         "description": "공통 시간대 보여주기",
         "parameters": [
@@ -1086,7 +1086,7 @@
       },
       "put": {
         "tags": [
-          "/users/{userId}/ongoing-sutydlist/{studyId}"
+          "/users/{userId}/ongoing-studylist/{studyId}"
         ],
         "description": "공통 시간대 최종 선택하기",
         "parameters": [
@@ -1128,7 +1128,7 @@
         ],
         "responses":{
           "500":{
-            "description":"I"
+            "description":"Internal Server Error"
           }
         }
       }
