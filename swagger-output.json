@@ -1150,6 +1150,10 @@
                   "type": "number",
                   "example": 100
                 },
+                "applicationName":{ 
+                  "type": "string",
+                  "example": "내 지원서"
+                },
                 "name": {
                   "type": "string",
                   "example": "김철수"
@@ -1181,6 +1185,10 @@
                     2
                   ]
                 },
+                "specification": {
+                  "type": "string",
+                  "example": "기획공모전 수상"
+                },
                 "address": {
                   "type": "string",
                   "example": "서울특별시 관악구"
@@ -1200,10 +1208,6 @@
                     "적극적인",
                     "활발한"
                   ]
-                },
-                "applyMotive": {
-                  "type": "string",
-                  "example": "지원동기입니다"
                 },
                 "message": {
                   "type": "string",

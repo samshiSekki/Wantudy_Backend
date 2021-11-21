@@ -36,11 +36,12 @@ const logger=require('../.config/winston');
 
 // 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
-    const { userId, name, gender, age, school, 
+    const { userId, applicationName, name, gender, age, school, 
         major, attending, semester, specification, address, interests, keyword, message } = req.body;
 
     const application = new Application({ // 뭐가들어올지 모르니까 프론트에서 다 보내주세요
         userId,
+        applicationName,
         name,
         gender,
         age,
@@ -205,8 +206,8 @@ exports.updateApplication = async function (req, res){
                     school: school,
                     major: major,
                     attending: attending,
-                    specification: specification,
                     semester: semester,
+                    specification: specification,
                     address: address,
                     interests: interests,
                     keyword: keyword,
