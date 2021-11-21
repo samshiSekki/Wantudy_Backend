@@ -450,16 +450,17 @@ exports.ongoingStudyList = async function (req, res){
         // 2. 참여하는 스터디  participatedStudyList 3번이라는 사람이 참여하는 스터디 목록 돌면서
         var participatedStudy = new Array();
         console.log(participatedStudyList.length)
-        console.log(participatedStudyList[i])
+        // console.log(participatedStudyList[0])
         for(var i=0;i<participatedStudyList.length;i++){ // 참여하는 스터디 목록 돌면서
             console.log("hiiiiiiiiiii");
 
             // 참여자 목록
             var members = new Array();
-            const member2 = await RegisterApplication.find({study:participatedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
-            if(!member2)
+            const member = await RegisterApplication.find({study:participatedStudyList[i]._id, state:1},{userId:1}) // 등록된 지원서 중 해당 스터디에 해당하며, 수락된 userId 목록찾기
+            console.log(member)
+            if(!member)
                 console.log("없음")
-            for(var j=0;j<member2.length;j++){
+            for(var j=0;j<member.length;j++){
                 const user = await User.findOne({userId:member[j].userId}, {_id:0, userId:1, profileImage:1, nickname:1})
                 members[j]=user
             }
