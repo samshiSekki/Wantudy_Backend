@@ -130,12 +130,16 @@ exports.applyStudyList = async function (req, res) {
                 .status(200)
                 .json({ msg: '신청한 스터디가 없습니다' })
         }
-
+        console.log(applyStudyList.length)
         // objectId 받아서 studyList에서 다시 조회해오기
         for (var i = 0; i < applyStudyList.length; i++) {
+            console.log(i)
+            console.log(applyStudyList[i])
             var study = await StudyList.findOne({ _id: applyStudyList[i].study }) // 어떤 스터디인지
+            console.log(study)
             var state = applyStudyList[i].state; // 스터디 등록 상태 (대기, 수락, 거절)
             var application = await Application.findOne({ _id: applyStudyList[i].application }) // 해당스터디에 등록한 지원서
+            
             console.log(application)
             if(!application)
                 return res
@@ -150,7 +154,7 @@ exports.applyStudyList = async function (req, res) {
             }
             studyAndApplication[i] = result;
         }
-        console.log(studyAndApplication);
+        console.log("hi"+studyAndApplication);
 
         return res
             .status(200)
