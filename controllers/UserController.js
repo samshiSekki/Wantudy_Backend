@@ -379,8 +379,8 @@ exports.ongoingStudyList = async function (req, res){
         }
         console.log("참여하는 스터디 "+participatedStudyList)
 
-        // console.log(openedStudyList.length)
-        // console.log(participatedStudyList.length)
+        console.log(openedStudyList.length)
+        console.log(participatedStudyList.length)
 
         if(participatedStudyList.length==0 && openedStudyList.length==0){ // 스터디 신청x + 개설x 인 경우
             return res
@@ -403,7 +403,7 @@ exports.ongoingStudyList = async function (req, res){
             // 스터디장도 추가
             const studyManager = await User.findOne({userId:userId}, {_id:0, userId:1, profileImage:1, nickname:1})
             members[j]=studyManager
-            console.log(members);
+            console.log("멤버"+members);
 
             // 확정된 일정
             var schedule;
@@ -453,17 +453,16 @@ exports.ongoingStudyList = async function (req, res){
                 members[j]=user
             }
             //스터디장도 추가 
-            const studyManager = await User.findOne({userId:participatedStudyList[i].userId},
-                {_id:0, userId:1, profileImage:1, nickname:1})
+            const studyManager = await User.findOne({userId:participatedStudyList[i].userId},{_id:0, userId:1, profileImage:1, nickname:1})
             members[j]=studyManager
-            console.log(members);
+            console.log("참여스터디인원"+members);
 
-            // 확정된 일정
+            //확정된 일정
             var schedule;
-            if(!openedStudyList[i].commonSchedule)
-                schedule=null;
+            if(!participatedStudyList[i].commonSchedule)
+                schedule = null;
             else
-                schedule = openedStudyList[i].commonSchedule
+                schedule = participatedStudyList[i].commonSchedule
 
             // 해야 할 과제 
             var assignment =await Assignment.find({studyId: participatedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
@@ -475,15 +474,17 @@ exports.ongoingStudyList = async function (req, res){
                 participants: members, // 스터디 참여자
                 schedule: schedule, // 일정 조율
                 todoAssignment: assignment, // 해야 할 과제
-                studyState: openedStudyList[i].state // 스터디 종료 여부
+                studyState: participatedStudyList[i].state // 스터디 종료 여부
             } 
             participatedStudy[i]=study            
         }
+
         ongoingList={
             studyManager : openedStudy,
             studyMember : participatedStudy
         }
 
+        console.log(ongoingList)
         return res
             .status(200)
             .json(ongoingList);
