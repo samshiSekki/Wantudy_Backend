@@ -7,6 +7,10 @@ const StudySchema = new Schema({
         type: Number,
         // required : true,
     },
+    nickname:{
+        type: String,
+        ref : 'User'
+    },
     StudyId: {
         type: Number,
         default: 0,
