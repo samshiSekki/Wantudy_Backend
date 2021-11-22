@@ -37,7 +37,7 @@ const logger=require('../.config/winston');
 // 새로운 지원서 작성
 exports.saveApplication = async function (req, res){
     const { userId, applicationName, name, gender, age, school, 
-        major, attending, semester, specification, address, interests, keyword, message } = req.body;
+        major, attending, semester, specification, address, interests, keyword} = req.body;
 
     const application = new Application({ // 뭐가들어올지 모르니까 프론트에서 다 보내주세요
         userId,
@@ -53,7 +53,6 @@ exports.saveApplication = async function (req, res){
         address,
         interests,
         keyword,
-        message,
     });
 
     const user = await User.findOneAndUpdate({userId: userId},{
@@ -91,6 +90,7 @@ exports.detailApplication = async function (req, res) {
                 .status(200)
                 .json(application)    
     } catch (err) {
+        logger.error("지원서 상세보기:"+err)
         throw res
             .status(500)
             .json({ error: err })
@@ -127,8 +127,6 @@ exports.registerApplication = async function (req, res) {
             }
         },{new: true});
         
-        // 지원서 등록
-        // const application = await Application.findOne({applicationId:applicationId});
         if (!application) 
             return res
                 .status(404)
@@ -224,6 +222,7 @@ exports.updateApplication = async function (req, res){
                 .status(200)
                 .json(application);
         } catch (err) {
+            logger.error("지원서 수정:"+err)
             throw res
                 .status(500)
                 .json({ error: err })
