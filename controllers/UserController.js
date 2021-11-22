@@ -6,6 +6,7 @@ const StudyList = require('../models/StudyModel');
 const User = require("../models/User");
 const RegisterAssignment = require("../models/RegisterAssignment");
 const { scheduleSave } = require("./ScheduleController");
+const logger = require('../.config/winston');
 
 /* 마이페이지 화면 controller */
 
