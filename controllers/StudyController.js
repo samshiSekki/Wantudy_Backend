@@ -4,6 +4,7 @@ const LikeStudy = require('../models/LikeStudy');
 const commentList = require('../models/comment');
 const recommentList = require('../models/recomment')
 const reportList = require('../models/reportModel');
+const User = require('../models/User')
 const path = require('path');
 const logger = require('../.config/winston');
 
@@ -22,9 +23,13 @@ exports.saveStudy = async function (req, res) {
     logger.info("deadline : " + req.body.deadline)
     logger.info("period : " + req.body.period)
     logger.info("level : " + req.body.level)
-    // console.log(req.body)
+
+    const user=await User.findOne({ userId : userId })
+    const nickname = user.nickname
+
     const study = new StudyList({
         userId,
+        nickname,
         studyName,
         category,
         description,

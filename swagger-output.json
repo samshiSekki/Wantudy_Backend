@@ -1089,6 +1089,72 @@
             "description": "Internal Server Error"
           }
         }
+      },
+      "put":{
+        "tags":[
+          "/users/{userId}/ongoing-studylist/{studyId}"
+        ],
+        "description":"일정 조율 개인 시간 수정하기",
+        "parameters":[
+          {
+            "name":"userId",
+            "in":"path",
+            "required":true,
+            "type":"number"
+          },
+          {
+            "name":"studyId",
+            "in":"path",
+            "required":true,
+            "type":"number"
+          },
+          {
+            "name":"obj",
+            "in":"body",
+            "schema":{
+              "type":"object",
+              "properties":{
+                "time":{
+                  "type":"Array",
+                  "example":[
+                    [
+                      "월",
+                      "11",
+                      "12"
+                    ],
+                    [
+                      "화",
+                      "14"
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      "금",
+                      "11"
+                    ],
+                    [
+                      null
+                    ],
+                    [
+                      "일",
+                      "9",
+                      "10"
+                    ]
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses":{
+          "500":{
+            "description":"Internal Server Error"
+          }
+        }
       }
     },
     "/users/{userId}/ongoing-studylist/{studyId}/schedule-common": {
