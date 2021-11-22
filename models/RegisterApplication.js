@@ -14,6 +14,9 @@ const registerApplicationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'StudyList',
     },
+    message:{ // 등록할 때 쓰는 메시지
+        type:String
+    },
     state:{ // 대기중:0 (default), 수락완료:1, 거절됨 :2 
         type:Number,
         default:0

@@ -216,6 +216,7 @@ exports.openedStudyList = async function (req, res) {
                     console.log(user)
                     var temperature = user.temperature; // 지원자의 열정온도
                     var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
+                    var message = await applicationObject[j].message // 지원자가 등록한 메세지
                     var state = await applicationObject[j].state // 수락된 상태인지 아닌지 보여주기
 
                     if(!application){
@@ -226,6 +227,7 @@ exports.openedStudyList = async function (req, res) {
                     info[j] = {
                         application, // 등록한 지원서
                         temperature, // 등록한 지원자 온도
+                        message, // 스터디장에게 한마디 
                         registered, // 
                         state // 지원서 수락 여부 
                     } 
