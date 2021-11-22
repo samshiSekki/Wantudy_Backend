@@ -55,7 +55,7 @@ exports.saveApplication = async function (req, res){
         keyword,
     });
 
-    const user = await User.findOneAndUpdate({userId: userId},{
+    await User.findOneAndUpdate({userId: userId},{
         $set: {
             state:true
         }
@@ -152,7 +152,7 @@ exports.registerApplication = async function (req, res) {
 // 지원서 수정 (저장 / 다른 이름으로 저장)
 exports.updateApplication = async function (req, res){
     const { applicationName, name, gender, age, school, 
-        major, attending, specification, semester, address, interests, keyword, message } = req.body;
+        major, attending, specification, semester, address, interests, keyword } = req.body;
     const { applicationId } = req.params;
 
     if(applicationName===''){ // 저장인 경우
@@ -170,7 +170,6 @@ exports.updateApplication = async function (req, res){
                     address: address,
                     interests: interests,
                     keyword: keyword,
-                    message: message,
                 }
             },{new: true});
     
@@ -204,7 +203,6 @@ exports.updateApplication = async function (req, res){
                     address: address,
                     interests: interests,
                     keyword: keyword,
-                    message: message,
                 }
             },{new: true});
            
