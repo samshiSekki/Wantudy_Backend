@@ -418,16 +418,37 @@ exports.ongoingStudyList = async function (req, res){
             else
                 schedule = openedStudyList[i].commonSchedule
                 
-            // 해야 할 과제 
+            // 해야 할 과제
+            var assignedState=true
+            var todoAssignment = new Array()
             var assignment =await Assignment.find({studyId: openedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
-
-            // 완료 여부 추가해야하는데 ㅋ(2/4 완료)
-            // openedStudyList[i].peopleNum;
-            // const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum:1}); // 스터디 참여 인원
-            // console.log(openedStudyList[i].peopleNum);
-
+            console.log("해야할 과제"+assignment)
             if(!assignment)
                 assignment = '해야 할 과제가 없습니다'
+
+            for(var j=0;j<assignment.length;j++){
+                // 과제 완료 여부 추가
+                // console.log(assignment[j]);
+                const study = await StudyList.findOne({StudyId : assignment[j].studyId}); // 스터디             
+                const assign = await Assignment.findOne({studyId: assignment[j].studyId}) // 스터디에서 부여한 과제
+               
+                // console.log(openedStudyList[i].peopleNum);
+                const assignedOrNot = await RegisterAssignment.findOne({userId: userId, assignmentId:assign.assignmentId}) // 내가 과제를 제출했는지 여부
+                console.log(assignedOrNot)
+
+                if(!assignedOrNot) // 제출하지 않았다면
+                    assignedState=false;
+                else
+                    assignedState=true;
+
+                console.log(assignedOrNot)
+                const todo={
+                    assignment: assignment[j],
+                    checked:[assign.currentNum, study.currentNum], // 2/4명 완료
+                    assignedOrNot:assignedState
+                }
+                todoAssignment[j]=todo;
+            }
 
             // 관리 할 과제            
             var manageAssignment = await RegisterAssignment.find({studyId: openedStudyList[i].StudyId}) // 등록된 과제 중에서 해당 스터디에 해당하는 것
@@ -438,7 +459,7 @@ exports.ongoingStudyList = async function (req, res){
                 studyInfo : openedStudyList[i], // 스터디정보
                 participants : members, // 참여자 
                 schedule: schedule, // 일정 조율
-                todoAssignment : assignment, // 해야 할 과제
+                todoAssignment : todoAssignment, // 해야 할 과제
                 manageAssignment: manageAssignment, // 관리 할 과제
                 studyState: openedStudyList[i].state // 스터디 종료 여부
             }
@@ -477,17 +498,43 @@ exports.ongoingStudyList = async function (req, res){
             else
                 schedule = participatedStudyList[i].commonSchedule
 
-            // 해야 할 과제 
-            console.log(participatedStudyList[i]);
+            // 해야 할 과제
+            var assignedState=true
+            var todoAssignment = new Array()
             var assignment =await Assignment.find({studyId: participatedStudyList[i].StudyId}); // 현 스터디에 부여된 과제 목록 (해야 할 과제)
+            console.log("해야할 과제"+assignment)
             if(!assignment)
                 assignment = '해야 할 과제가 없습니다'
+
+            for(var j=0;j<assignment.length;j++){
+                // 과제 완료 여부 추가
+                // console.log(assignment[j]);
+                const study = await StudyList.findOne({StudyId : assignment[j].studyId}); // 스터디             
+                const assign = await Assignment.findOne({studyId: assignment[j].studyId}) // 스터디에서 부여한 과제
+            
+                // console.log(openedStudyList[i].peopleNum);
+                const assignedOrNot = await RegisterAssignment.findOne({userId: userId, assignmentId:assign.assignmentId}) // 내가 과제를 제출했는지 여부
+                console.log(assignedOrNot)
+
+                if(!assignedOrNot) // 제출하지 않았다면
+                    assignedState=false;
+                else
+                    assignedState=true;
+
+                console.log(assignedOrNot)
+                const todo={
+                    assignment: assignment[j],
+                    checked:[assign.currentNum, study.currentNum], // 2/4명 완료
+                    assignedOrNot:assignedState
+                }
+                todoAssignment[j]=todo;
+            }
 
             const study = {
                 studyInfo : participatedStudyList[i], // 스터디정보
                 participants: members, // 스터디 참여자
                 schedule: schedule, // 일정 조율
-                todoAssignment: assignment, // 해야 할 과제
+                todoAssignment: todoAssignment, // 해야 할 과제
                 studyState: participatedStudyList[i].state // 스터디 종료 여부
             } 
             participatedStudy[i]=study            
@@ -535,51 +582,8 @@ exports.giveAssignment = async function (req, res) {
             .json({ error: err })
     }
 }
-    // const { assignment } = req.file; // 폼데이터나 폼태그를 통해 업로드한 이미지가 들어옴
-    
-    // var orgFileName = assignment.originalname; // 원본 파일명을 저장한다.
-    // var filesize = assignment.size; // 파일 사이즈를 저장한다.
-    // console.log(__dirname)
-    // // var savePath = __dirname + "/../upload/" + orgFileName;​ // 파일의 경로를 저장한다.
-
-    // // 파일시스템에서 파일 읽기
-    // fs.open(savePath, "r", async function(err, fd){ // fs 모듈 활용
-    // // MongoDB에 데이터를 저장하기 위해서는 Buffer Type의 공간에 담아 저장해야 합니다!!
-    // // binary 데이터를 저장하기 위해 파일 사이즈 만큼의 크기를 갖는 Buffer 객체 생성​ 
-    //     var buffer = new Buffer(filesize); 
-    //     fs.read(fd, buffer, 0, buffer.length, null, async function(err, bytes, buffer){
-    //         try{
-    //             const todo = new Assignment({
-    //                 userId,
-    //                 studyId,
-    //                 assignmentName,
-    //                 assignment:buffer,
-    //             })
-
-    //             await todo.save(function(err){
-    //                 if(err) res.send(err);    
-    //                 // db에 모든 작업이 올라간 후에 upload에 있는 파일이 지워진다.
-    //                 fs.unlink(savePath, function(){}); // 파일 삭제        
-    //                 // ※​​ DB에 모두 올라간 다음 upload에 있는 파일이 지워지기 때문에 조금 시간이 걸릴 수 있다.                  
-    //                 res.end("ok");
-    //             });
-
-    //             return res
-    //                 .status(200)
-    //                 .json(todo);
-        
-    //         } catch (err) {
-    //             throw res
-    //                 .status(500)
-    //                 .json({ error: err })
-    //         }
-    //     });
-    // });
-
 
 // 과제 완료 체크
-// router.post('/:userId/ongoing-studylist/:studyId/checkAssignment', UserController.checkAssignment)
-// router.post('/:userId/ongoing-studylist/:studyId/checkAssignment/{assignmentId}', UserController.checkAssignment)
 exports.checkAssignment = async function (req, res) {
     const { userId, studyId, assignmentId } = req.params;
     
@@ -587,8 +591,6 @@ exports.checkAssignment = async function (req, res) {
     const studyMember = await StudyList.findOne({StudyId : studyId}, {_id:0, currentNum:1}); // 스터디 참여 인원
     console.log(studyMember)
     // const checkedMember = await Assignment.findOne({assignmentId:assignmentId}, {_id:0, currentNum}); // 현재 과제 제출 인원
-
-    // 어떻게 계속 체크 유지할거냐???????????????
 
     try{
         const check = new RegisterAssignment({

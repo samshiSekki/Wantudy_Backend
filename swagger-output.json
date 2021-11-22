@@ -855,7 +855,7 @@
     "/users/{userId}/ongoing-studylist": {
       "get": {
         "tags": [
-          "/users/{userId}"
+          "/users/{userId}/ongoing-studylist"
         ],
         "description": "마이페이지 참여 스터디 조회",
         "parameters": [
@@ -876,7 +876,7 @@
     "/users/{userId}/ongoing-studylist/{studyId}/giveAssignment": {
       "post": {
         "tags": [
-          "/users/{userId}"
+          "/users/{userId}/ongoing-studylist"
         ],
         "description": "마이페이지 참여 스터디 과제 부여",
         "parameters": [
@@ -921,10 +921,43 @@
         }
       }
     },
+    "/users/{userId}/ongoing-studylist/{studyId}/checkAssignment/{assignmentId}": {
+      "post": {
+        "tags": [
+          "/users/{userId}/ongoing-studylist"
+        ],
+        "description": "마이페이지 참여 스터디 과제 완료 체크",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "assignmentId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/{userId}/ongoing-studylist/passion-test/{memberId}": {
       "put": {
         "tags": [
-          "/users/{userId}"
+          "/users/{userId}/ongoing-studylist"
         ],
         "description": "마이페이지 참여 스터디 열정평가",
         "parameters": [

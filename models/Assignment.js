@@ -18,7 +18,7 @@ const assignmentSchema = new Schema({
         type:String,
         required:true
     },
-    assignment:{
+    assignment:{ // 과제 설명 
         type:String
     },
     deadline:{
