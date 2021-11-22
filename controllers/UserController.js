@@ -161,6 +161,7 @@ exports.applyStudyList = async function (req, res) {
             .json(studyAndApplication);
 
     } catch (err) {
+        logger.error("신청한 스터디 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
@@ -239,6 +240,7 @@ exports.openedStudyList = async function (req, res) {
             .json(openedAndApplication);
 
     } catch (err) {
+        logger.error("개설한 스터디 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
@@ -551,6 +553,7 @@ exports.ongoingStudyList = async function (req, res){
             .json(ongoingList);
 
     } catch (err) {
+        logger.error("참여 스터디 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
