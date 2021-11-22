@@ -52,10 +52,6 @@ const applicationSchema = new Schema({
     keyword:{
         type:[String],
         validate: v => Array.isArray(v) && v.length > 0, 
-    },
-    message:{
-        type:String,
-        default:""
     }
 })
 
