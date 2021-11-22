@@ -200,7 +200,6 @@ exports.openedStudyList = async function (req, res) {
         for (var i = 0; i < openedStudyList.length; i++) { // a가 개설한 스터디 목록을 모두 돌면서
             var study = openedStudyList[i];
             var applicationObject = await RegisterApplication.find({ study: study._id }).exec()  // a가 개설한 스터디에 등록한 등록지원서 목록 가져오기
-
             if (applicationObject.length == 0) { // 스터디에 등록된 지원서가 없는 경우
                 openedAndApplication[i] = {
                     study: openedStudyList[i], // 개설한 스터디 정보
@@ -210,27 +209,31 @@ exports.openedStudyList = async function (req, res) {
             else {
                 var info = new Array()
                 for (var j = 0; j < applicationObject.length; j++) {
-                    var user = await User.findOne({ userId: applicationObject[j].userId }); // 열정온도 불러오기 위해서 유저부터 가져옴
+                    console.log(j)
+                    var user = await User.findOne({ userId: applicationObject[j].userId }); // 열정온도 불러오기 위해서 유저부터 가져옴 (등록된 지원서에서)
+                    console.log(user)
                     var temperature = user.temperature; // 지원자의 열정온도
                     var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
                     var state = await applicationObject[j].state // 수락된 상태인지 아닌지 보여주기
+
                     if(!application){
                        continue;
                     }
                     var registered = await applicationObject[j].registered // 지원서 등록시기
-
+                    console.log(registered)
                     info[j] = {
                         application, // 등록한 지원서
                         temperature, // 등록한 지원자 온도
                         registered, // 
                         state // 지원서 수락 여부 
                     } 
-                    
+                    console.log("hi"+info[j])
                 }
                 openedAndApplication[i] = {
                     study: openedStudyList[i], // 스터디 1개당 지원서 여러개 넣기 위해 이렇게 구조 짬
                     applications: info
                 }
+                console.log(openedAndApplication[i]);
             }
         }
 
