@@ -91,11 +91,12 @@ exports.scheduleCommon = async (req, res) => {
         var commonTime = new Array();
         var LastCommonTime = new Array();
         const schedule = await Schedule.find({ studyId: studyId })
-
+    
         for (var i = 0; i < schedule.length; i++) {
             for (var j = 0; j < 7; j++) { //요일만큼 반복
                 if (i == 0) {
                     //첫번째 두번째 사람 공통시간대 뽑기
+                    logger.info(schedule[i].time[j])
                     common = schedule[i].time[j].filter(x => schedule[i + 1].time[j].includes(x))
                     if (common.length > 1) { // 요일만 겹치는 경우 제외
                         commonTime.push(common) //commonTime에 공통 시간대 추가
