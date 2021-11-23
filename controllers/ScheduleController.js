@@ -14,19 +14,27 @@ exports.schedule = async (req, res) => {
         var UserTime = new Array();
         const study = await StudyList.findOne({ StudyId: studyId })
         const registeredStudyList = await RegisterApplication.find({ study: study._id, state: 1 })
-        //해당 스터디에 지원한 지원서 중 수락된 지원서들
+        //해당 스터디에 지원한 지원서 중 수락된 지원서들(스터디원들)
+
+        //스터디장 스케줄
+        const Writer = await Schedule.findOne({userId: study.userId})
 
         for (var i = 0; i < registeredStudyList.length; i++) {
             // var users = await User.findOne ({userId : registeredStudyList[i].userId})
             // //해당 스터디에 수락된 유저들 불러오기 
             // ongoingUser[i] = users;
             var time = await Schedule.findOne({ userId: registeredStudyList[i].userId })
-            UserTime[i] = time;
+            // console.log(time)
+            // UserTime[i] = time;
+            UserTime.push(time)
             //유저별 가능한 시간대 불러오기
         }
+        UserTime.push(Writer)
+        // console.log(UserTime)
+        // console.log(UserTime)
         // return res.status(200).json({
         //     status: 'succes',
-        //     data: UserTime
+        //     data: UserTime, 
         // })
         return res
             .status(200)
