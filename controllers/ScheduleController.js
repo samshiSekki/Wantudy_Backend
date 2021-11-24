@@ -13,22 +13,25 @@ exports.schedule = async (req, res) => {
         // var ongoingUser = new Array();
         var UserTime = new Array();
         const study = await StudyList.findOne({ StudyId: studyId })
+
         const registeredStudyList = await RegisterApplication.find({ study: study._id, state: 1 })
         //해당 스터디에 지원한 지원서 중 수락된 지원서들(스터디원들)
 
         //스터디장 스케줄
-        const Writer = await Schedule.findOne({userId: study.userId})
+        const Writer = await Schedule.findOne({userId: study.userId, studyId: studyId})
 
         for (var i = 0; i < registeredStudyList.length; i++) {
             // var users = await User.findOne ({userId : registeredStudyList[i].userId})
             // //해당 스터디에 수락된 유저들 불러오기 
             // ongoingUser[i] = users;
-            var time = await Schedule.findOne({ userId: registeredStudyList[i].userId })
+            var time = await Schedule.findOne({ userId: registeredStudyList[i].userId, studyId: studyId })
+            console.log(time)
             // console.log(time)
             // UserTime[i] = time;
             UserTime.push(time)
             //유저별 가능한 시간대 불러오기
         }
+        console.log(UserTime)
         UserTime.push(Writer)
         // console.log(UserTime)
         // console.log(UserTime)
