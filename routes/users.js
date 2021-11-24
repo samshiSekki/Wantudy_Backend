@@ -18,7 +18,7 @@ router.get('/:userId/like-studylist', UserController.likeStudyList)
 // 신청한 스터디 조회
 router.get('/:userId/apply-studylist', UserController.applyStudyList)
 
-// 스터디 신청 취소
+// 신청한 스터디_ 스터디 신청 취소
 router.delete('/:userId/apply-studylist/:applicationId', UserController.cancelStudy);
 
 // 개설한 스터디 조회
@@ -41,6 +41,9 @@ router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController
 
 // 참여 스터디 과제 완료 체크
 router.post('/:userId/ongoing-studylist/:studyId/checkAssignment/:assignmentId', UserController.checkAssignment)
+
+// 참여 스터디 과제 완료자 조회
+router.get('/:userId/ongoing-studylist/:studyId/showAssignment/:assignmentId', UserController.showAssignment)
 
 // 참여 스터디 열정 평가
 router.put('/:userId/ongoing-studylist/:studyId/passion-test/:memberId', UserController.passionTest)

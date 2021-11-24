@@ -635,6 +635,33 @@ exports.checkAssignment = async function (req, res) {
     }
 }
 
+// 과제 완료자 조회 
+// router.get('/:userId/ongoing-studylist/:studyId/showAssignment/:assignmentId', UserController.showAssignment)
+exports.showAssignment = async function (req, res) {
+    const { userId, studyId, assignmentId } = req.params;
+    try{
+        const assignedUsers = await RegisterAssignment.find({assignmentId:assignmentId}) // 내가 과제를 제출했는지 여부
+        var assigned = new Array()
+        for(var i=0;i<assignedUsers.length;i++){
+            const user = await User.findOne({userId: assignedUsers[i].userId})
+            console.log(user)
+            assigned[i]=user.nickname;
+        }
+        console.log(assigned);
+
+        return res
+            .status(200)
+            .json({
+                assignedMember:assigned
+            });
+    } catch (err) {
+        logger.error("과제 완료자 조회 error : " + err)
+        throw res
+            .status(500)
+            .json({ error: err })
+    }
+}
+
 // 열정 평가
 exports.passionTest = async function (req, res) {
     const { userId, studyId, memberId } = req.params;
@@ -651,8 +678,12 @@ exports.passionTest = async function (req, res) {
         
 
         if(study.userId == userId){ // 스터디장인 경우
-            // 스터디장으로 참여하는 경우 스터디를 삭제
-            await StudyList.findOneAndDelete({StudyId : studyId});
+            // 스터디장으로 참여하는 경우 스터디 상태를 종료로 바꿈
+            await StudyList.findOneAndUpdate({StudyId : studyId}, {
+                $set: {
+                    state:2
+                }
+            }, {new: true});
         } else{ // 스터디원인 경우
             await RegisterApplication.findOneAndUpdate({ userId: userId, study: study._id}, {
                 $set : {
