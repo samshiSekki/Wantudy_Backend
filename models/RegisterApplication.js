@@ -17,7 +17,7 @@ const registerApplicationSchema = new Schema({
     message:{ // 등록할 때 쓰는 메시지
         type:String
     },
-    state:{ // 대기중:0 (default), 수락완료:1, 거절됨 :2 
+    state:{ // 대기중:0 (default), 수락완료:1, 거절됨 :2, 스터디 종료됨 : 3
         type:Number,
         default:0
     },

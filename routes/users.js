@@ -43,7 +43,7 @@ router.post('/:userId/ongoing-studylist/:studyId/giveAssignment', UserController
 router.post('/:userId/ongoing-studylist/:studyId/checkAssignment/:assignmentId', UserController.checkAssignment)
 
 // 참여 스터디 열정 평가
-router.put('/:userId/ongoing-studylist/passion-test/:memberId', UserController.passionTest)
+router.put('/:userId/ongoing-studylist/:studyId/passion-test/:memberId', UserController.passionTest)
 
 //참여 스터디 일정 조율
 router.get('/:userId/ongoing-studylist/:studyId/schedule', ScheduleController.schedule)
