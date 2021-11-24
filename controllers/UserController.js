@@ -216,8 +216,12 @@ exports.openedStudyList = async function (req, res) {
                     console.log(user)
                     var temperature = user.temperature; // 지원자의 열정온도
                     var application = await Application.findOne({_id: applicationObject[j].application}) // 지원서
+                    var user = await User.findOne({userId: applicationObject[j].userId}) // 유저 프로필 사진
+                    var profileImage = user.profileImage; // 유저 프로필 사진
+                    var nickname= user.nickname; // 유저 닉네임
                     var message = await applicationObject[j].message // 지원자가 등록한 메세지
                     var state = await applicationObject[j].state // 수락된 상태인지 아닌지 보여주기
+                    console.log(profileImage)
 
                     if(!application){
                        continue;
@@ -225,6 +229,8 @@ exports.openedStudyList = async function (req, res) {
                     var registered = await applicationObject[j].registered // 지원서 등록시기
                     console.log(registered)
                     info[j] = {
+                        profileImage, // 등록한 사람 프사
+                        nickname, // 등록한 사람 닉네임
                         application, // 등록한 지원서
                         temperature, // 등록한 지원자 온도
                         message, // 스터디장에게 한마디 
@@ -303,6 +309,7 @@ exports.manageMember = async function (req, res) {
         var peopleNum = study.peopleNum; // 스터디 총 인원
         var currentNum = study.currentNum; // 스터디 현재 등록된 인원
         const application = await Application.findOne({ applicationId: applicationId })
+
         var result;
 
         if (choice == "수락") { // 스터디장이 수락한 경우
@@ -630,14 +637,30 @@ exports.checkAssignment = async function (req, res) {
 
 // 열정 평가
 exports.passionTest = async function (req, res) {
-    const { userId, memberId } = req.params;
+    const { userId, studyId, memberId } = req.params;
     const { positive, negative } = req.body;
     try{
-        const changeTemp = await User.findOneAndUpdate({userId:memberId},{
+        await User.findOneAndUpdate({userId:memberId},{
             $inc:{
                 temperature: positive+negative*(-1)
             }
         },{new:true}); // 상대방 온도 조정
+
+        // 스터디원으로 참여하는 경우 state=3으로 바꿈 (스터디종료)
+        const study = await StudyList.findOne({StudyId: studyId}); // 스터디찾기  
+        
+
+        if(study.userId == userId){ // 스터디장인 경우
+            // 스터디장으로 참여하는 경우 스터디를 삭제
+            await StudyList.findOneAndDelete({StudyId : studyId});
+        } else{ // 스터디원인 경우
+            await RegisterApplication.findOneAndUpdate({ userId: userId, study: study._id}, {
+                $set : {
+                    state: 3
+                }
+            }, {new: true});
+        }
+
 
         return res
             .status(200)
