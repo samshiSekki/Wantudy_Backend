@@ -96,13 +96,14 @@ exports.detailStudy = async function (req, res) {
         const study = await StudyList.findOne({ StudyId: studyId })
         const comment = await commentList.find({ studyId: studyId })
         const recomment = await recommentList.find({ studyId: studyId })
+        const writer = await User.findOne({userId: study.userId})
 
         if (!study) {
             return res.status(404).end();
         } else {
             return res.status(200).json({
                 status: 'succes',
-                data: study, comment, recomment
+                data: study, comment, recomment, writer
             })
         }
     } catch (err) {
