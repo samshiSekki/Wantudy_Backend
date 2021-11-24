@@ -586,6 +586,7 @@ exports.giveAssignment = async function (req, res) {
             .status(200)
             .json(todo);
     } catch (err) {
+        logger.error("과제 부여 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
@@ -620,6 +621,7 @@ exports.checkAssignment = async function (req, res) {
             .status(200)
             .json(check);
     } catch (err) {
+        logger.error("과제 완료 체크 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
@@ -641,6 +643,7 @@ exports.passionTest = async function (req, res) {
             .status(200)
             .json({msg : '열정 평가를 완료했습니다'});
     } catch (err) {
+        logger.error("열정 평가 error : " + err)
         throw res
             .status(500)
             .json({ error: err })
