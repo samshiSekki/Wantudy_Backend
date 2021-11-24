@@ -954,7 +954,40 @@
         }
       }
     },
-    "/users/{userId}/ongoing-studylist/passion-test/{memberId}": {
+    "/users/{userId}/ongoing-studylist/{studyId}/showAssignment/{assignmentId}": {
+      "get": {
+        "tags": [
+          "/users/{userId}/ongoing-studylist"
+        ],
+        "description": "마이페이지 참여 스터디 과제 완료자 조회",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "assignmentId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/ongoing-studylist/{studyId}/passion-test/{memberId}": {
       "put": {
         "tags": [
           "/users/{userId}/ongoing-studylist"
@@ -963,6 +996,12 @@
         "parameters": [
           {
             "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "studyId",
             "in": "path",
             "required": true,
             "type": "number"

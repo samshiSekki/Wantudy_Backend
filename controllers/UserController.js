@@ -692,7 +692,6 @@ exports.passionTest = async function (req, res) {
             }, {new: true});
         }
 
-
         return res
             .status(200)
             .json({msg : '열정 평가를 완료했습니다'});
