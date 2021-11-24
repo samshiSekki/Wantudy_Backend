@@ -181,15 +181,15 @@ exports.scheduleCommon = async (req, res) => {
                     break;
             }
         }
-        const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
-            {
-                $set: {
-                    commonSchedule: LastCommonTime
-                }
-            }); // 스터디 찾아와서 디비에 공통시간대 추가해줌
+        // const study = await StudyList.findOneAndUpdate({ StudyId: studyId },
+        //     {
+        //         $set: {
+        //             commonSchedule: LastCommonTime
+        //         }
+        //     }); // 스터디 찾아와서 디비에 공통시간대 추가해줌
         return res
             .status(200)
-            .json(study.commonSchedule)
+            .json(LastCommonTime)
     } catch (err) {
         logger.error("공통 시간대 error : " + err)
         return res
