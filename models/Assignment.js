@@ -14,6 +14,9 @@ const assignmentSchema = new Schema({
     studyId: {
         type:Number
     },
+    studyName:{
+        type:String
+    },
     assignmentName:{
         type:String,
         required:true

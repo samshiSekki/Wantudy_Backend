@@ -579,10 +579,13 @@ exports.giveAssignment = async function (req, res) {
     const { userId, studyId} = req.params;
     const { assignmentName, assignment, deadline } = req.body; 
 
+    study = await StudyList.findOne({StudyId:studyId})
+
     try{
         const todo = new Assignment({
             userId,
             studyId,
+            studyName:study.studyName,
             assignmentName,
             assignment,
             deadline
